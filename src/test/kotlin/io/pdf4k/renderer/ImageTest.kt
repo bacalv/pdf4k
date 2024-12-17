@@ -3,14 +3,14 @@ package io.pdf4k.renderer
 import io.pdf4k.domain.Font
 import io.pdf4k.domain.Font.Style.Bold
 import io.pdf4k.domain.HorizontalAlignment
-import io.pdf4k.domain.HorizontalAlignment.Center
-import io.pdf4k.domain.HorizontalAlignment.Justified
+import io.pdf4k.domain.HorizontalAlignment.*
 import io.pdf4k.domain.Leading.Companion.multiplier
 import io.pdf4k.domain.Margin
 import io.pdf4k.domain.Musician.Companion.musicians
 import io.pdf4k.domain.QrStyle
 import io.pdf4k.domain.QrStyle.Companion.Logo
 import io.pdf4k.domain.QrStyle.Companion.Shape
+import io.pdf4k.domain.QrStyle.Companion.Shape.Square
 import io.pdf4k.domain.StyleAttributes.Companion.border
 import io.pdf4k.domain.StyleAttributes.Companion.noBorder
 import io.pdf4k.domain.StyleAttributes.Companion.style
@@ -43,7 +43,20 @@ class ImageTest : AbstractPdfApproverTest() {
                                     height = 200f
                                 )
                                 tableCell(1, noBorder) {
-                                    textCell(nameStyle) { +artist.name }
+                                    tableCell(2) {
+                                        textCell(nameStyle) { +artist.name }
+                                        qrCodeCell(
+                                            link = artist.wikiLink,
+                                            qrStyle = QrStyle(
+                                                shape = Square,
+                                                colour = BLACK,
+                                                background = if (index % 2 == 0) evenRowColour else oddRowColour,
+                                                size = 50,
+                                                logo = logo
+                                            ),
+                                            style = style(align = Right)
+                                        )
+                                    }
                                     textCell(bioStyle) { +artist.bio }
                                     tableCell(columns = 1, margin = Margin(0f, 0f, 24f, 24f)) {
                                         tableCell(2, bioTable, weights = floatArrayOf(1f, 3f)) {
@@ -99,7 +112,6 @@ class ImageTest : AbstractPdfApproverTest() {
 
     @Test
     fun `render QR code`(approver: PdfApprover) {
-        val logo = Logo("spades.png", 300, 300)
         pdf {
             page {
                 content {
@@ -134,14 +146,16 @@ class ImageTest : AbstractPdfApproverTest() {
             paddingLeft = 8f,
             paddingRight = 8f
         )
+        val oddRowColour = Color(0xEA, 0xEA, 0xEA)
         val oddRow = header + style(
             fontStyle = Font.Style.Plain,
             align = HorizontalAlignment.Left,
             colour = BLACK,
             size = 10f,
-            cellBackground = Color(0xEA, 0xEA, 0xEA)
+            cellBackground = oddRowColour
         )
-        val evenRow = oddRow + style(cellBackground = Color(0xCB, 0xC5, 0xEA))
+        val evenRowColour = Color(0xCB, 0xC5, 0xEA)
+        val evenRow = oddRow + style(cellBackground = evenRowColour)
         val nameStyle = style(fontStyle = Bold, size = 14f)
         val bioStyle = style(align = Justified, leading = multiplier(2f), paddingBottom = 24f)
         val bioTable = border(1f, Color(0x31, 0x3D, 0x5A)) + style(cellBackground = WHITE, size = 10f)
@@ -151,5 +165,6 @@ class ImageTest : AbstractPdfApproverTest() {
             colour = WHITE,
             cellBackground = Color(0x31, 0x3D, 0x5A)
         )
+        val logo = Logo("spades.png", 300, 300)
     }
 }

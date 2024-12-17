@@ -19,7 +19,7 @@ object QrRenderer {
                 RoundedSquare -> ROUNDED_SQUARE
             }
         ).withColor(style.colour.convert()).also { builder ->
-            style.background.convert().let { builder.withBackgroundColor(it) }
+            style.background?.convert()?.let { builder.withBackgroundColor(it) }
         }
             .withSize(style.size)
             .withErrorCorrectionLevel(HIGH).also { builder ->
