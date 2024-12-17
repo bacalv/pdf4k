@@ -19,7 +19,7 @@ data class Musician(
                 bio = """
                     Born in Seattle, Washington, Hendrix began playing guitar at age 15. In 1961,
                     he enlisted in the US Army, but was discharged the following year.
-                    Soon afterward, he moved to Clarksville, then Nashville, Tennessee, and began 
+                    Soon afterward, he moved to Clarksville, then Nashville, Tennessee, and began
                     playing gigs on the chitlin' circuit, earning a place in the Isley Brothers'
                     backing band and later with Little Richard, with whom he continued to work
                     through mid-1965. He then played with Curtis Knight and the Squires before
