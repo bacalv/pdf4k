@@ -1,9 +1,10 @@
 package io.pdf4k.renderer
 
-import io.pdf4k.domain.Font
+import io.pdf4k.domain.Font.Style.Bold
 import io.pdf4k.domain.HorizontalAlignment.Justified
 import io.pdf4k.domain.HorizontalAlignment.Right
 import io.pdf4k.domain.Margin
+import io.pdf4k.domain.Stationary.Companion.BlankA4Landscape
 import io.pdf4k.domain.Stationary.Companion.BlankA4Portrait
 import io.pdf4k.domain.StyleAttributes.Companion.style
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
@@ -91,7 +92,7 @@ class StationaryTest : AbstractPdfApproverTest() {
                         +"23rd September, 2025"
                     }
                     paragraph {
-                        "RE: NOTICE OF NEW BYPASS" and style(fontStyle = Font.Style.Bold)
+                        "RE: NOTICE OF NEW BYPASS" and style(fontStyle = Bold)
                     }
                     crlf()
                     paragraph("Dear Mr Dent")
@@ -160,6 +161,49 @@ class StationaryTest : AbstractPdfApproverTest() {
                         Yours Sincerely,
                         
                         The Local Council
+                    """.splitParagraphs().map(::paragraph)
+                }
+            }
+        }.approve(approver)
+    }
+
+
+    @Test
+    fun `can use different sized stationary for continuation page`(approver: PdfApprover) {
+        pdf {
+            page(continuation = arrayOf(BlankA4Landscape)) {
+                content(style(size = 24f)) {
+                    """
+                        Far away on the opposite spiral arm of the Galaxy, five hundred thousand
+                        light years from the star Sol, Zaphod Beeblebrox, President of the Imperial
+                        Galactic Government, sped across the seas of Damogran, his ion drive delta
+                        boat winking and flashing in the Damogran sun.
+                        
+                        Damogran the hot; Damogran the remote; Damogran the almost totally
+                        unheard of.
+                        
+                        Damogran, secret home of the Heart of Gold.
+                        
+                        The boat sped on across the water. It would be some time before it
+                        reached its destination because Damogran is such an inconveniently arranged
+                        planet. It consists of nothing but middling to large desert islands separated
+                        by very pretty but annoyingly wide stretches of ocean.
+                        The boat sped on.
+                        
+                        Because of this topological awkwardness Damogran has always remained
+                        a deserted planet. This is why the Imperial Galactic Government chose
+                        Damogran for the Heart of Gold project, because it was so deserted and the
+                        Heart of Gold was so secret.
+                        
+                        The boat zipped and skipped across the sea, the sea that lay between the
+                        main islands of the only archipelago of any useful size on the whole planet.
+                        Zaphod Beeblebrox was on his way from the tiny spaceport on Easter Island
+                        (the name was an entirely meaningless coincidence – in Galacticspeke, easter
+                        means small flat and light brown) to the Heart of Gold island, which by
+                        another meaningless coincidence was called France.
+                        
+                        One of the side effects of work on the Heart of Gold was a whole string
+                        of pretty meaningless coincidences
                     """.splitParagraphs().map(::paragraph)
                 }
             }

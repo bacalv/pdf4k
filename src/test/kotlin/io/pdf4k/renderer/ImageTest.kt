@@ -2,7 +2,6 @@ package io.pdf4k.renderer
 
 import io.pdf4k.domain.Font
 import io.pdf4k.domain.Font.Style.Bold
-import io.pdf4k.domain.HorizontalAlignment
 import io.pdf4k.domain.HorizontalAlignment.*
 import io.pdf4k.domain.Leading.Companion.multiplier
 import io.pdf4k.domain.Margin
@@ -149,7 +148,7 @@ class ImageTest : AbstractPdfApproverTest() {
         val oddRowColour = Color(0xEA, 0xEA, 0xEA)
         val oddRow = header + style(
             fontStyle = Font.Style.Plain,
-            align = HorizontalAlignment.Left,
+            align = Left,
             colour = BLACK,
             size = 10f,
             cellBackground = oddRowColour
