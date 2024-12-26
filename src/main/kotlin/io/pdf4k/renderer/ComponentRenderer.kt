@@ -25,6 +25,9 @@ object ComponentRenderer {
 
             is Component.Paragraph -> listOf(PdfPTable(1).also { table ->
                 table.widthPercentage = 100.0f
+                table.keepTogether = false
+                table.isSplitRows = true
+                table.isSplitLate = true
                 table.addCell(PdfPCell().also { cell ->
                     cell.paddingLeft = 0f
                     cell.paddingRight = 0f
@@ -34,6 +37,7 @@ object ComponentRenderer {
                     cell.setHorizintalAlignment(context.peekStyle().align)
                     context.currentLeading().let { cell.setLeading(it.fixed, it.multiplier) }
                     cell.phrase = Paragraph().also { paragraph ->
+                        paragraph.keepTogether = false
                         paragraph.addAll(component.children.render(context))
                     }
                 })

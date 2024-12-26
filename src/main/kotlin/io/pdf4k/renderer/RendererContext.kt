@@ -16,13 +16,15 @@ import java.util.concurrent.atomic.AtomicInteger
 import com.lowagie.text.Font as ITFont
 
 class RendererContext(
-    val document: Document,
-    val writer: PdfWriter,
+    val mainDocument: Document,
+    val mainDocumentWriter: PdfWriter,
+    val contentBlocksDocument: Document,
+    val contentBlocksDocumentWriter: PdfWriter,
     val loadedStationary: Map<String, LoadedStationary>
 ) {
     private val styleStack: Stack<StyleAttributes> = Stack()
     private val pageNumber: AtomicInteger = AtomicInteger()
-    val stationaryByPage = mutableListOf<LoadedStationary>()
+    val stationaryByPage = mutableListOf<Pair<LoadedStationary, Int>>()
 
     init {
         styleStack.push(DEFAULT_STYLE)
@@ -59,13 +61,13 @@ class RendererContext(
     }
 
     fun add(elements: List<Element>) {
-        elements.forEach { document.add(it) }
+        elements.forEach { contentBlocksDocument.add(it) }
     }
 
-    fun nextPage(stationary: Stationary) {
+    fun nextPage(stationary: Stationary, blocksFilled: Int) {
         pageNumber.incrementAndGet()
-        stationaryByPage += loadedStationary[stationary.template]
-            ?: throw IllegalStateException("Can't find stationary $stationary")
+        stationaryByPage += (loadedStationary[stationary.template]
+            ?: throw IllegalStateException("Can't find stationary $stationary")) to blocksFilled
     }
 
     fun currentPageNumber() = pageNumber.get()

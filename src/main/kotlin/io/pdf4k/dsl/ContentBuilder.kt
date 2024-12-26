@@ -57,7 +57,6 @@ abstract class ContentBuilder<F : PhraseBuilder<F>, P : ParagraphBuilder<F, P>, 
         override val paragraphBuilder: () -> ParagraphBuilder.ForBlock = { ParagraphBuilder.ForBlock() }
         override val childBuilder: () -> ForBlock = ::ForBlock
         override val tableBuilder: (TableAttributes, StyleAttributes?) -> TableBuilder.ForBlock =  { t, s -> TableBuilder.ForBlock(t, s) }
-
     }
 
     class ForPage : ContentBuilder<PhraseBuilder.ForPage, ParagraphBuilder.ForPage, TableBuilder.ForPage, ForPage>() {
