@@ -1,16 +1,15 @@
 package io.pdf4k.renderer
 
-import com.lowagie.text.Chunk
 import com.lowagie.text.Document
 import com.lowagie.text.FontFactory
 import com.lowagie.text.FontFactoryImp
-import com.lowagie.text.Rectangle
-import com.lowagie.text.pdf.*
-import io.pdf4k.domain.Page
+import com.lowagie.text.pdf.BaseFont
+import com.lowagie.text.pdf.PdfReader
+import com.lowagie.text.pdf.PdfStamper
+import com.lowagie.text.pdf.PdfWriter
 import io.pdf4k.domain.Pdf
 import io.pdf4k.domain.PdfMetadata
 import io.pdf4k.domain.Stationary
-import io.pdf4k.renderer.ComponentRenderer.render
 import io.pdf4k.renderer.PageRenderer.render
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -41,7 +40,7 @@ object PdfRenderer {
         mainDocument.setMetadata(metadata)
         val contentBlocksDocument = Document()
         val contentBlocksDocumentWriter = PdfWriter.getInstance(contentBlocksDocument, contentBlocksDocumentStream)
-        val context = RendererContext(mainDocument, mainDocumentWriter, contentBlocksDocument, contentBlocksDocumentWriter, loadedStationary)
+        val context = RendererContext(mainDocument, mainDocumentWriter, contentBlocksDocument, loadedStationary)
         val eventListener = PageEventListener(context)
         contentBlocksDocumentWriter.pageEvent = eventListener
         context.pushStyle(style)
@@ -107,18 +106,6 @@ object PdfRenderer {
             stationary.template to LoadedStationary(stationary, pageSize, reader)
         }
 
-    private fun drawBlocks(page: Page, stationary: Stationary, context: RendererContext) {
-        page.blockContent.forEach { (blockName, content) ->
-            stationary.blocks[blockName]?.let { block ->
-                ColumnText(context.mainDocumentWriter.directContent).let { columnText ->
-                    columnText.setSimpleColumn(block.x, block.y + block.h, block.x + block.w, block.y)
-                    content.children.render(context).forEach { columnText.addElement(it) }
-                    columnText.go()
-                }
-            }
-        }
-    }
-
     private fun loadFonts() {
         FontFactory.defaultEmbedding = BaseFont.EMBEDDED
         FontFactory.defaultEncoding = BaseFont.IDENTITY_H
@@ -135,83 +122,5 @@ object PdfRenderer {
                 .map { FontFactory.register(it.toString()) }.count()
         }
         if (fontsRegistered == 0L) throw IllegalStateException("No fonts found")
-    }
-
-    private class PageEventListener(val context: RendererContext) : PdfPageEventHelper() {
-        private lateinit var currentPageTemplate: Page
-        private var templatePageCount = 0
-        private var currentBlockCount = 0
-
-        fun setCurrentPageTemplate(page: Page) {
-            currentPageTemplate = page
-            templatePageCount = 0
-            currentBlockCount = 0
-            setTemplate()
-            if (!context.contentBlocksDocument.isOpen) {
-                context.contentBlocksDocument.open()
-            } else {
-                context.contentBlocksDocument.newPage()
-            }
-        }
-
-        private fun setTemplate() {
-            val currentTemplate = currentPageTemplate.stationary.getOrNull(templatePageCount)
-                ?: currentPageTemplate.stationary.last()
-            context.loadedStationary[currentTemplate.template]?.let { loadedStationary ->
-                context.mainDocument.setPageSize(loadedStationary.pageSize)
-                with(currentTemplate.margin) {
-                    context.mainDocument.setMargins(left, right, top, bottom)
-                }
-                val currentBlock = loadedStationary.stationary.getBlock(currentBlockCount)
-                if (currentBlock == null) {
-                    context.contentBlocksDocument.setPageSize(loadedStationary.pageSize)
-                    with(currentTemplate.margin) {
-                        context.contentBlocksDocument.setMargins(left, right, top, bottom)
-                    }
-                } else {
-                    context.contentBlocksDocument.setPageSize(Rectangle(currentBlock.w, currentBlock.h))
-                    context.contentBlocksDocument.setMargins(0f, 0f, 0f, 0f)
-                }
-            }
-        }
-
-        fun Stationary.getBlock(sequence: Int) = contentFlow.getOrNull(sequence)?.let { blockName -> blocks[blockName] }
-        
-        override fun onStartPage(writer: PdfWriter?, document: Document?) {
-            val stationary = currentPageTemplate.stationary.getOrNull(templatePageCount)
-                ?: currentPageTemplate.stationary.last()
-
-            if (stationary.contentFlow.isEmpty()) {
-                context.nextPage(stationary, 1)
-                nextPage()
-                drawBlocks(currentPageTemplate, stationary, context)
-                templatePageCount++
-                setTemplate()
-            } else {
-                if (currentBlockCount == 0) {
-                    nextPage()
-                }
-                if (currentBlockCount == stationary.contentFlow.size - 1) {
-                    context.nextPage(stationary, currentBlockCount)
-                    drawBlocks(currentPageTemplate, stationary, context)
-                    templatePageCount++
-                    currentBlockCount = 0
-                } else {
-                    currentBlockCount++
-                }
-                setTemplate()
-            }
-        }
-
-        private fun nextPage() {
-            if (!context.mainDocument.isOpen) {
-                context.mainDocument.open()
-                context.mainDocument.add(Chunk(""))
-            } else {
-                if (context.mainDocument.newPage()) {
-                    context.mainDocument.add(Chunk(""))
-                }
-            }
-        }
     }
 }

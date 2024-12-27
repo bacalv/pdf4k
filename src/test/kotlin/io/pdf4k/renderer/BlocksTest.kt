@@ -75,8 +75,8 @@ class BlocksTest : AbstractPdfApproverTest() {
     @Test
     fun `renders pages with 2 column text`(approver: PdfApprover) {
         val stationary = stationary(BlankA4Portrait.template) {
-            block("col1", 24f, 24f, 262f, 796f,)
-            block("col2", 310f, 24f, 262f, 796f,)
+            block("col1", 24f, 24f, 262f, 796f)
+            block("col2", 310f, 24f, 262f, 796f)
             contentFlow("col1", "col2")
         }
 
