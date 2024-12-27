@@ -9,6 +9,7 @@ import io.pdf4k.domain.StyleAttributes
 @PdfDsl
 class PdfBuilder(val style: StyleAttributes?) {
     private val pages = mutableListOf<Page>()
+    private val metadataBuilder = MetadataBuilder()
 
     fun page(
         style: StyleAttributes? = null,
@@ -21,8 +22,12 @@ class PdfBuilder(val style: StyleAttributes?) {
         pages += builder.build()
     }
 
+    fun metadata(block: MetadataBuilder.() -> Unit) {
+        metadataBuilder.block()
+    }
+
     private fun build(): Pdf {
-        return Pdf(style, pages)
+        return Pdf(style, pages, metadataBuilder.build())
     }
 
     companion object {

@@ -1,6 +1,7 @@
 package pro.juxt.pdf4k.testing
 
 import org.apache.pdfbox.Loader
+import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.rendering.PDFRenderer
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.assertAll
@@ -10,15 +11,29 @@ import kotlin.math.min
 
 object PdfAssert {
     fun assertEquals(approved: ByteArray, actual: ByteArray) {
+        val approvedDocument = Loader.loadPDF(approved)
+        val actualDocument = Loader.loadPDF(actual)
+
         assertAll(
             "PDF Comparison Failures",
-            imageComparisonAssertions(approved, actual)
+            imageComparisonAssertions(approvedDocument, actualDocument)
+                    + metadataAssertions(approvedDocument, actualDocument)
         )
     }
 
-    private fun imageComparisonAssertions(approved: ByteArray, actual: ByteArray): List<() -> Unit> {
-        val approvedDocument = Loader.loadPDF(approved)
-        val actualDocument = Loader.loadPDF(actual)
+    private fun metadataAssertions(approvedDocument: PDDocument, actualDocument: PDDocument): List<() -> Unit> {
+        return approvedDocument.documentInformation.metadataKeys.filterNot { it in setOf("CreationDate", "ModDate") }.map { key ->
+            {
+                assertEquals(
+                    approvedDocument.documentInformation.getPropertyStringValue(key),
+                    actualDocument.documentInformation.getPropertyStringValue(key),
+                    "Metadata property $key matches"
+                )
+            }
+        }
+    }
+
+    private fun imageComparisonAssertions(approvedDocument: PDDocument, actualDocument: PDDocument): List<() -> Unit> {
         val approvedRenderer = PDFRenderer(approvedDocument)
         val actualRenderer = PDFRenderer(actualDocument)
         return (0..< min(actualDocument.numberOfPages, approvedDocument.numberOfPages)).map { page ->

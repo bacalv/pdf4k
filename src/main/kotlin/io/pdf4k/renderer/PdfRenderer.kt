@@ -8,6 +8,7 @@ import com.lowagie.text.Rectangle
 import com.lowagie.text.pdf.*
 import io.pdf4k.domain.Page
 import io.pdf4k.domain.Pdf
+import io.pdf4k.domain.PdfMetadata
 import io.pdf4k.domain.Stationary
 import io.pdf4k.renderer.ComponentRenderer.render
 import io.pdf4k.renderer.PageRenderer.render
@@ -16,7 +17,6 @@ import java.io.File
 import java.io.OutputStream
 import java.nio.file.FileSystems
 import java.nio.file.Files
-import kotlin.io.path.Path
 import kotlin.io.path.extension
 
 object PdfRenderer {
@@ -31,8 +31,6 @@ object PdfRenderer {
         val mainDocumentStream = ByteArrayOutputStream()
         val contentBlocksDocumentStream = ByteArrayOutputStream()
         val context = renderDocument(mainDocumentStream, contentBlocksDocumentStream, loadedStationary)
-        Files.write(Path("/Users/bretcalvey/tmp-content.pdf"), contentBlocksDocumentStream.toByteArray())
-        Files.write(Path("/Users/bretcalvey/tmp-main.pdf"), mainDocumentStream.toByteArray())
         applyTemplates(mainDocumentStream, contentBlocksDocumentStream, outputStream, context)
         loadedStationary.values.forEach { it.reader.close() }
     }
@@ -40,6 +38,7 @@ object PdfRenderer {
     private fun Pdf.renderDocument(mainDocumentStream: ByteArrayOutputStream, contentBlocksDocumentStream: ByteArrayOutputStream, loadedStationary: Map<String, LoadedStationary>): RendererContext {
         val mainDocument = Document()
         val mainDocumentWriter = PdfWriter.getInstance(mainDocument, mainDocumentStream)
+        mainDocument.setMetadata(metadata)
         val contentBlocksDocument = Document()
         val contentBlocksDocumentWriter = PdfWriter.getInstance(contentBlocksDocument, contentBlocksDocumentStream)
         val context = RendererContext(mainDocument, mainDocumentWriter, contentBlocksDocument, contentBlocksDocumentWriter, loadedStationary)
@@ -57,6 +56,15 @@ object PdfRenderer {
         return context
     }
 
+    private fun Document.setMetadata(metadata: PdfMetadata) {
+        metadata.title?.let { addTitle(it) }
+        metadata.author?.let { addAuthor(it) }
+        metadata.subject?.let { addSubject(it) }
+        metadata.keywords?.let { addKeywords(it) }
+        metadata.creator?.let { addCreator(it) }
+        metadata.producer?.let { addProducer(it) }
+    }
+
     private fun applyTemplates(
         mainDocumentStream: ByteArrayOutputStream,
         contentBlocksDocumentStream: ByteArrayOutputStream,
@@ -65,16 +73,12 @@ object PdfRenderer {
     ) {
         val mainDocumentReader = PdfReader(mainDocumentStream.toByteArray())
         val contentReader = PdfReader(contentBlocksDocumentStream.toByteArray())
-        stampPageTemplates(mainDocumentReader, contentReader, outputStream, context)
+        val stamper = PdfStamper(mainDocumentReader, outputStream)
+        stampPageTemplates(stamper, contentReader, context)
+        stamper.close()
     }
 
-    private fun stampPageTemplates(
-        mainDocumentReader: PdfReader,
-        contentReader: PdfReader,
-        tempStream: OutputStream,
-        context: RendererContext
-    ) {
-        val stamper = PdfStamper(mainDocumentReader, tempStream)
+    private fun stampPageTemplates(stamper: PdfStamper, contentReader: PdfReader, context: RendererContext) {
         var contentPage = 1
         context.stationaryByPage.forEachIndexed { pageNumber, (template, blocksFilled) ->
             val imported = stamper.getImportedPage(template.reader, template.stationary.templatePage)
@@ -92,8 +96,6 @@ object PdfRenderer {
                 }
             }
         }
-        stamper.cleanMetadata()
-        stamper.close()
     }
 
     private fun loadStationary(stationaryList: List<Stationary>): Map<String, LoadedStationary> =
