@@ -17,7 +17,7 @@ import io.pdf4k.domain.VerticalAlignment.Middle
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
 import io.pdf4k.testing.AbstractPdfApproverTest
 import org.junit.jupiter.api.Test
-import pro.juxt.pdf4k.testing.PdfApprover
+import io.pdf4k.testing.PdfApprover
 import java.awt.Color
 import java.awt.Color.BLACK
 import java.awt.Color.WHITE

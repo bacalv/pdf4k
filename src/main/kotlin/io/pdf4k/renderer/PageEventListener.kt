@@ -29,19 +29,20 @@ class PageEventListener(private val context: RendererContext) : PdfPageEventHelp
         val currentTemplate = currentPageTemplate.stationary.getOrNull(templatePageCount)
             ?: currentPageTemplate.stationary.last()
         context.loadedStationary[currentTemplate.template]?.let { loadedStationary ->
-            context.mainDocument.setPageSize(loadedStationary.pageSize)
-            with(currentTemplate.margin) {
-                context.mainDocument.setMargins(left, right, top, bottom)
-            }
+            val pageSize = Rectangle(loadedStationary.stationary.width, loadedStationary.stationary.height)
+            context.mainDocument.setPageSize(pageSize)
+            context.mainDocument.setMargins(0f, 0f, 0f, 0f)
+            context.contentBlocksDocument.setPageSize(pageSize)
             val currentBlock = loadedStationary.stationary.getBlock(currentBlockCount)
             if (currentBlock == null) {
-                context.contentBlocksDocument.setPageSize(loadedStationary.pageSize)
-                with(currentTemplate.margin) {
-                    context.contentBlocksDocument.setMargins(left, right, top, bottom)
-                }
-            } else {
-                context.contentBlocksDocument.setPageSize(Rectangle(currentBlock.w, currentBlock.h))
                 context.contentBlocksDocument.setMargins(0f, 0f, 0f, 0f)
+            } else {
+                context.contentBlocksDocument.setMargins(
+                    currentBlock.x,
+                    pageSize.width - (currentBlock.x + currentBlock.w),
+                    pageSize.height - (currentBlock.y + currentBlock.h),
+                    currentBlock.y
+                )
             }
         }
     }

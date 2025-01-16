@@ -1,4 +1,4 @@
-package pro.juxt.pdf4k.testing
+package io.pdf4k.testing
 
 import com.oneeyedmen.okeydoke.BinaryApprover
 import com.oneeyedmen.okeydoke.SourceOfApproval

@@ -9,10 +9,11 @@ import io.pdf4k.domain.Stationary.Companion.BlankA4Portrait
 import io.pdf4k.domain.StyleAttributes.Companion.style
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
 import io.pdf4k.dsl.StationaryBuilder.Companion.stationary
+import io.pdf4k.dsl.StationaryBuilder.Companion.withMargin
 import io.pdf4k.extensions.splitParagraphs
 import io.pdf4k.testing.AbstractPdfApproverTest
 import org.junit.jupiter.api.Test
-import pro.juxt.pdf4k.testing.PdfApprover
+import io.pdf4k.testing.PdfApprover
 
 class StationaryTest : AbstractPdfApproverTest() {
     @Test
@@ -211,10 +212,10 @@ class StationaryTest : AbstractPdfApproverTest() {
     }
 
     companion object {
-        val BlankA4DifferentMargins = BlankA4Portrait.copy(margin = Margin(100f, 100f, 100f, 100f))
-        val Letter = stationary("letter", 1, Margin(250f, 42f, 46f, 30f)) {
+        val BlankA4DifferentMargins = BlankA4Portrait.withMargin(Margin(100f, 100f, 100f, 100f))
+        val Letter = stationary("letter", 1, 595.92f, 842.88f, Margin(250f, 42f, 46f, 30f)) {
             block("address", 50f, 600f, 120f, 120f)
         }
-        val ContinuationPage = stationary("continuation-page", 1, Margin.DEFAULT_MARGIN.copy(top = 120f))
+        val ContinuationPage = stationary("continuation-page", 1, 595.92f, 842.88f, Margin.DEFAULT_MARGIN.copy(top = 120f))
     }
 }

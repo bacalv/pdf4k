@@ -1,4 +1,4 @@
-package pro.juxt.pdf4k.testing
+package io.pdf4k.testing
 
 import org.apache.pdfbox.Loader
 import org.apache.pdfbox.pdmodel.PDDocument
@@ -18,6 +18,7 @@ object PdfAssert {
             "PDF Comparison Failures",
             imageComparisonAssertions(approvedDocument, actualDocument)
                     + metadataAssertions(approvedDocument, actualDocument)
+                    + annotationAssertions(approvedDocument, actualDocument)
         )
     }
 
@@ -30,6 +31,12 @@ object PdfAssert {
                     "Metadata property $key matches"
                 )
             }
+        }
+    }
+
+    private fun annotationAssertions(approvedDocument: PDDocument, actualDocument: PDDocument): List<() -> Unit> {
+        return approvedDocument.documentCatalog.pages.mapIndexed { index, pdPage ->
+            { assertEquals(pdPage.annotations.toString(), actualDocument.documentCatalog.pages.get(index).annotations.toString()) }
         }
     }
 

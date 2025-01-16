@@ -4,12 +4,12 @@ import io.pdf4k.domain.HorizontalAlignment.JustifiedAll
 import io.pdf4k.domain.Stationary.Companion.BlankA4Portrait
 import io.pdf4k.domain.StyleAttributes.Companion.style
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
-import io.pdf4k.dsl.StationaryBuilder.Companion.stationary
+import io.pdf4k.dsl.StationaryBuilder.Companion.plusBlocks
 import io.pdf4k.dsl.StationaryBuilder.Companion.withBlocks
 import io.pdf4k.extensions.splitParagraphs
 import io.pdf4k.testing.AbstractPdfApproverTest
 import org.junit.jupiter.api.Test
-import pro.juxt.pdf4k.testing.PdfApprover
+import io.pdf4k.testing.PdfApprover
 import java.awt.Color.RED
 
 class BlocksTest : AbstractPdfApproverTest() {
@@ -74,7 +74,7 @@ class BlocksTest : AbstractPdfApproverTest() {
 
     @Test
     fun `renders pages with 2 column text`(approver: PdfApprover) {
-        val stationary = stationary(BlankA4Portrait.template) {
+        val stationary = BlankA4Portrait.withBlocks {
             block("col1", 24f, 24f, 262f, 796f)
             block("col2", 310f, 24f, 262f, 796f)
             contentFlow("col1", "col2")
@@ -122,7 +122,7 @@ class BlocksTest : AbstractPdfApproverTest() {
     }
 
     companion object {
-        private val stationaryWithBlock = BlankA4Portrait.withBlocks {
+        private val stationaryWithBlock = BlankA4Portrait.plusBlocks {
             block("blockName", 115f, 520f, 450f, 100f)
         }
     }

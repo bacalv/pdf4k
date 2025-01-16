@@ -1,44 +1,62 @@
 package io.pdf4k.testing
 
-import com.lowagie.text.*
-import com.lowagie.text.pdf.PdfPTable
-import com.lowagie.text.pdf.PdfWriter
-import java.awt.Color
-import java.io.FileOutputStream
-import java.nio.file.Path
+import com.lowagie.text.pdf.*
 
 fun main() {
-    val path = Path.of("./fontsize.pdf")
-    FileOutputStream(path.toFile()).also { output ->
-        Document().use { document ->
-            PdfWriter.getInstance(document, output)
-            document.open()
-            val red = FontFactory.getFont("arial unicode ms", 16f, Font.BOLD, Color.RED)
-            val green = FontFactory.getFont("arial unicode ms", 24f, Font.BOLD, Color.GREEN)
-            val blue = FontFactory.getFont("arial unicode ms", 16f, Font.BOLD, Color.BLUE)
-            val p = Paragraph().also {
-                it.setLeading(0f, 1.2f)
-                it.add(Phrase(32F, "jdf osi hfoh dfoihsd pjpojpo jpoj poj pj po jpoj poj poj pojpoj poj ;oj poj poj po jpoj po jpo jpo jpoj poj po jp oif hoisdhf o sdh ofighs doifugosi dufg oisdu gfoiusg dfoiusg dofiugs dofiugsd oifugs oidfug osidufg oidsugf oiudsgf oisudg foisudg foisugf"))
-                it.add(Phrase().also {
-                    it.add(Chunk(" RED", red))
-                })
-                it.add(Phrase(42f, " GREEN", green))
-                it.add(Phrase(" BLUE", blue))
-                it.add(Phrase(" jdf osi hfoh dfoihsd pjpojpo jpoj poj pj po jpoj poj poj pojpoj poj ;oj poj poj po jpoj po jpo jpo jpoj poj po jp oif hoisdhf o sdh ofighs doifugosi dufg oisdu gfoiusg dfoiusg dofiugs dofiugsd oifugs oidfug osidufg oidsugf oiudsgf oisudg foisudg foisugf"))
-            }
-            document.add(p)
-            val table = PdfPTable(1)
-            table.defaultCell.setLeading(0f,1.2f)
-            table.addCell(Paragraph().also {
-                it.add(Chunk("jdf osi hfoh dfoihsd pjpojpo jpoj poj pj po jpoj poj poj pojpoj poj ;oj poj poj po jpoj po jpo jpo jpoj poj po jp oif hoisdhf o sdh ofighs doifugosi dufg oisdu gfoiusg dfoiusg dofiugs dofiugsd oifugs oidfug osidufg oidsugf oiudsgf oisudg foisudg foisugf"))
-                it.add(Chunk(" RED", red))
-                it.add(Chunk(" GREEN", green))
-                it.add(Chunk(" BLUE", blue))
-                it.add(Chunk(" jdf osi hfoh dfoihsd pjpojpo jpoj poj pj po jpoj poj poj pojpoj poj ;oj poj poj po jpoj po jpo jpo jpoj poj po jp oif hoisdhf o sdh ofighs doifugosi dufg oisdu gfoiusg dfoiusg dofiugs dofiugsd oifugs oidfug osidufg oidsugf oiudsgf oisudg foisudg foisugf"))
-            })
-            table.setWidths(floatArrayOf(1f))
-            table.widthPercentage = 100.0f
-            document.add(table)
+    val pdfPath = "/Users/bretcalvey/IdeaProjects/io/pdf4k/src/test/resources/io/pdf4k/renderer/LinksTest.adds a link to another part of the document.actual.pdf"  // Update with the path to your PDF
+    val reader = PdfReader(pdfPath)
+
+    reader.namedDestination
+    // Iterate through all pages (we need to get all dictionaries)
+    for (i in 1..reader.numberOfPages) {
+        val pageDictionary = reader.getPageN(i)
+        traverseDictionary(reader, pageDictionary, "Page $i Dictionary")
+    }
+}
+
+fun traverseDictionary(reader: PdfReader, pdfDictionary: PdfDictionary, context: String) {
+    println("Traversing dictionary in context: $context")
+    val keys = pdfDictionary.keys.iterator()
+    while (keys.hasNext()) {
+        val key = keys.next()
+        val value = pdfDictionary.get(key)
+
+        if (value is PRIndirectReference) {
+            val obj = reader.getPdfObject(value.number)
+            println(obj)
         }
-    }.also { it.close() }
+        // Print key and the type of the object
+        val valueType = when (value) {
+            is PdfDictionary -> "PdfDictionary"
+            is PdfArray -> "PdfArray"
+            else -> value.javaClass.simpleName
+        }
+
+        println("Key: $key, Type: $valueType, Reference: ${value}")
+
+        // Recursively traverse if the value is a dictionary or array
+        when (value) {
+            is PdfDictionary -> traverseDictionary(reader, value, "Dictionary under key: $key")
+            is PdfArray -> traverseArray(reader, value, "Array under key: $key")
+        }
+    }
+}
+
+fun traverseArray(reader: PdfReader, pdfArray: PdfArray, context: String) {
+    println("Traversing array in context: $context")
+    for (i in 0 until pdfArray.size()) {
+        val element = pdfArray.elements.get(i)
+        val elementType = when (element) {
+            is PdfDictionary -> "PdfDictionary"
+            is PdfArray -> "PdfArray"
+            else -> element.javaClass.simpleName
+        }
+        println("Index: $i, Type: $elementType, Reference: ${element}, Object: ${element}")
+
+        // Recursively traverse if the element is a dictionary or array
+        when (element) {
+            is PdfDictionary -> traverseDictionary(reader, element, "Dictionary in array at index $i")
+            is PdfArray -> traverseArray(reader, element, "Array in array at index $i")
+        }
+    }
 }

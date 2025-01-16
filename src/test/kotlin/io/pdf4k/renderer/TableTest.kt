@@ -13,8 +13,8 @@ import io.pdf4k.testing.AbstractPdfApproverTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
-import pro.juxt.pdf4k.testing.CartesianProduct.cartesianProduct
-import pro.juxt.pdf4k.testing.PdfApprover
+import io.pdf4k.testing.CartesianProduct.cartesianProduct
+import io.pdf4k.testing.PdfApprover
 import java.awt.Color
 import java.awt.Color.*
 
