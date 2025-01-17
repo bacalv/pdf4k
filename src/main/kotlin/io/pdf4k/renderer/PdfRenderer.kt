@@ -13,10 +13,11 @@ import java.io.File
 import java.io.OutputStream
 import java.nio.file.FileSystems
 import java.nio.file.Files
+import kotlin.io.path.Path
 import kotlin.io.path.extension
 
 object PdfRenderer {
-    private const val fontResource = "/fonts"
+    private const val FONT_RESOURCE = "/fonts"
 
     init {
         loadFonts()
@@ -27,18 +28,23 @@ object PdfRenderer {
         val mainDocumentStream = ByteArrayOutputStream()
         val contentBlocksDocumentStream = ByteArrayOutputStream()
         val context = renderDocument(mainDocumentStream, contentBlocksDocumentStream, loadedStationary)
-//        Files.write(Path("./blocks.pdf"), contentBlocksDocumentStream.toByteArray())
+        Files.write(Path("./blocks.pdf"), contentBlocksDocumentStream.toByteArray())
         applyTemplates(mainDocumentStream, contentBlocksDocumentStream, outputStream, context)
         loadedStationary.values.forEach { it.reader.close() }
     }
 
-    private fun Pdf.renderDocument(mainDocumentStream: ByteArrayOutputStream, contentBlocksDocumentStream: ByteArrayOutputStream, loadedStationary: Map<String, LoadedStationary>): RendererContext {
+    private fun Pdf.renderDocument(mainDocumentStream: ByteArrayOutputStream, contentBlocksDocumentStream: ByteArrayOutputStream, loadedStationary: Map<Stationary, LoadedStationary>): RendererContext {
         val mainDocument = Document()
-        val mainDocumentWriter = PdfWriter.getInstance(mainDocument, mainDocumentStream)
+        PdfWriter.getInstance(mainDocument, mainDocumentStream)
         mainDocument.setMetadata(metadata)
         val contentBlocksDocument = Document()
         val contentBlocksDocumentWriter = PdfWriter.getInstance(contentBlocksDocument, contentBlocksDocumentStream)
-        val context = RendererContext(mainDocument, mainDocumentWriter, contentBlocksDocument, loadedStationary)
+        val context = RendererContext(
+            mainDocument,
+            contentBlocksDocument,
+            contentBlocksDocumentWriter,
+            loadedStationary
+        )
         val eventListener = PageEventListener(context)
         contentBlocksDocumentWriter.pageEvent = eventListener
         context.pushStyle(style)
@@ -84,31 +90,30 @@ object PdfRenderer {
         }.map { (pageNumber, blocksFilled) ->
             (1..blocksFilled).map { pageNumber }
         }.flatten()
-
-        contentReader.namedDestination.map { (name, obj) ->
-            val array = obj as PdfArray
-            val pageRef = array.elements[0] as PRIndirectReference
-            val realPage = pageNumberMap[pageRef.number] ?: 1
-            val x = array.elements[2] as PdfNumber
-            val y = array.elements[3] as PdfNumber
-            val destination = PdfDestination(PdfDestination.XYZ, x.floatValue(), y.floatValue(),0f)
-            stamper.writer.addNamedDestination(name.toString(), realPage, destination)
-        }
+        val namedDestinations = contentReader.namedDestination
 
         context.stationaryByPage.forEachIndexed { pageNumber, (template, blocksFilled) ->
             val imported = stamper.getImportedPage(template.reader, template.stationary.templatePage)
             stamper.getUnderContent(pageNumber + 1)?.addTemplate(imported, 0f, 0f)
-            template.stationary.contentFlow.forEachIndexed { blockNumber, blockName ->
+            template.stationary.contentFlow.forEachIndexed { blockNumber, _ ->
                 if (blockNumber <= blocksFilled) {
-                    template.stationary.blocks[blockName]?.let { block ->
-                        val importedBlock = stamper.getImportedPage(contentReader, contentPage)
-                        stamper.getOverContent(pageNumber + 1)?.addTemplate(importedBlock, 0f, 0f)
-                        copyLinks(contentReader, contentPage, stamper, pageNumber, blockPageMapping)
-                        contentPage++
-                    }
+                    val importedBlock = stamper.getImportedPage(contentReader, contentPage)
+                    stamper.getOverContent(pageNumber + 1)?.addTemplate(importedBlock, 0f, 0f)
+                    copyLinks(contentReader, contentPage, stamper, pageNumber, pageNumberMap, blockPageMapping, namedDestinations)
+                    contentPage++
                 }
             }
         }
+//
+//        contentReader.namedDestination.map { (name, obj) ->
+//            val array = obj as PdfArray
+//            val pageRef = array.elements[0] as PRIndirectReference
+//            val realPage = pageNumberMap[pageRef.number] ?: 1
+//            val x = array.elements[2] as PdfNumber
+//            val y = array.elements[3] as PdfNumber
+//            val destination = PdfDestination(PdfDestination.XYZ, x.floatValue(), y.floatValue(),0f)
+//            stamper.writer.addNamedDestination(name.toString(), realPage, destination)
+//        }
     }
 
     private fun copyLinks(
@@ -116,9 +121,10 @@ object PdfRenderer {
         contentPage: Int,
         stamper: PdfStamperAccessor,
         pageNumber: Int,
-        blockPageMapping: List<Int>
+        pageNumberMap: Map<Int, Int>,
+        blockPageMapping: List<Int>,
+        namedDestinations: Map<Any, PdfObject>
     ) {
-        val pageNumberMap = (1..stamper.reader.numberOfPages).map { contentReader.getPageOrigRef(it).number to it }.toMap()
         contentReader.getLinks(contentPage).map(::PdfLinkAccessor).forEach { accessor ->
             if (accessor.isLocal()) {
                 val array = contentReader.getPdfObject(accessor.getReference().number) as PdfArray
@@ -132,6 +138,8 @@ object PdfRenderer {
                 val ref = stamper.writer.addToBody(newArray)
                 ((annotation as PdfDictionary).get(PdfName.A) as PdfDictionary).put(PdfName.D, ref.indirectReference)
                 stamper.addAnnotation(annotation, pageNumber + 1)
+                val name = namedDestinations.filter { it.value == array }.map { it.key }.first()
+                PdfWriterAccessor(stamper.writer).addNamedDestination(name, ref)
             } else {
                 accessor.link.createAnnotation(stamper.writer).also {
                     stamper.addAnnotation(it, pageNumber + 1)
@@ -140,23 +148,23 @@ object PdfRenderer {
         }
     }
 
-    private fun loadStationary(stationaryList: List<Stationary>): Map<String, LoadedStationary> =
-        stationaryList.associate { stationary ->
+    private fun loadStationary(stationaryList: List<Stationary>): Map<Stationary, LoadedStationary> =
+        stationaryList.associateWith { stationary ->
             val stream = PdfRenderer::class.java.getResourceAsStream("/stationary/${stationary.template}.pdf")
                 ?: throw IllegalStateException("Can't find stationary: ${stationary.template}")
             val reader = PdfReader(stream)
-            stationary.template to LoadedStationary(stationary, reader)
+            LoadedStationary(stationary, reader)
         }
 
     private fun loadFonts() {
         FontFactory.defaultEmbedding = BaseFont.EMBEDDED
         FontFactory.defaultEncoding = BaseFont.IDENTITY_H
         FontFactory.setFontImp(FontFactoryImp().also { it.defaultEmbedding = BaseFont.EMBEDDED })
-        val uri = PdfRenderer::class.java.getResource(fontResource)?.toURI()
+        val uri = PdfRenderer::class.java.getResource(FONT_RESOURCE)?.toURI()
             ?: throw IllegalStateException("Failed to read font directory")
         val fontsRegistered = if (uri.scheme != "file") {
             FileSystems.newFileSystem(uri, emptyMap<String, Any>()).use { fileSystem ->
-                Files.walk(fileSystem.getPath(fontResource)).filter { it.extension == "ttf" }
+                Files.walk(fileSystem.getPath(FONT_RESOURCE)).filter { it.extension == "ttf" }
                     .map { FontFactory.register(it.toUri().toString()) }.count()
             }
         } else {

@@ -15,7 +15,7 @@ data class Musician(
         val musicians = listOf(
             Musician(
                 name = "Jimi Hendrix",
-                image ="hendrix.png",
+                image = "hendrix.png",
                 bio = """
                     Born in Seattle, Washington, Hendrix began playing guitar at age 15. In 1961,
                     he enlisted in the US Army, but was discharged the following year.

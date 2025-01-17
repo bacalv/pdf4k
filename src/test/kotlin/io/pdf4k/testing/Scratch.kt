@@ -3,7 +3,7 @@ package io.pdf4k.testing
 import com.lowagie.text.pdf.*
 
 fun main() {
-    val pdfPath = "/Users/bretcalvey/IdeaProjects/io/pdf4k/src/test/resources/io/pdf4k/renderer/LinksTest.adds a link to another part of the document.actual.pdf"  // Update with the path to your PDF
+    val pdfPath = "/Users/bac/IdeaProjects/pdf4k/src/test/resources/io/pdf4k/renderer/LinksTest.adds a link from a block to main content.actual.pdf"  // Update with the path to your PDF
     val reader = PdfReader(pdfPath)
 
     reader.namedDestination

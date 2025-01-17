@@ -19,9 +19,9 @@ import com.lowagie.text.Font as ITFont
 
 class RendererContext(
     val mainDocument: Document,
-    val mainDocumentWriter: PdfWriter,
     val contentBlocksDocument: Document,
-    val loadedStationary: Map<String, LoadedStationary>
+    val contentBlocksDocumentWriter: PdfWriter,
+    val loadedStationary: Map<Stationary, LoadedStationary>
 ) {
     private val styleStack: Stack<StyleAttributes> = Stack()
     private val pageNumber: AtomicInteger = AtomicInteger()
@@ -72,7 +72,7 @@ class RendererContext(
     fun drawBlocks(page: Page, stationary: Stationary) {
         page.blockContent.forEach { (blockName, content) ->
             stationary.blocks[blockName]?.let { block ->
-                ColumnText(mainDocumentWriter.directContent).let { columnText ->
+                ColumnText(contentBlocksDocumentWriter.directContent).let { columnText ->
                     columnText.setSimpleColumn(block.x, block.y + block.h, block.x + block.w, block.y)
                     content.children.render(this).forEach { columnText.addElement(it) }
                     columnText.go()
@@ -87,7 +87,7 @@ class RendererContext(
 
     fun nextPage(stationary: Stationary, blocksFilled: Int) {
         pageNumber.incrementAndGet()
-        stationaryByPage += (loadedStationary[stationary.template]
+        stationaryByPage += (loadedStationary[stationary]
             ?: throw IllegalStateException("Can't find stationary $stationary")) to blocksFilled
     }
 

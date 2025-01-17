@@ -28,7 +28,7 @@ class PageEventListener(private val context: RendererContext) : PdfPageEventHelp
     private fun setTemplate() {
         val currentTemplate = currentPageTemplate.stationary.getOrNull(templatePageCount)
             ?: currentPageTemplate.stationary.last()
-        context.loadedStationary[currentTemplate.template]?.let { loadedStationary ->
+        context.loadedStationary[currentTemplate]?.let { loadedStationary ->
             val pageSize = Rectangle(loadedStationary.stationary.width, loadedStationary.stationary.height)
             context.mainDocument.setPageSize(pageSize)
             context.mainDocument.setMargins(0f, 0f, 0f, 0f)
