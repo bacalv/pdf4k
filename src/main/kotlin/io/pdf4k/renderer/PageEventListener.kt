@@ -52,27 +52,18 @@ class PageEventListener(private val context: RendererContext) : PdfPageEventHelp
     override fun onStartPage(writer: PdfWriter?, document: Document?) {
         val stationary = currentPageTemplate.stationary.getOrNull(templatePageCount)
             ?: currentPageTemplate.stationary.last()
-
-        if (stationary.contentFlow.isEmpty()) {
-            context.nextPage(stationary, 1)
+        if (currentBlockCount == 0) {
             nextPage()
+        }
+        if (currentBlockCount == stationary.contentFlow.size - 1) {
+            context.nextPage(stationary, currentBlockCount + 1)
             context.drawBlocks(currentPageTemplate, stationary)
             templatePageCount++
-            setTemplate()
+            currentBlockCount = 0
         } else {
-            if (currentBlockCount == 0) {
-                nextPage()
-            }
-            if (currentBlockCount == stationary.contentFlow.size - 1) {
-                context.nextPage(stationary, currentBlockCount)
-                context.drawBlocks(currentPageTemplate, stationary)
-                templatePageCount++
-                currentBlockCount = 0
-            } else {
-                currentBlockCount++
-            }
-            setTemplate()
+            currentBlockCount++
         }
+        setTemplate()
     }
 
     private fun nextPage() {

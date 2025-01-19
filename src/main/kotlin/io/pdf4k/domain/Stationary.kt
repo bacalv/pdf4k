@@ -10,15 +10,14 @@ data class Stationary(
     val blocks: Map<String, Block> = emptyMap(),
     val contentFlow: List<String> = emptyList()
 ) {
-    private constructor(template: String, templatePage: Int, width: Float, height: Float, margin: Margin) :
-            this(
-                template = template,
-                templatePage = templatePage,
-                width = width,
-                height = height,
-                blocks = mapOf(MainBlockName to margin.toBlock(width, height)),
-                contentFlow = listOf(MainBlockName)
-            )
+    constructor(template: String, templatePage: Int, width: Float, height: Float, margin: Margin) : this(
+        template = template,
+        templatePage = templatePage,
+        width = width,
+        height = height,
+        blocks = mapOf(MainBlockName to margin.toBlock(width, height)),
+        contentFlow = listOf(MainBlockName)
+    )
 
     companion object {
         val MainBlockName = "main"

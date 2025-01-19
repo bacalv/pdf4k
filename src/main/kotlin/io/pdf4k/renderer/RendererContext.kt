@@ -7,9 +7,12 @@ import com.lowagie.text.Image
 import com.lowagie.text.pdf.BaseFont
 import com.lowagie.text.pdf.ColumnText
 import com.lowagie.text.pdf.PdfWriter
-import io.pdf4k.domain.*
+import io.pdf4k.domain.Component
 import io.pdf4k.domain.Font.BuiltIn.Ariel
 import io.pdf4k.domain.Font.Style.*
+import io.pdf4k.domain.Page
+import io.pdf4k.domain.Stationary
+import io.pdf4k.domain.StyleAttributes
 import io.pdf4k.domain.StyleAttributes.Companion.DEFAULT_STYLE
 import io.pdf4k.renderer.ComponentRenderer.render
 import java.awt.Color
@@ -19,6 +22,7 @@ import com.lowagie.text.Font as ITFont
 
 class RendererContext(
     val mainDocument: Document,
+    val mainDocumentWriter: PdfWriter,
     val contentBlocksDocument: Document,
     val contentBlocksDocumentWriter: PdfWriter,
     val loadedStationary: Map<Stationary, LoadedStationary>

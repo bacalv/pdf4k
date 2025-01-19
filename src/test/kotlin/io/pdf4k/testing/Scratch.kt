@@ -1,9 +1,14 @@
 package io.pdf4k.testing
 
-import com.lowagie.text.pdf.*
+import com.lowagie.text.pdf.PRIndirectReference
+import com.lowagie.text.pdf.PdfArray
+import com.lowagie.text.pdf.PdfDictionary
+import com.lowagie.text.pdf.PdfReader
 
 fun main() {
-    val pdfPath = "/Users/bac/IdeaProjects/pdf4k/src/test/resources/io/pdf4k/renderer/LinksTest.adds a link from a block to main content.actual.pdf"  // Update with the path to your PDF
+//    val pdfPath = "/Users/bretcalvey/IdeaProjects/io/pdf4k/blocks.pdf"  // Update with the path to your PDF
+    val pdfPath = "/Users/bretcalvey/IdeaProjects/io/pdf4k/src/test/resources/io/pdf4k/renderer/LinksTest.adds a link to another part of the document.actual.pdf"  // Update with the path to your PDF
+//    val pdfPath = "/Users/bretcalvey/IdeaProjects/sedex/binder/services/audit/src/test/resources/com/sedex/connect/audit/pdf/SMETADocumentApprovalTest.generates SMETA PDF.approved.pdf"  // Update with the path to your PDF
     val reader = PdfReader(pdfPath)
 
     reader.namedDestination
