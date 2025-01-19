@@ -13,9 +13,9 @@ abstract class TableBuilder<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(
 
     override fun build() = with(attributes) {
         if (style == null) {
-            Component.Table(columns, widthPercentage, weights, headerRows, children.map { it.build() })
+            Component.Table(columns, widthPercentage, weights, headerRows, extend, children.map { it.build() })
         } else {
-            Component.Table(columns, widthPercentage, weights, headerRows, listOf(Component.Style(style, children.map { it.build() })))
+            Component.Table(columns, widthPercentage, weights, headerRows, extend, listOf(Component.Style(style, children.map { it.build() })))
         }
     }
 
@@ -43,11 +43,12 @@ abstract class TableBuilder<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(
         weights: FloatArray? = null,
         margin: Margin? = Margin.ZERO,
         headerRows: Int = 0,
+        extend: Boolean = false,
         colSpan: Int = 1,
         rowSpan: Int = 1,
         block: T.() -> Unit
     ) {
-        children += CellBuilder(colSpan, rowSpan, margin, tableBuilder(TableAttributes(columns, 100f, weights, margin, headerRows), style).also { it.block() })
+        children += CellBuilder(colSpan, rowSpan, margin, tableBuilder(TableAttributes(columns, 100f, weights, margin, headerRows, extend), style).also { it.block() })
     }
 
     fun imageCell(resource: String, style: StyleAttributes? = null, colSpan: Int = 1, rowSpan: Int = 1, width: Float? = null, height: Float? = null,
@@ -76,7 +77,7 @@ abstract class TableBuilder<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(
         style: StyleAttributes?
     ) : TableBuilder<PhraseBuilder.ForBlock, ForBlock>(attributes, style) {
         override val phraseBuilder: () -> PhraseBuilder.ForBlock = { PhraseBuilder.ForBlock() }
-        override val childBuilder: () -> ForBlock = { ForBlock(TableAttributes(0, attributes.widthPercentage, null, attributes.margin, 0), style) }
+        override val childBuilder: () -> ForBlock = { ForBlock(TableAttributes(0, attributes.widthPercentage, null, attributes.margin, 0, attributes.extend), style) }
         override val tableBuilder: (TableAttributes, StyleAttributes?) -> ForBlock = { t, s -> ForBlock(t, s) }
     }
 
@@ -85,7 +86,7 @@ abstract class TableBuilder<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(
         style: StyleAttributes?
     ) : TableBuilder<PhraseBuilder.ForPage, ForPage>(attributes, style) {
         override val phraseBuilder: () -> PhraseBuilder.ForPage = { PhraseBuilder.ForPage() }
-        override val childBuilder: () -> ForPage = { ForPage(TableAttributes(0, attributes.widthPercentage, null, attributes.margin, 0), style) }
+        override val childBuilder: () -> ForPage = { ForPage(TableAttributes(0, attributes.widthPercentage, null, attributes.margin, 0, attributes.extend), style) }
         override val tableBuilder: (TableAttributes, StyleAttributes?) -> ForPage = { t, s -> ForPage(t, s) }
     }
 }

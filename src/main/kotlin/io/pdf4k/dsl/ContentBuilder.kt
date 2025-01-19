@@ -46,8 +46,8 @@ abstract class ContentBuilder<F : PhraseBuilder<F>, P : ParagraphBuilder<F, P>, 
         style?.let { _ -> style(style) { phrase(block) } } ?: phrase(block)
     }
 
-    fun table(columns: Int, style: StyleAttributes? = null, widthPercentage: Float = 100f, weights: FloatArray? = null, headerRows: Int = 0, block: T.() -> Unit) {
-        children += tableBuilder(TableAttributes(columns, widthPercentage, weights, null, headerRows), style).also { it.block() }
+    fun table(columns: Int, style: StyleAttributes? = null, widthPercentage: Float = 100f, weights: FloatArray? = null, headerRows: Int = 0, extend: Boolean = false, block: T.() -> Unit) {
+        children += tableBuilder(TableAttributes(columns, widthPercentage, weights, null, headerRows, extend), style).also { it.block() }
     }
 
     override fun build() = Component.Content(children.map { it.build() })

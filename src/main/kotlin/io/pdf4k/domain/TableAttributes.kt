@@ -5,5 +5,6 @@ data class TableAttributes(
     val widthPercentage: Float?,
     val weights: FloatArray?,
     val margin: Margin?,
-    val headerRows: Int
+    val headerRows: Int,
+    val extend: Boolean
 )

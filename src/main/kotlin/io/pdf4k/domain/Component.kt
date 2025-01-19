@@ -21,7 +21,7 @@ sealed class Component(val children: List<Component>) {
 
     object PageNumber : Component(emptyList())
 
-    class Table(val columns: Int, val widthPercentage: Float?, val weights: FloatArray?, val headerRows: Int, children: List<Component>) : Component(children)
+    class Table(val columns: Int, val widthPercentage: Float?, val weights: FloatArray?, val headerRows: Int, val extend: Boolean, children: List<Component>) : Component(children)
 
     sealed class Cell(val colSpan: Int, val rowSpan: Int, children: List<Component> = emptyList()) : Component(children) {
         class Style(colSpan: Int, rowSpan: Int, val style: Component.Style) : Cell(colSpan, rowSpan, listOf(style))

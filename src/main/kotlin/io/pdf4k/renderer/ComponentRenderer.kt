@@ -74,6 +74,7 @@ object ComponentRenderer {
             is Component.QrCode -> listOf(getQrCode(component))
 
             is Component.Table -> listOf(PdfPTable(component.columns).also { table ->
+                table.isExtendLastRow = component.extend
                 table.widthPercentage = component.widthPercentage ?: 100f
                 table.defaultCell.borderWidthTop = 0f
                 table.defaultCell.borderWidthBottom = 0f

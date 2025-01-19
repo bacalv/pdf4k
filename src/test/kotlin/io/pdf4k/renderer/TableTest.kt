@@ -4,17 +4,19 @@ import io.pdf4k.domain.Font.Style.Bold
 import io.pdf4k.domain.Font.Style.Plain
 import io.pdf4k.domain.HorizontalAlignment
 import io.pdf4k.domain.HorizontalAlignment.*
+import io.pdf4k.domain.Stationary
 import io.pdf4k.domain.StyleAttributes.Companion.border
 import io.pdf4k.domain.StyleAttributes.Companion.style
 import io.pdf4k.domain.VerticalAlignment
 import io.pdf4k.domain.VerticalAlignment.*
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
+import io.pdf4k.dsl.StationaryBuilder.Companion.plusBlocks
 import io.pdf4k.testing.AbstractPdfApproverTest
+import io.pdf4k.testing.CartesianProduct.cartesianProduct
+import io.pdf4k.testing.PdfApprover
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
-import io.pdf4k.testing.CartesianProduct.cartesianProduct
-import io.pdf4k.testing.PdfApprover
 import java.awt.Color
 import java.awt.Color.*
 
@@ -251,6 +253,28 @@ class TableTest : AbstractPdfApproverTest() {
                     table(2, widthPercentage = 50f) {
                         textCell("Col 1")
                         textCell("Cell 2")
+                    }
+                }
+            }
+        }.approve(approver)
+    }
+
+    @Test
+    fun `extends table to fill the rest of the block`(approver: PdfApprover) {
+        val stationary = Stationary.BlankA4Portrait.plusBlocks {
+            block("normal", 0f, 0f, 250f, 642.88f)
+            block("extended", 260f, 0f, 250f, 642.88f)
+        }
+
+        pdf {
+            page(stationary = stationary) {
+                listOf("extended" to true, "normal" to false).forEach { (blockName, extend) ->
+                    block(blockName) {
+                        style(cellBackground = RED, colour = WHITE) {
+                            table(1, extend = extend) {
+                                textCell("extend=$extend")
+                            }
+                        }
                     }
                 }
             }

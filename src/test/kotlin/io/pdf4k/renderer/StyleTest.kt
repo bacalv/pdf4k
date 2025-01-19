@@ -2,11 +2,17 @@ package io.pdf4k.renderer
 
 import io.pdf4k.domain.Font.BuiltIn.Ariel
 import io.pdf4k.domain.Font.Style.*
+import io.pdf4k.domain.HorizontalAlignment.Center
+import io.pdf4k.domain.Stationary
+import io.pdf4k.domain.StyleAttributes.Companion.noBorder
 import io.pdf4k.domain.StyleAttributes.Companion.style
+import io.pdf4k.domain.VerticalAlignment.Middle
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
+import io.pdf4k.dsl.StationaryBuilder.Companion.plusBlocks
 import io.pdf4k.testing.AbstractPdfApproverTest
-import org.junit.jupiter.api.Test
 import io.pdf4k.testing.PdfApprover
+import org.junit.jupiter.api.Test
+import java.awt.Color
 import java.awt.Color.*
 
 class StyleTest : AbstractPdfApproverTest() {
@@ -148,6 +154,33 @@ class StyleTest : AbstractPdfApproverTest() {
                         textCell("Italic 24 underlined", style(underlined = true))
                         textCell(style(cellBackground = YELLOW)) {
                             +"Italic 24 yellow background"
+                        }
+                    }
+                }
+            }
+        }.approve(approver)
+    }
+
+    @Test
+    fun `renders semi-transparent colours`(approver: PdfApprover) {
+        val stationary = Stationary.BlankA4Portrait.plusBlocks {
+            block("red", 0f, 0f, 395.92f, 642.88f)
+            block("green", 200f, 0f, 395.92f, 642.88f)
+            block("blue", 250f, 0f, 200f, 642.88f)
+        }
+        val redTransparent = style(cellBackground = Color(255, 0, 0, 128))
+        val greenTransparent = style(cellBackground = Color(0, 255, 0, 128))
+        val blueTransparent = style(cellBackground = Color(0, 0, 255, 128))
+        pdf {
+            page(stationary = stationary) {
+                listOf(
+                    "red" to redTransparent,
+                    "green" to greenTransparent,
+                    "blue" to blueTransparent,
+                ).forEach { (blockName, style) ->
+                    block(blockName) {
+                        table(1, style + noBorder, extend = true) {
+                            textCell(blockName.uppercase(), style(align = Center, valign = Middle))
                         }
                     }
                 }
