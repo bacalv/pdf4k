@@ -6,5 +6,6 @@ data class PdfMetadata(
     val subject: String?,
     val keywords: String?,
     val creator: String?,
-    val producer: String?
+    val producer: String?,
+    val customProperties: Map<String, String> = emptyMap()
 )

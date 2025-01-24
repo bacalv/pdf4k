@@ -9,6 +9,11 @@ class MetadataBuilder {
     var keywords: String? = null
     var creator: String? = null
     var producer: String? = null
+    private val properties = mutableMapOf<String, String>()
 
-    fun build() = PdfMetadata(title, author, subject, keywords, creator, producer)
+    fun customProperty(key: String, value: String) {
+        properties += key to value
+    }
+
+    fun build() = PdfMetadata(title, author, subject, keywords, creator, producer, properties)
 }

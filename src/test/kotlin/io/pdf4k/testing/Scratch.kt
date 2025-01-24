@@ -7,8 +7,9 @@ import com.lowagie.text.pdf.PdfReader
 
 fun main() {
 //    val pdfPath = "/Users/bretcalvey/IdeaProjects/io/pdf4k/blocks.pdf"  // Update with the path to your PDF
-    val pdfPath = "/Users/bretcalvey/IdeaProjects/io/pdf4k/src/test/resources/io/pdf4k/renderer/LinksTest.adds a link to another part of the document.actual.pdf"  // Update with the path to your PDF
+//    val pdfPath = "/Users/bretcalvey/IdeaProjects/io/pdf4k/src/test/resources/io/pdf4k/renderer/LinksTest.adds a link to another part of the document.actual.pdf"  // Update with the path to your PDF
 //    val pdfPath = "/Users/bretcalvey/IdeaProjects/sedex/binder/services/audit/src/test/resources/com/sedex/connect/audit/pdf/SMETADocumentApprovalTest.generates SMETA PDF.approved.pdf"  // Update with the path to your PDF
+    val pdfPath = "/Users/bretcalvey/Downloads/METADATA.pdf"  // Update with the path to your PDF
     val reader = PdfReader(pdfPath)
 
     reader.namedDestination

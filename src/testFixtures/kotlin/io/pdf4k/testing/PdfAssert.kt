@@ -99,7 +99,7 @@ object PdfAssert {
                     "Metadata property $key matches"
                 )
             }
-        }
+        } + listOf({ assertEquals(approvedDocument.documentInformation.metadataKeys, actualDocument.documentInformation.metadataKeys, "Same metadata keys") })
     }
 
     private fun annotationAssertions(approvedDocument: PDDocument, actualDocument: PDDocument): List<() -> Unit> {

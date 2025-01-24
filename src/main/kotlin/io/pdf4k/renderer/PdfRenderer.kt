@@ -126,6 +126,10 @@ object PdfRenderer {
             )
         }
         stampPageTemplates(stamper, contentReader, context)
+        metadata.customProperties.forEach {
+            val info: PdfDictionary = stamper.reader.trailer.getAsDict(PdfName.INFO)
+            info.put(PdfName(it.key),  PdfString(it.value))
+        }
         stamper.close()
     }
 
