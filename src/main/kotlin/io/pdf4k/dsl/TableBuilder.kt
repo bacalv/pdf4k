@@ -19,10 +19,6 @@ abstract class TableBuilder<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(
         }
     }
 
-    fun textCell(text: String, colSpan: Int = 1, rowSpan: Int = 1) {
-        textCell(text, null, colSpan, rowSpan)
-    }
-
     fun textCell(text: String, style: StyleAttributes? = null, colSpan: Int = 1, rowSpan: Int = 1) {
         textCell(style, colSpan, rowSpan) { +text }
     }

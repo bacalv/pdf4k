@@ -1,15 +1,18 @@
 package io.pdf4k.renderer
 
-import io.pdf4k.domain.HorizontalAlignment.JustifiedAll
+import io.pdf4k.domain.Font.Style.Bold
+import io.pdf4k.domain.HorizontalAlignment.*
+import io.pdf4k.domain.Musician.Companion.musicians
 import io.pdf4k.domain.Stationary.Companion.BlankA4Portrait
+import io.pdf4k.domain.StyleAttributes.Companion.noBorder
 import io.pdf4k.domain.StyleAttributes.Companion.style
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
 import io.pdf4k.dsl.StationaryBuilder.Companion.plusBlocks
 import io.pdf4k.dsl.StationaryBuilder.Companion.withBlocks
 import io.pdf4k.extensions.splitParagraphs
 import io.pdf4k.testing.AbstractPdfApproverTest
-import org.junit.jupiter.api.Test
 import io.pdf4k.testing.PdfApprover
+import org.junit.jupiter.api.Test
 import java.awt.Color.RED
 
 class BlocksTest : AbstractPdfApproverTest() {
@@ -74,14 +77,8 @@ class BlocksTest : AbstractPdfApproverTest() {
 
     @Test
     fun `renders pages with 2 column text`(approver: PdfApprover) {
-        val stationary = BlankA4Portrait.withBlocks {
-            block("col1", 24f, 24f, 262f, 796f)
-            block("col2", 310f, 24f, 262f, 796f)
-            contentFlow("col1", "col2")
-        }
-
         pdf {
-            page(stationary = stationary) {
+            page(stationary = twoColumns) {
                 content(style(size = 24f, align = JustifiedAll)) {
                     +"""
                         Within seconds he ran out onto the deck and waved and grinned at over
@@ -121,9 +118,37 @@ class BlocksTest : AbstractPdfApproverTest() {
         }.approve(approver)
     }
 
+    @Test
+    fun `renders artists in two columns`(approver: PdfApprover) {
+        pdf {
+            page(stationary = twoColumns) {
+                content(noBorder) {
+                    table(1) {
+                        musicians.forEach { musician ->
+                            tableCell(1, style(align = Center)) {
+                                textCell(musician.name, style(fontStyle = Bold, size = 16f))
+                                style(paddingTop = 16f, paddingBottom = 16f) {
+                                    imageCell("musicians/${musician.image}", width = 200f, height = 200f)
+                                }
+                            }
+                            textCell(musician.bio, style(size = 12f, align = Justified))
+                            textCell { crlf() }
+                        }
+                    }
+                }
+            }
+        }.approve(approver)
+    }
+
     companion object {
         private val stationaryWithBlock = BlankA4Portrait.plusBlocks {
             block("blockName", 115f, 520f, 450f, 100f)
+        }
+
+        val twoColumns = BlankA4Portrait.withBlocks {
+            block("col1", 24f, 24f, 262f, 796f)
+            block("col2", 310f, 24f, 262f, 796f)
+            contentFlow("col1", "col2")
         }
     }
 }

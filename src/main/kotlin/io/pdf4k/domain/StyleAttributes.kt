@@ -29,6 +29,8 @@ data class StyleAttributes(
     val borderColourBottom: Color? = null,
     val borderColourLeft: Color? = null,
     val borderColourRight: Color? = null,
+    val splitLate: Boolean? = null,
+    val splitRows: Boolean? = null,
 ) {
     companion object {
         val DEFAULT_LEADING = leading(0f, 1.2f)
@@ -49,6 +51,7 @@ data class StyleAttributes(
             4f,
             4f
         )
+
         fun style(
             font: Font? = null,
             fontStyle: Font.Style? = null,
@@ -73,6 +76,8 @@ data class StyleAttributes(
             borderColourBottom: Color? = null,
             borderColourLeft: Color? = null,
             borderColourRight: Color? = null,
+            splitLate: Boolean? = null,
+            splitRows: Boolean? = null
             ) = StyleAttributes(
             font,
             fontStyle,
@@ -96,18 +101,20 @@ data class StyleAttributes(
             borderColourTop,
             borderColourBottom,
             borderColourLeft,
-            borderColourRight
+            borderColourRight,
+            splitLate,
+            splitRows
         )
 
         fun border(width: Float, colour: Color? = null) = StyleAttributes(
-            borderColourTop = colour,
-            borderColourBottom = colour,
-            borderColourLeft = colour,
-            borderColourRight = colour,
             borderWidthTop = width,
             borderWidthBottom = width,
             borderWidthLeft = width,
             borderWidthRight = width,
+            borderColourTop = colour,
+            borderColourBottom = colour,
+            borderColourLeft = colour,
+            borderColourRight = colour,
         )
 
         val noBorder = border(0f)
@@ -136,6 +143,8 @@ data class StyleAttributes(
         other.borderColourTop ?: borderColourTop ?: DEFAULT_STYLE.borderColourTop,
         other.borderColourBottom ?: borderColourBottom ?: DEFAULT_STYLE.borderColourBottom,
         other.borderColourLeft ?: borderColourLeft ?: DEFAULT_STYLE.borderColourLeft,
-        other.borderColourRight ?: borderColourRight ?: DEFAULT_STYLE.borderColourRight
+        other.borderColourRight ?: borderColourRight ?: DEFAULT_STYLE.borderColourRight,
+        other.splitLate ?: splitLate ?: DEFAULT_STYLE.splitLate,
+        other.splitRows ?: splitRows ?: DEFAULT_STYLE.splitRows
     )
 }

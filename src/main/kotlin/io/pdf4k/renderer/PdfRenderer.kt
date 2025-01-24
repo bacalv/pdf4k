@@ -13,7 +13,6 @@ import java.io.File
 import java.io.OutputStream
 import java.nio.file.FileSystems
 import java.nio.file.Files
-import kotlin.io.path.Path
 import kotlin.io.path.extension
 
 object PdfRenderer {
@@ -32,8 +31,8 @@ object PdfRenderer {
         context.copyNamedDestinations(contentReader)
         context.mainDocument.close()
         val mainContentBytes = mainDocumentStream.toByteArray()
-        Files.write(Path("./main.pdf"), mainContentBytes)
-        Files.write(Path("./blocks.pdf"), contentBlocksDocumentStream.toByteArray())
+//        Files.write(Path("./main.pdf"), mainContentBytes)
+//        Files.write(Path("./blocks.pdf"), contentBlocksDocumentStream.toByteArray())
         applyTemplates(PdfReader(mainContentBytes), contentReader, outputStream, context)
         loadedStationary.values.forEach { it.reader.close() }
     }
@@ -60,6 +59,7 @@ object PdfRenderer {
         }
         context.popStyle()
         contentBlocksDocumentWriter.pageEvent = null
+        eventListener.close()
         contentBlocksDocument.close()
         return context
     }

@@ -68,7 +68,7 @@ data class Musician(
                     began writing classical music in high school, while simultaneously playing drums in rhythm and 
                     blues bands, later switching to electric guitar. His debut studio album with the Mothers of 
                     Invention, Freak Out! (1966), combined satirical but seemingly conventional rock and roll songs 
-                    with extended sound collages. He continued this eclectic and experimental approach throughout his 
+                    with extended sound collages. He continued this eclectic and experimental approach throughout his
                     career.
                 """.singleLine(),
                 dob = LocalDate.parse("1940-12-21"),

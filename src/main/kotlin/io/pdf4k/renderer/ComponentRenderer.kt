@@ -26,8 +26,10 @@ object ComponentRenderer {
             is Component.Paragraph -> listOf(PdfPTable(1).also { table ->
                 table.widthPercentage = 100.0f
                 table.keepTogether = false
-                table.isSplitRows = true
-                table.isSplitLate = true
+                context.peekStyle().let { style ->
+                    table.isSplitLate = style.splitLate ?: false
+                    table.isSplitRows = style.splitRows ?: true
+                }
                 table.addCell(PdfPCell().also { cell ->
                     cell.paddingLeft = 0f
                     cell.paddingRight = 0f
@@ -80,6 +82,10 @@ object ComponentRenderer {
                 table.defaultCell.borderWidthBottom = 0f
                 table.defaultCell.borderWidthLeft = 0f
                 table.defaultCell.borderWidthRight = 0f
+                context.peekStyle().let { style ->
+                    table.isSplitLate = style.splitLate ?: false
+                    table.isSplitRows = style.splitRows ?: true
+                }
                 component.weights?.let { table.setWidths(it) }
                 table.headerRows = component.headerRows
                 component.children.render(context).forEach {

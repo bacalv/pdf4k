@@ -30,6 +30,8 @@ interface BuildsCellStyle<T : Component, B : ComponentBuilder<T, B>> : Component
         borderColourBottom: Color? = null,
         borderColourLeft: Color? = null,
         borderColourRight: Color? = null,
+        splitLate: Boolean? = null,
+        splitRows: Boolean? = null,
         block: B.() -> Unit
     ) = style(
         StyleAttributes(
@@ -55,7 +57,9 @@ interface BuildsCellStyle<T : Component, B : ComponentBuilder<T, B>> : Component
             borderColourTop,
             borderColourBottom,
             borderColourLeft,
-            borderColourRight
+            borderColourRight,
+            splitLate,
+            splitRows
         ), block
     )
 
