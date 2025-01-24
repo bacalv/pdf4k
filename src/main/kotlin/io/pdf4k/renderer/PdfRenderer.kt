@@ -4,15 +4,15 @@ import com.lowagie.text.Document
 import com.lowagie.text.FontFactory
 import com.lowagie.text.FontFactoryImp
 import com.lowagie.text.pdf.*
-import io.pdf4k.domain.Pdf
-import io.pdf4k.domain.PdfMetadata
-import io.pdf4k.domain.Stationary
+import io.pdf4k.domain.*
+import io.pdf4k.domain.PdfPermissions.PdfPermission.*
 import io.pdf4k.renderer.PageRenderer.render
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.OutputStream
 import java.nio.file.FileSystems
 import java.nio.file.Files
+import java.util.*
 import kotlin.io.path.extension
 
 object PdfRenderer {
@@ -22,7 +22,7 @@ object PdfRenderer {
         loadFonts()
     }
 
-    fun Pdf.render(outputStream: OutputStream) {
+    fun Pdf.render(outputStream: OutputStream, keyProvider: KeyProvider) {
         val loadedStationary = loadStationary(pages.map { it.stationary }.flatten())
         val mainDocumentStream = ByteArrayOutputStream()
         val contentBlocksDocumentStream = ByteArrayOutputStream()
@@ -33,11 +33,15 @@ object PdfRenderer {
         val mainContentBytes = mainDocumentStream.toByteArray()
 //        Files.write(Path("./main.pdf"), mainContentBytes)
 //        Files.write(Path("./blocks.pdf"), contentBlocksDocumentStream.toByteArray())
-        applyTemplates(PdfReader(mainContentBytes), contentReader, outputStream, context)
+        applyTemplates(PdfReader(mainContentBytes), contentReader, outputStream, context, keyProvider)
         loadedStationary.values.forEach { it.reader.close() }
     }
 
-    private fun Pdf.paginateDocument(mainDocumentStream: ByteArrayOutputStream, contentBlocksDocumentStream: ByteArrayOutputStream, loadedStationary: Map<Stationary, LoadedStationary>): RendererContext {
+    private fun Pdf.paginateDocument(
+        mainDocumentStream: ByteArrayOutputStream,
+        contentBlocksDocumentStream: ByteArrayOutputStream,
+        loadedStationary: Map<Stationary, LoadedStationary>
+    ): RendererContext {
         val mainDocument = Document()
         val mainDocumentWriter = PdfWriter.getInstance(mainDocument, mainDocumentStream)
         mainDocument.setMetadata(metadata)
@@ -74,12 +78,19 @@ object PdfRenderer {
     }
 
     private fun RendererContext.copyNamedDestinations(contentReader: PdfReader) {
-        val blockNumbers = (1..contentReader.numberOfPages).map { page -> contentReader.getPageOrigRef(page).number to page }.toMap()
+        val blockNumbers =
+            (1..contentReader.numberOfPages).map { page -> contentReader.getPageOrigRef(page).number to page }.toMap()
         contentReader.namedDestination.forEach { (name, obj) ->
             (obj as? PdfArray)?.elements?.let { array ->
-                val blockNumber = blockNumbers[(array[0] as PdfIndirectReference).number] ?: throw IllegalStateException("Page not found ${array[0]}")
+                val blockNumber = blockNumbers[(array[0] as PdfIndirectReference).number]
+                    ?: throw IllegalStateException("Page not found ${array[0]}")
                 val translatedPage = findPageForBlockNumber(blockNumber)
-                val destination = PdfDestination(0, (array[2] as PdfNumber).floatValue(), (array[3] as PdfNumber).floatValue(), (array[4] as PdfNumber).floatValue())
+                val destination = PdfDestination(
+                    0,
+                    (array[2] as PdfNumber).floatValue(),
+                    (array[3] as PdfNumber).floatValue(),
+                    (array[4] as PdfNumber).floatValue()
+                )
                 mainDocumentWriter.addNamedDestination(name.toString(), translatedPage, destination)
             }
         }
@@ -94,20 +105,71 @@ object PdfRenderer {
         throw IllegalStateException("Can't find page for block $blockNumber")
     }
 
-    private fun applyTemplates(
+    private fun Pdf.applyTemplates(
         mainDocumentReader: PdfReader,
         contentReader: PdfReader,
         outputStream: OutputStream,
-        context: RendererContext
+        context: RendererContext,
+        keyProvider: KeyProvider
     ) {
-        val stamper = PdfStamper(mainDocumentReader, outputStream)
+        val stamper = if (signature != null) {
+            signature.createSigningStamper(keyProvider, mainDocumentReader, outputStream)
+        } else {
+            PdfStamper(mainDocumentReader, outputStream, '\u0000')
+        }
+        if (permissions != null) {
+            stamper.setEncryption(
+                permissions.userPassword.toByteArray(),
+                permissions.ownerPassword.toByteArray(),
+                permissions.toInt(),
+                PdfWriter.ENCRYPTION_AES_256_V3
+            )
+        }
         stampPageTemplates(stamper, contentReader, context)
         stamper.close()
     }
 
+    private fun PdfPermissions.toInt() =
+        permissions.fold(0) { acc, e ->
+            when (e) {
+                Print -> PdfWriter.ALLOW_PRINTING
+                ModifyContents -> PdfWriter.ALLOW_MODIFY_CONTENTS
+                Copy -> PdfWriter.ALLOW_COPY
+                ModifyAnnotations -> PdfWriter.ALLOW_MODIFY_ANNOTATIONS
+                FillIn -> PdfWriter.ALLOW_FILL_IN
+                ScreenReaders -> PdfWriter.ALLOW_SCREENREADERS
+                Assembly -> PdfWriter.ALLOW_ASSEMBLY
+                DegradedPrint -> PdfWriter.ALLOW_DEGRADED_PRINTING
+            } or acc
+        }
+
+    private fun Signature.createSigningStamper(
+        keyProvider: KeyProvider,
+        mainDocumentReader: PdfReader,
+        outputStream: OutputStream
+    ): PdfStamper {
+        val keys = keyProvider.lookup(keyName)
+        return PdfStamper.createSignature(mainDocumentReader, outputStream, '\u0000').also {
+            it.signatureAppearance.apply {
+                setCrypto(
+                    keys.privateKey,
+                    keys.certificateChain.toTypedArray(),
+                    emptyArray(),
+                    PdfSignatureAppearance.WINCER_SIGNED
+                )
+                reason = this@createSigningStamper.reason
+                location = this@createSigningStamper.location
+                contact = this@createSigningStamper.contact
+                signDate =
+                    Calendar.getInstance().also { it.time = Date.from(this@createSigningStamper.signDate.toInstant()) }
+            }
+        }
+    }
+
     private fun stampPageTemplates(stamper: PdfStamper, contentReader: PdfReader, context: RendererContext) {
         var contentPage = 1
-        val pageNumberMap = (1..stamper.reader.numberOfPages).map { contentReader.getPageOrigRef(it).number to it }.toMap()
+        val pageNumberMap =
+            (1..stamper.reader.numberOfPages).map { contentReader.getPageOrigRef(it).number to it }.toMap()
         val blockPageMapping = context.stationaryByPage.mapIndexed { pageNumber, (_, blocksFilled) ->
             pageNumber to blocksFilled
         }.map { (pageNumber, blocksFilled) ->
@@ -121,7 +183,15 @@ object PdfRenderer {
                 if (blockNumber < blocksFilled) {
                     val importedBlock = stamper.getImportedPage(contentReader, contentPage)
                     stamper.getOverContent(pageNumber + 1)?.addTemplate(importedBlock, 0f, 0f)
-                    copyLinks(contentReader, contentPage, stamper, pageNumber, pageNumberMap, blockPageMapping, namedDestinations)
+                    copyLinks(
+                        contentReader,
+                        contentPage,
+                        stamper,
+                        pageNumber,
+                        pageNumberMap,
+                        blockPageMapping,
+                        namedDestinations
+                    )
                     contentPage++
                 }
             }
@@ -148,7 +218,15 @@ object PdfRenderer {
                 annotation.setPage(destinationPage + 1)
                 val name = contentReader.namedDestination.filter { it.value == array }.map { it.key }.first().toString()
                 val destination = namedDestinations.getOrPut(name) {
-                    val newArray = PdfArray(listOf(destinationPageRef, array.elements[1], array.elements[2], array.elements[3], array.elements[4]))
+                    val newArray = PdfArray(
+                        listOf(
+                            destinationPageRef,
+                            array.elements[1],
+                            array.elements[2],
+                            array.elements[3],
+                            array.elements[4]
+                        )
+                    )
                     val ref = stamper.writer.addToBody(newArray)
                     ref.indirectReference
                 }

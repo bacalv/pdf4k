@@ -15,6 +15,9 @@ repositories {
 dependencies {
     implementation("com.github.librepdf:openpdf:2.0.3")
     implementation("io.github.g0dkar:qrcode-kotlin:4.2.0")
+//    implementation("org.bouncycastle:bcprov-jdk18on:1.80")
+    implementation("org.bouncycastle:bcmail-jdk18on:1.80")
+
     testImplementation(kotlin("test"))
     testFixturesImplementation(kotlin("test"))
     testFixturesImplementation("org.junit.jupiter:junit-jupiter-api:5.11.3")

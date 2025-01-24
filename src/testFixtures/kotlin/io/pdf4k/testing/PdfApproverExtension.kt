@@ -11,10 +11,13 @@ import java.lang.reflect.Method
 
 class PdfApproverExtension : ParameterResolver, BeforeTestExecutionCallback, AfterTestExecutionCallback {
     override fun beforeTestExecution(context: ExtensionContext) {
+        val password = context.testMethod.map {
+            it.annotations.filterIsInstance<PdfPassword>().firstOrNull()?.value ?: ""
+        }.orElse("")
         store(context).put(STORE_KEY, with(context) {
             PdfApprover(
                 nameFor(requiredTestClass, requiredTestMethod, displayName),
-                PDFSourceOfApproval(File(DEFAULT_SOURCE_ROOT, Sources.pathForPackage(requiredTestClass.getPackage())))
+                PDFSourceOfApproval(File(DEFAULT_SOURCE_ROOT, Sources.pathForPackage(requiredTestClass.getPackage())), password)
             )
         })
     }
@@ -36,7 +39,7 @@ class PdfApproverExtension : ParameterResolver, BeforeTestExecutionCallback, Aft
     private fun store(context: ExtensionContext): ExtensionContext.Store =
         context.getStore(Namespace.create(context.requiredTestClass.name, context.requiredTestMethod.name))
 
-    private class PDFSourceOfApproval(dir: File) :
+    private class PDFSourceOfApproval(dir: File, val password: String) :
         FileSystemSourceOfApproval(dir, dir, ".pdf", Reporters.fileSystemReporter()) {
         override fun <T : Any?> checkActualAgainstApproved(
             testName: String,
@@ -46,7 +49,7 @@ class PdfApproverExtension : ParameterResolver, BeforeTestExecutionCallback, Aft
             val actual = IO.readResource(actualFor(testName), serializer) as ByteArray? ?: fail("Actual was null")
             val approved =
                 IO.readResource(approvedFor(testName), serializer) as ByteArray? ?: fail("No approved file found")
-            PdfAssert.assertEquals(approved, actual)
+            PdfAssert.assertEquals(approved, actual, password)
         }
     }
 

@@ -1,15 +1,17 @@
 package io.pdf4k.dsl
 
-import io.pdf4k.domain.Page
-import io.pdf4k.domain.Pdf
-import io.pdf4k.domain.Stationary
+import io.pdf4k.domain.*
+import io.pdf4k.domain.PdfPermissions.PdfPermission
 import io.pdf4k.domain.Stationary.Companion.BlankA4Portrait
-import io.pdf4k.domain.StyleAttributes
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 @PdfDsl
 class PdfBuilder(val style: StyleAttributes?) {
     private val pages = mutableListOf<Page>()
     private val metadataBuilder = MetadataBuilder()
+    private var signature: Signature? = null
+    private var permissions: PdfPermissions? = null
 
     fun page(
         style: StyleAttributes? = null,
@@ -26,8 +28,22 @@ class PdfBuilder(val style: StyleAttributes?) {
         metadataBuilder.block()
     }
 
+    fun sign(
+        keyName: KeyName,
+        reason: String,
+        location: String,
+        contact: String,
+        signDate: ZonedDateTime = ZonedDateTime.now(ZoneId.systemDefault())
+    ) {
+        signature = Signature(keyName, reason, location, contact, signDate)
+    }
+
     private fun build(): Pdf {
-        return Pdf(style, pages, metadataBuilder.build())
+        return Pdf(style, pages, metadataBuilder.build(), signature, permissions)
+    }
+
+    fun encrypt(userPassword: String, ownerPassword: String, vararg permission: PdfPermission) {
+        permissions = PdfPermissions(userPassword, ownerPassword, permission.toSet())
     }
 
     companion object {

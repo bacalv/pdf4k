@@ -14,9 +14,9 @@ import javax.imageio.ImageIO
 import kotlin.math.min
 
 object PdfAssert {
-    fun assertEquals(approved: ByteArray, actual: ByteArray) {
-        val approvedDocument = Loader.loadPDF(approved)
-        val actualDocument = Loader.loadPDF(actual)
+    fun assertEquals(approved: ByteArray, actual: ByteArray, password: String = "") {
+        val approvedDocument = Loader.loadPDF(approved, password)
+        val actualDocument = Loader.loadPDF(actual, password)
 
         assertAll(
             "PDF Comparison Failures",
@@ -24,6 +24,32 @@ object PdfAssert {
                     + metadataAssertions(approvedDocument, actualDocument)
                     + annotationAssertions(approvedDocument, actualDocument)
                     + namedDestinationAssertions(approvedDocument, actualDocument)
+                    + encryptionAssertions(approvedDocument, actualDocument)
+                    + permissionAssertions(approvedDocument, actualDocument)
+        )
+    }
+
+    private fun encryptionAssertions(approvedDocument: PDDocument, actualDocument: PDDocument): List<() -> Unit> {
+        val approvedDicts = approvedDocument.signatureDictionaries
+        val actualDicts = actualDocument.signatureDictionaries
+        val assertions = if (approvedDicts.size == actualDicts.size) {
+            approvedDicts.mapIndexed { index, approved ->
+                val actual = actualDicts[index]
+                listOf(
+                    { assertEquals(approved.name, actual.name, "Signature Name") },
+                    { assertEquals(approved.location, actual.location, "Signature Location") },
+                    { assertEquals(approved.contactInfo, actual.contactInfo, "Signature Contact") },
+                    { assertEquals(approved.reason, actual.reason, "Signature Reason") },
+                )
+            }.flatten()
+        } else emptyList()
+        return listOf({ assertEquals(approvedDicts.size, actualDicts.size, "Number of signature dictionaries") }) + assertions
+    }
+
+    private fun permissionAssertions(approvedDocument: PDDocument, actualDocument: PDDocument): List<() -> Unit> {
+        return listOf(
+            { assertEquals(approvedDocument.currentAccessPermission.isOwnerPermission, actualDocument.currentAccessPermission.isOwnerPermission, "Owner permission flags match") },
+            { assertEquals(approvedDocument.currentAccessPermission.permissionBytes, actualDocument.currentAccessPermission.permissionBytes, "Permissions match") },
         )
     }
 
