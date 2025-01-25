@@ -56,9 +56,13 @@ object PdfAssert {
     }
 
     private fun namedDestinationAssertions(approvedDocument: PDDocument, actualDocument: PDDocument): List<() -> Unit> {
-        return listOf({
-            assertEquals(getNamedDestinations(approvedDocument), getNamedDestinations(actualDocument), "Named destinations match")
-        })
+        return listOf {
+            assertEquals(
+                getNamedDestinations(approvedDocument),
+                getNamedDestinations(actualDocument),
+                "Named destinations match"
+            )
+        }
     }
 
     private fun getNamedDestinations(doc: PDDocument): Set<NamedDestination> {
@@ -101,11 +105,13 @@ object PdfAssert {
                     "Metadata property $key matches"
                 )
             }
-        } + listOf({ assertEquals(
-            approvedDocument.documentInformation.metadataKeys - ignoredMetadataKeys,
-            actualDocument.documentInformation.metadataKeys - ignoredMetadataKeys,
-            "Same metadata keys"
-        ) })
+        } + listOf {
+            assertEquals(
+                approvedDocument.documentInformation.metadataKeys - ignoredMetadataKeys,
+                actualDocument.documentInformation.metadataKeys - ignoredMetadataKeys,
+                "Same metadata keys"
+            )
+        }
     }
 
     private fun annotationAssertions(approvedDocument: PDDocument, actualDocument: PDDocument): List<() -> Unit> {
