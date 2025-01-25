@@ -14,6 +14,8 @@ import javax.imageio.ImageIO
 import kotlin.math.min
 
 object PdfAssert {
+    private val ignoredMetadataKeys = setOf("CreationDate", "ModDate", "Producer")
+
     fun assertEquals(approved: ByteArray, actual: ByteArray, password: String = "") {
         val approvedDocument = Loader.loadPDF(approved, password)
         val actualDocument = Loader.loadPDF(actual, password)
@@ -99,7 +101,11 @@ object PdfAssert {
                     "Metadata property $key matches"
                 )
             }
-        } + listOf({ assertEquals(approvedDocument.documentInformation.metadataKeys, actualDocument.documentInformation.metadataKeys, "Same metadata keys") })
+        } + listOf({ assertEquals(
+            approvedDocument.documentInformation.metadataKeys - ignoredMetadataKeys,
+            actualDocument.documentInformation.metadataKeys - ignoredMetadataKeys,
+            "Same metadata keys"
+        ) })
     }
 
     private fun annotationAssertions(approvedDocument: PDDocument, actualDocument: PDDocument): List<() -> Unit> {
