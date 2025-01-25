@@ -14,7 +14,7 @@ class SecurityTest : AbstractPdfApproverTest() {
             page {
                 content { +"A signed PDF" }
             }
-            sign(defaultKeyName, "Test signing a PDF", "Cyberspace", "01234567890")
+            sign(defaultKeyName, "Test signing a PDF", "Bedford Taxi", "01234567890")
         }.approve(approver)
     }
 
@@ -40,7 +40,7 @@ class SecurityTest : AbstractPdfApproverTest() {
                     +"Hello, owner"
                 }
             }
-            encrypt("userPass", "ownerPass", Print, ScreenReaders)
+            encrypt("userPass", "ownerPass")
         }.approve(approver)
     }
 }
