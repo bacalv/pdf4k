@@ -26,8 +26,8 @@ object QrRenderer {
                 style.logo?.let { logo ->
                     builder.withLogo(
                         logo = ClassLoader.getSystemResourceAsStream("images/${logo.resource}")?.readBytes() ?: ByteArray(0),
-                        width = style.logo.width,
-                        height = style.logo.height,
+                        width = logo.width,
+                        height = logo.height,
                         clearLogoArea = logo.clearLogoArea
                     )
                 }

@@ -156,20 +156,20 @@ object ComponentRenderer {
                 null -> verticalAlignment
             }
 
-            if (style.leading != null) { setLeading(style.leading.fixed, style.leading.multiplier) }
-            if (style.cellBackground != null) backgroundColor = style.cellBackground
-            if (style.paddingLeft != null) paddingLeft = style.paddingLeft
-            if (style.paddingRight != null) paddingRight = style.paddingRight
-            if (style.paddingTop != null) paddingTop = style.paddingTop
-            if (style.paddingBottom != null) paddingBottom = style.paddingBottom
-            if (style.borderColourTop != null) borderColorTop = style.borderColourTop
-            if (style.borderColourBottom != null) borderColorBottom = style.borderColourBottom
-            if (style.borderColourLeft != null) borderColorLeft = style.borderColourLeft
-            if (style.borderColourRight != null) borderColorRight = style.borderColourRight
-            if (style.borderWidthTop != null) borderWidthTop = style.borderWidthTop
-            if (style.borderWidthBottom != null) borderWidthBottom = style.borderWidthBottom
-            if (style.borderWidthLeft != null) borderWidthLeft = style.borderWidthLeft
-            if (style.borderWidthRight != null) borderWidthRight = style.borderWidthRight
+            style.leading?.let { setLeading(it.fixed, it.multiplier) }
+            style.cellBackground?.let { backgroundColor = it }
+            style.paddingLeft?.let { paddingLeft = it }
+            style.paddingRight?.let { paddingRight = it }
+            style.paddingTop?.let { paddingTop = it }
+            style.paddingBottom?.let { paddingBottom = it }
+            style.borderColourTop?.let { borderColorTop = it }
+            style.borderColourBottom?.let { borderColorBottom = it }
+            style.borderColourLeft?.let { borderColorLeft = it }
+            style.borderColourRight?.let { borderColorRight = it }
+            style.borderWidthTop?.let { borderWidthTop = it }
+            style.borderWidthBottom?.let { borderWidthBottom = it }
+            style.borderWidthLeft?.let { borderWidthLeft = it }
+            style.borderWidthRight?.let { borderWidthRight = it }
         }
     }
 

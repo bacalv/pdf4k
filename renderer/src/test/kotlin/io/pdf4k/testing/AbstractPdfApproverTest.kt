@@ -4,6 +4,7 @@ import io.pdf4k.domain.KeyName
 import io.pdf4k.domain.Pdf
 import io.pdf4k.renderer.KeyProvider
 import io.pdf4k.renderer.PdfRenderer.render
+import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.extension.ExtendWith
 import java.io.ByteArrayOutputStream
 import java.security.KeyFactory
@@ -12,7 +13,6 @@ import java.security.cert.Certificate
 import java.security.cert.CertificateFactory
 import java.security.spec.PKCS8EncodedKeySpec
 import java.util.*
-import kotlin.test.fail
 
 @ExtendWith(PdfApproverExtension::class)
 abstract class AbstractPdfApproverTest {

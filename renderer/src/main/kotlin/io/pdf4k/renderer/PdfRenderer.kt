@@ -112,19 +112,18 @@ object PdfRenderer {
         context: RendererContext,
         keyProvider: KeyProvider
     ) {
-        val stamper = if (signature != null) {
-            signature.createSigningStamper(keyProvider, mainDocumentReader, outputStream)
-        } else {
-            PdfStamper(mainDocumentReader, outputStream, '\u0000')
-        }
-        if (permissions != null) {
+        val stamper = signature?.createSigningStamper(keyProvider, mainDocumentReader, outputStream)
+            ?: PdfStamper(mainDocumentReader, outputStream, '\u0000')
+
+        permissions?.let {
             stamper.setEncryption(
-                permissions.userPassword.toByteArray(),
-                permissions.ownerPassword.toByteArray(),
-                permissions.toInt(),
+                it.userPassword.toByteArray(),
+                it.ownerPassword.toByteArray(),
+                it.toInt(),
                 PdfWriter.ENCRYPTION_AES_256_V3
             )
         }
+
         stampPageTemplates(stamper, contentReader, context)
         metadata.customProperties.forEach {
             val info: PdfDictionary = stamper.reader.trailer.getAsDict(PdfName.INFO)
