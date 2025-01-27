@@ -2,7 +2,7 @@ package io.pdf4k.renderer
 
 import io.pdf4k.domain.Font.*
 import io.pdf4k.domain.Font.Custom.Resource
-import io.pdf4k.domain.Font.Included.Ariel
+import io.pdf4k.domain.Font.Included.Arial
 import io.pdf4k.domain.Font.Style.*
 import io.pdf4k.domain.HorizontalAlignment.Center
 import io.pdf4k.domain.Stationary
@@ -22,7 +22,7 @@ class StyleTest : AbstractPdfApproverTest() {
     @Test
     fun `renders different colour text`(approver: PdfApprover) {
         content {
-            phrase(style(font = Ariel, fontStyle = Bold, size = 16f)) {
+            phrase(style(font = Arial, fontStyle = Bold, size = 16f)) {
                 "RED" and style(colour = RED)
                 " GREEN" and style(colour = GREEN)
                 " BLUE" and style(colour = BLUE)
@@ -33,7 +33,7 @@ class StyleTest : AbstractPdfApproverTest() {
     @Test
     fun `renders different colour text backgrounds`(approver: PdfApprover) {
         content {
-            phrase(style(font = Ariel, fontStyle = Bold, size = 16f, colour = WHITE)) {
+            phrase(style(font = Arial, fontStyle = Bold, size = 16f, colour = WHITE)) {
                 "RED" and style(background = RED)
                 +" "
                 "GREEN" and style(background = GREEN)

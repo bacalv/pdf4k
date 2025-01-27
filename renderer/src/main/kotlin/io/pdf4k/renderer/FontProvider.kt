@@ -6,7 +6,7 @@ import io.pdf4k.domain.Font
 import io.pdf4k.domain.Font.*
 import io.pdf4k.domain.Font.BuiltIn.*
 import io.pdf4k.domain.Font.Custom.Resource
-import io.pdf4k.domain.Font.Included.Ariel
+import io.pdf4k.domain.Font.Included.Arial
 import io.pdf4k.domain.Font.Style.*
 import java.awt.Color
 import com.lowagie.text.Font as OpenPDFFont
@@ -30,7 +30,7 @@ class FontProvider {
     }
 
     fun getFont(font: Font?, size: Float?, style: Style?, colour: Color?): OpenPDFFont {
-        val defaultedFont = font ?: Ariel
+        val defaultedFont = font ?: Arial
         val defaultedSize = size ?: 12f
         val defaultedColour = colour ?: Color.BLACK
         val defaultedStyle = when (style ?: Plain) {
@@ -53,7 +53,7 @@ class FontProvider {
 
             is Included -> {
                 val name = when (defaultedFont) {
-                    Ariel -> "arial unicode ms"
+                    Arial -> "arial unicode ms"
                 }
                 fontWithName(name, defaultedSize, defaultedStyle, defaultedColour)
             }

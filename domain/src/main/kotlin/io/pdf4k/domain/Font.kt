@@ -2,7 +2,7 @@ package io.pdf4k.domain
 
 sealed class Font {
     sealed class Included: Font() {
-        data object Ariel: Included()
+        data object Arial: Included()
     }
 
     sealed class BuiltIn: Font() {
