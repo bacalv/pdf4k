@@ -203,7 +203,7 @@ class StyleTest : AbstractPdfApproverTest() {
                         table(2, weights = floatArrayOf(2f, 8f)) {
                             subType.sealedSubclasses.mapNotNull { it.objectInstance }.forEach { font ->
                                 textCell { +(font::class.simpleName ?: "UNKNOWN") }
-                                textCell { "The quick brown fox jumps over the lazy hen." and style(font = font) }
+                                textCell { "The quick brown fox jumped over the lazy hen." and style(font = font) }
                             }
                         }
                         crlf()
@@ -219,7 +219,7 @@ class StyleTest : AbstractPdfApproverTest() {
             page {
                 content {
                     paragraph {
-                        "The quick brown fox jumps over the lazy hen." and style(font = Resource("ArianaVioleta"), size = 24f)
+                        "The quick brown fox jumped over the lazy hen." and style(font = Resource("ArianaVioleta"), size = 24f)
                     }
                 }
             }
