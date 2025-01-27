@@ -2,6 +2,7 @@
 bouncyCastleBcmailVersion = "1.80"
 junitJupiterVersion = "5.11.3"
 kotlin-gradle-plugin = "2.0.21"
+kotlinReflectVersion = "2.1.0"
 okeydokeVersion = "2.0.3"
 openPdfVersion = "2.0.3"
 pdfBoxVersion = "3.0.3"
@@ -12,6 +13,7 @@ bouncyCastleBcmail = { module = "org.bouncycastle:bcmail-jdk18on", version.ref="
 junitJupiterApi = { module = "org.junit.jupiter:junit-jupiter-api", version.ref="junitJupiterVersion" }
 junitJupiterParams = { module = "org.junit.jupiter:junit-jupiter-params", version.ref="junitJupiterVersion" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-gradle-plugin" }
+kotlinReflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlinReflectVersion"}
 okeyDoke = { module = "com.oneeyedmen:okeydoke", version.ref = "okeydokeVersion" }
 openPdf = { module = "com.github.librepdf:openpdf", version.ref = "openPdfVersion" }
 pdfBox = { module = "org.apache.pdfbox:pdfbox", version.ref = "pdfBoxVersion" }

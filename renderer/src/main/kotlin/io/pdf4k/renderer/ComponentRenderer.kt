@@ -36,7 +36,7 @@ object ComponentRenderer {
                     cell.paddingTop = 0f
                     cell.paddingBottom = 0f
                     cell.border = NO_BORDER
-                    cell.setHorizintalAlignment(context.peekStyle().align)
+                    cell.setHorizontalAlignment(context.peekStyle().align)
                     context.currentLeading().let { cell.setLeading(it.fixed, it.multiplier) }
                     cell.phrase = Paragraph().also { paragraph ->
                         paragraph.keepTogether = false
@@ -147,7 +147,7 @@ object ComponentRenderer {
 
     private fun PdfPCell.setStyle(context: RendererContext) {
         context.peekStyle().let { style ->
-            setHorizintalAlignment(style.align ?: HorizontalAlignment.Left)
+            setHorizontalAlignment(style.align ?: HorizontalAlignment.Left)
 
             verticalAlignment = when(style.valign) {
                 VerticalAlignment.Top -> ALIGN_TOP
@@ -173,7 +173,7 @@ object ComponentRenderer {
         }
     }
 
-    private fun PdfPCell.setHorizintalAlignment(align: HorizontalAlignment?) {
+    private fun PdfPCell.setHorizontalAlignment(align: HorizontalAlignment?) {
         horizontalAlignment = when (align) {
             HorizontalAlignment.Left -> ALIGN_LEFT
             HorizontalAlignment.Center -> ALIGN_CENTER
