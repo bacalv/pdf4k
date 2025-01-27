@@ -2,8 +2,9 @@ package io.pdf4k.testing
 
 import io.pdf4k.domain.KeyName
 import io.pdf4k.domain.Pdf
+import io.pdf4k.renderer.FontProvider
 import io.pdf4k.renderer.KeyProvider
-import io.pdf4k.renderer.PdfRenderer.render
+import io.pdf4k.renderer.PdfRenderer
 import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.extension.ExtendWith
 import java.io.ByteArrayOutputStream
@@ -29,13 +30,12 @@ abstract class AbstractPdfApproverTest {
 
         val defaultKeyName = KeyName("default")
         val keys = mutableMapOf(defaultKeyName to KeyProvider.Keys(privateKey, certificateChain))
+        val renderer = PdfRenderer(FontProvider(), object : KeyProvider {
+            override fun lookup(keyName: KeyName) = keys[keyName] ?: fail("Key not found: $keyName")
+        })
 
         fun Pdf.approve(approver: PdfApprover) = approver.assertApproved(ByteArrayOutputStream().also { stream ->
-            stream.use {
-                render(it, object : KeyProvider {
-                    override fun lookup(keyName: KeyName) = keys[keyName] ?: fail("Key not found: $keyName")
-                })
-            }
+            stream.use { renderer.render(this, it) }
         }.toByteArray())
 
         fun toPrivateKey(pem: String): PrivateKey {

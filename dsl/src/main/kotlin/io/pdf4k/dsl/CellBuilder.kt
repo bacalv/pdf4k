@@ -23,6 +23,6 @@ class CellBuilder(
         }
 
     companion object {
-        val EMPTY = Collections.unmodifiableList(emptyList<ComponentBuilder<*, *>>())
+        val EMPTY: MutableList<ComponentBuilder<*, *>> = Collections.unmodifiableList(emptyList<ComponentBuilder<*, *>>())
     }
 }

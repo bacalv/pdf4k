@@ -35,7 +35,7 @@ data class StyleAttributes(
     companion object {
         val DEFAULT_LEADING = leading(0f, 1.2f)
         val DEFAULT_STYLE = StyleAttributes(
-            Font.BuiltIn.Ariel,
+            Font.Included.Ariel,
             Font.Style.Plain,
             12f,
             Color.BLACK,

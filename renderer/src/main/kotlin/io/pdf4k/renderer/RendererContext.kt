@@ -2,35 +2,29 @@ package io.pdf4k.renderer
 
 import com.lowagie.text.Document
 import com.lowagie.text.Element
-import com.lowagie.text.FontFactory
 import com.lowagie.text.Image
-import com.lowagie.text.pdf.BaseFont
 import com.lowagie.text.pdf.ColumnText
 import com.lowagie.text.pdf.PdfWriter
 import io.pdf4k.domain.Component
-import io.pdf4k.domain.Font.BuiltIn.Ariel
-import io.pdf4k.domain.Font.Style.*
 import io.pdf4k.domain.Page
 import io.pdf4k.domain.Stationary
 import io.pdf4k.domain.StyleAttributes
 import io.pdf4k.domain.StyleAttributes.Companion.DEFAULT_STYLE
 import io.pdf4k.renderer.ComponentRenderer.render
-import java.awt.Color
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
-import com.lowagie.text.Font as ITFont
 
 class RendererContext(
     val mainDocument: Document,
     val mainDocumentWriter: PdfWriter,
     val contentBlocksDocument: Document,
     val contentBlocksDocumentWriter: PdfWriter,
-    val loadedStationary: Map<Stationary, LoadedStationary>
+    val loadedStationary: Map<Stationary, LoadedStationary>,
+    val fontProvider: FontProvider
 ) {
     private val styleStack: Stack<StyleAttributes> = Stack()
     private val pageNumber: AtomicInteger = AtomicInteger()
     val stationaryByPage = mutableListOf<Pair<LoadedStationary, Int>>()
-    val baseFontCache = mutableMapOf<String, BaseFont>()
 
     init {
         styleStack.push(DEFAULT_STYLE)
@@ -40,37 +34,13 @@ class RendererContext(
 
     fun pushStyle(component: Component.Style) = pushStyle(component.styleAttributes)
 
-    fun pushStyle(style: StyleAttributes?) =
+    fun pushStyle(style: StyleAttributes?): StyleAttributes =
         styleStack.push(style?.let { styleStack.peek() + it } ?: styleStack.peek())
 
-    fun popStyle() = styleStack.pop()
+    fun popStyle(): StyleAttributes = styleStack.pop()
 
-    fun currentFont(): ITFont {
-        with(peekStyle()) {
-            val font = font ?: Ariel
-            val size = size ?: 12f
-            val colour = colour ?: Color.BLACK
-            val fontStyle = fontStyle ?: Plain
-
-            val name = when (font) {
-                Ariel -> "arial unicode ms"
-            }
-
-            val style = when (fontStyle) {
-                Plain -> ITFont.NORMAL
-                Bold -> ITFont.BOLD
-                Italic -> ITFont.ITALIC
-                BoldItalic -> ITFont.BOLDITALIC
-            }
-
-            return baseFontCache[name]?.let { baseFont ->
-                ITFont(baseFont, size, style, colour)
-            } ?: run {
-                val result = FontFactory.getFont(name, size, style, colour)
-                baseFontCache[name] = result.baseFont
-                result
-            }
-        }
+    fun currentFont() = with(peekStyle()) {
+        fontProvider.getFont(font, size, fontStyle, colour)
     }
 
     fun drawBlocks(page: Page, stationary: Stationary) {

@@ -1,28 +1,19 @@
 package io.pdf4k.renderer
 
 import com.lowagie.text.Document
-import com.lowagie.text.FontFactory
-import com.lowagie.text.FontFactoryImp
 import com.lowagie.text.pdf.*
 import io.pdf4k.domain.*
 import io.pdf4k.domain.PdfPermissions.PdfPermission.*
 import io.pdf4k.renderer.PageRenderer.render
 import java.io.ByteArrayOutputStream
-import java.io.File
 import java.io.OutputStream
-import java.nio.file.FileSystems
-import java.nio.file.Files
 import java.util.*
-import kotlin.io.path.extension
 
-object PdfRenderer {
-    private const val FONT_RESOURCE = "/fonts"
-
-    init {
-        loadFonts()
-    }
-
-    fun Pdf.render(outputStream: OutputStream, keyProvider: KeyProvider) {
+class PdfRenderer(
+    private val fontProvider: FontProvider,
+    private val keyProvider: KeyProvider
+) {
+    fun render(pdf: Pdf, outputStream: OutputStream) = with (pdf) {
         val loadedStationary = loadStationary(pages.map { it.stationary }.flatten())
         val mainDocumentStream = ByteArrayOutputStream()
         val contentBlocksDocumentStream = ByteArrayOutputStream()
@@ -33,7 +24,7 @@ object PdfRenderer {
         val mainContentBytes = mainDocumentStream.toByteArray()
 //        Files.write(Path("./main.pdf"), mainContentBytes)
 //        Files.write(Path("./blocks.pdf"), contentBlocksDocumentStream.toByteArray())
-        applyTemplates(PdfReader(mainContentBytes), contentReader, outputStream, context, keyProvider)
+        applyTemplates(PdfReader(mainContentBytes), contentReader, outputStream, context)
         loadedStationary.values.forEach { it.reader.close() }
     }
 
@@ -52,7 +43,8 @@ object PdfRenderer {
             mainDocumentWriter,
             contentBlocksDocument,
             contentBlocksDocumentWriter,
-            loadedStationary
+            loadedStationary,
+            fontProvider
         )
         val eventListener = PageEventListener(context)
         contentBlocksDocumentWriter.pageEvent = eventListener
@@ -78,8 +70,9 @@ object PdfRenderer {
     }
 
     private fun RendererContext.copyNamedDestinations(contentReader: PdfReader) {
-        val blockNumbers =
-            (1..contentReader.numberOfPages).map { page -> contentReader.getPageOrigRef(page).number to page }.toMap()
+        val blockNumbers = (1..contentReader.numberOfPages).associateBy { page ->
+            contentReader.getPageOrigRef(page).number
+        }
         contentReader.namedDestination.forEach { (name, obj) ->
             (obj as? PdfArray)?.elements?.let { array ->
                 val blockNumber = blockNumbers[(array[0] as PdfIndirectReference).number]
@@ -109,8 +102,7 @@ object PdfRenderer {
         mainDocumentReader: PdfReader,
         contentReader: PdfReader,
         outputStream: OutputStream,
-        context: RendererContext,
-        keyProvider: KeyProvider
+        context: RendererContext
     ) {
         val stamper = signature?.createSigningStamper(keyProvider, mainDocumentReader, outputStream)
             ?: PdfStamper(mainDocumentReader, outputStream, '\u0000')
@@ -125,8 +117,8 @@ object PdfRenderer {
         }
 
         stampPageTemplates(stamper, contentReader, context)
+        val info: PdfDictionary = stamper.reader.trailer.getAsDict(PdfName.INFO)
         metadata.customProperties.forEach {
-            val info: PdfDictionary = stamper.reader.trailer.getAsDict(PdfName.INFO)
             info.put(PdfName(it.key),  PdfString(it.value))
         }
         stamper.close()
@@ -250,22 +242,4 @@ object PdfRenderer {
             val reader = PdfReader(stream)
             LoadedStationary(stationary, reader)
         }
-
-    private fun loadFonts() {
-        FontFactory.defaultEmbedding = BaseFont.EMBEDDED
-        FontFactory.defaultEncoding = BaseFont.IDENTITY_H
-        FontFactory.setFontImp(FontFactoryImp().also { it.defaultEmbedding = BaseFont.EMBEDDED })
-        val uri = PdfRenderer::class.java.getResource(FONT_RESOURCE)?.toURI()
-            ?: throw IllegalStateException("Failed to read font directory")
-        val fontsRegistered = if (uri.scheme != "file") {
-            FileSystems.newFileSystem(uri, emptyMap<String, Any>()).use { fileSystem ->
-                Files.walk(fileSystem.getPath(FONT_RESOURCE)).filter { it.extension == "ttf" }
-                    .map { FontFactory.register(it.toUri().toString()) }.count()
-            }
-        } else {
-            Files.walk(File(uri.path).toPath()).filter { it.extension == "ttf" }
-                .map { FontFactory.register(it.toString()) }.count()
-        }
-        if (fontsRegistered == 0L) throw IllegalStateException("No fonts found")
-    }
 }

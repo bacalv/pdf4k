@@ -1,6 +1,8 @@
 package io.pdf4k.renderer
 
-import io.pdf4k.domain.Font.BuiltIn.Ariel
+import io.pdf4k.domain.Font.*
+import io.pdf4k.domain.Font.Custom.Resource
+import io.pdf4k.domain.Font.Included.Ariel
 import io.pdf4k.domain.Font.Style.*
 import io.pdf4k.domain.HorizontalAlignment.Center
 import io.pdf4k.domain.Stationary
@@ -182,6 +184,42 @@ class StyleTest : AbstractPdfApproverTest() {
                         table(1, style + noBorder, extend = true) {
                             textCell(blockName.uppercase(), style(align = Center, valign = Middle))
                         }
+                    }
+                }
+            }
+        }.approve(approver)
+    }
+
+    @Test
+    fun `renders different font families`(approver: PdfApprover) {
+        pdf {
+            page {
+                content {
+                    listOf(BuiltIn::class, Included::class).forEach { subType ->
+                        paragraph {
+                            (subType.simpleName ?: "UNKNOWN") and style(fontStyle = Bold)
+                        }
+                        crlf()
+                        table(2, weights = floatArrayOf(2f, 8f)) {
+                            subType.sealedSubclasses.mapNotNull { it.objectInstance }.forEach { font ->
+                                textCell { +(font::class.simpleName ?: "UNKNOWN") }
+                                textCell { "The quick brown fox jumps over the lazy hen." and style(font = font) }
+                            }
+                        }
+                        crlf()
+                    }
+                }
+            }
+        }.approve(approver)
+    }
+
+    @Test
+    fun `renders custom font`(approver: PdfApprover) {
+        pdf {
+            page {
+                content {
+                    paragraph {
+                        "The quick brown fox jumps over the lazy hen." and style(font = Resource("ArianaVioleta"), size = 24f)
                     }
                 }
             }

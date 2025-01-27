@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     api(project(":domain"))
+    implementation(libs.kotlinReflect)
     implementation(libs.openPdf)
     implementation(libs.qrCode)
     implementation(libs.bouncyCastleBcmail)
