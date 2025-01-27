@@ -7,6 +7,7 @@ import io.pdf4k.domain.Margin
 import io.pdf4k.domain.Stationary.Companion.BlankA4Landscape
 import io.pdf4k.domain.Stationary.Companion.BlankA4Portrait
 import io.pdf4k.domain.StyleAttributes.Companion.style
+import io.pdf4k.dsl.PdfBuilder.Companion.content
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
 import io.pdf4k.dsl.StationaryBuilder.Companion.stationary
 import io.pdf4k.dsl.StationaryBuilder.Companion.withMargin
@@ -25,12 +26,8 @@ class StationaryTest : AbstractPdfApproverTest() {
 
     @Test
     fun `render text on blank A4 portrait`(approver: PdfApprover) {
-        pdf {
-            page {
-                content {
-                    +"Hello World!"
-                }
-            }
+        content {
+            +"Hello World!"
         }.approve(approver)
     }
 
@@ -216,6 +213,7 @@ class StationaryTest : AbstractPdfApproverTest() {
         val Letter = stationary("letter", 1, 595.92f, 842.88f, Margin(250f, 42f, 46f, 30f)) {
             block("address", 50f, 600f, 120f, 120f)
         }
-        val ContinuationPage = stationary("continuation-page", 1, 595.92f, 842.88f, Margin.DEFAULT_MARGIN.copy(top = 120f))
+        val ContinuationPage =
+            stationary("continuation-page", 1, 595.92f, 842.88f, Margin.DEFAULT_MARGIN.copy(top = 120f))
     }
 }

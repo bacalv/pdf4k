@@ -52,5 +52,7 @@ class PdfBuilder(val style: StyleAttributes?) {
             builder.block()
             return builder.build()
         }
+
+        fun content(block: ContentBuilder<*, *, *, *>.() -> Unit) = pdf { page { content { block() } } }
     }
 }

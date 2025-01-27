@@ -7,6 +7,7 @@ import io.pdf4k.domain.Leading.Companion.fixed
 import io.pdf4k.domain.Leading.Companion.leading
 import io.pdf4k.domain.Leading.Companion.multiplier
 import io.pdf4k.domain.StyleAttributes.Companion.style
+import io.pdf4k.dsl.PdfBuilder.Companion.content
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
 import io.pdf4k.extensions.singleLine
 import io.pdf4k.extensions.splitParagraphs
@@ -20,21 +21,15 @@ import io.pdf4k.testing.PdfApprover
 class ParagraphTest : AbstractPdfApproverTest() {
     @Test
     fun `render simple paragraph`(approver: PdfApprover) {
-        pdf {
-            page {
-                content {
-                    +"Simple Paragraph"
-                }
-            }
+        content {
+            +"Simple Paragraph"
         }.approve(approver)
     }
 
     @Test
     fun `render long paragraph`(approver: PdfApprover) {
-        pdf {
-            page {
-                content {
-                    +"""
+        content {
+            +"""
                         Bypasses are devices which allow some people to drive from point A to
                         point B very fast whilst other people dash from point B to point A very fast.
                         People living at point C, being a point directly in between, are often given
@@ -43,48 +38,34 @@ class ParagraphTest : AbstractPdfApproverTest() {
                         of point A are so keen to get there. They often wish that people would just
                         once and for all work out where the hell they wanted to be.
                     """.singleLine()
-                }
-            }
         }.approve(approver)
     }
 
     @Test
     fun `render two phrases in a paragraph`(approver: PdfApprover) {
-        pdf {
-            page {
-                content {
-                    paragraph {
-                        +"Phrase 1"
-                        +"Phrase 2"
-                    }
-                }
+        content {
+            paragraph {
+                +"Phrase 1"
+                +"Phrase 2"
             }
         }.approve(approver)
     }
 
     @Test
     fun `render two phrases in two paragraphs`(approver: PdfApprover) {
-        pdf {
-            page {
-                content {
-                    phrase("Phrase 1")
-                    phrase("Phrase 2")
-                }
-            }
+        content {
+            phrase("Phrase 1")
+            phrase("Phrase 2")
         }.approve(approver)
     }
 
     @Test
     fun `render chunks`(approver: PdfApprover) {
-        pdf {
-            page {
-                content {
-                    paragraph {
-                        phrase {
-                            +"Chunk 1"
-                            +"Chunk 2"
-                        }
-                    }
+        content {
+            paragraph {
+                phrase {
+                    +"Chunk 1"
+                    +"Chunk 2"
                 }
             }
         }.approve(approver)
@@ -119,47 +100,41 @@ class ParagraphTest : AbstractPdfApproverTest() {
 
     @Test
     fun `render paragraphs with horizontal alignment`(approver: PdfApprover) {
-        pdf {
-            page {
-                content {
-                    paragraph(style(align = HorizontalAlignment.Left)) { +"Left aligned" }
-                    paragraph(style(align = HorizontalAlignment.Right)) { +"Right aligned" }
-                    paragraph(style(align = HorizontalAlignment.Justified)) {
-                        crlf()
-                        "Justified." and style(fontStyle = Bold)
-                        crlf()
-                        crlf()
-                        +"""
+        content {
+            paragraph(style(align = HorizontalAlignment.Left)) { +"Left aligned" }
+            paragraph(style(align = HorizontalAlignment.Right)) { +"Right aligned" }
+            paragraph(style(align = HorizontalAlignment.Justified)) {
+                crlf()
+                "Justified." and style(fontStyle = Bold)
+                crlf()
+                crlf()
+                +"""
                             A twenty-foot-high transparent globe floated next to his boat, rolling and
                             bobbing, glistening in the brilliant sun. Inside it floated a wide semi-circular
                             sofa upholstered in glorious red leather: the more the globe bobbed and
                             rolled, the more the sofa stayed perfectly still, steady as an upholstered rock.
                             Again, all done for effect as much as anything.
                         """.singleLine()
-                    }
-                    paragraph(style(align = HorizontalAlignment.JustifiedAll)) {
-                        crlf()
-                        "Justified all." and style(fontStyle = Bold)
-                        crlf()
-                        crlf()
-                        +"""
+            }
+            paragraph(style(align = HorizontalAlignment.JustifiedAll)) {
+                crlf()
+                "Justified all." and style(fontStyle = Bold)
+                crlf()
+                crlf()
+                +"""
                             Zaphod stepped through the wall of the globe and relaxed on the sofa.
                             He spread his two arms lazily along the back and with the third brushed
                             some dust off his knee. His heads looked about, smiling; he put his feet up.
                             At any moment, he thought, he might scream.
                         """.singleLine()
-                    }
-                }
             }
         }.approve(approver)
     }
 
     @Test
     fun `renders unicode text`(approver: PdfApprover) {
-        pdf {
-            page {
-                content {
-                    """
+        content {
+            """
                         Water boiled up beneath the bubble, it seethed and spouted. The bubble
                         surged into the air, bobbing and rolling on the water spout. Up, up it
                         climbed, throwing stilts of light at the cliff. Up it surged on the jet, the
@@ -174,8 +149,6 @@ class ParagraphTest : AbstractPdfApproverTest() {
                         al acantilado. Subió sobre el chorro, el agua cayó desde debajo de ella, estrellándose 
                         de nuevo contra el mar a cientos de pies debajo
                     """.splitParagraphs().map(::paragraph)
-                }
-            }
         }.approve(approver)
     }
 

@@ -9,6 +9,7 @@ import io.pdf4k.domain.Stationary
 import io.pdf4k.domain.StyleAttributes.Companion.noBorder
 import io.pdf4k.domain.StyleAttributes.Companion.style
 import io.pdf4k.domain.VerticalAlignment.Middle
+import io.pdf4k.dsl.PdfBuilder.Companion.content
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
 import io.pdf4k.dsl.StationaryBuilder.Companion.plusBlocks
 import io.pdf4k.testing.AbstractPdfApproverTest
@@ -20,106 +21,86 @@ import java.awt.Color.*
 class StyleTest : AbstractPdfApproverTest() {
     @Test
     fun `renders different colour text`(approver: PdfApprover) {
-        pdf {
-            page {
-                content {
-                    phrase(style(font = Ariel, fontStyle = Bold, size = 16f)) {
-                        "RED" and style(colour = RED)
-                        " GREEN" and style(colour = GREEN)
-                        " BLUE" and style(colour = BLUE)
-                    }
-                }
+        content {
+            phrase(style(font = Ariel, fontStyle = Bold, size = 16f)) {
+                "RED" and style(colour = RED)
+                " GREEN" and style(colour = GREEN)
+                " BLUE" and style(colour = BLUE)
             }
         }.approve(approver)
     }
 
     @Test
     fun `renders different colour text backgrounds`(approver: PdfApprover) {
-        pdf {
-            page {
-                content {
-                    phrase(style(font = Ariel, fontStyle = Bold, size = 16f, colour = WHITE)) {
-                        "RED" and style(background = RED)
-                        +" "
-                        "GREEN" and style(background = GREEN)
-                        +" "
-                        "BLUE" and style(background = BLUE)
-                    }
-                }
+        content {
+            phrase(style(font = Ariel, fontStyle = Bold, size = 16f, colour = WHITE)) {
+                "RED" and style(background = RED)
+                +" "
+                "GREEN" and style(background = GREEN)
+                +" "
+                "BLUE" and style(background = BLUE)
             }
         }.approve(approver)
     }
 
     @Test
     fun `renders underlined text`(approver: PdfApprover) {
-        pdf {
-            page {
-                content {
-                    phrase {
-                        +"Next word is "
-                        "underlined" and style(underlined = true)
-                        crlf()
-                        +"Next words are "
-                        "red and underlined in red" and style(colour = RED, underlined = true)
-                        crlf()
-                        +"Next words are "
-                        "red and underlined in blue" and style(colour = RED, underlined = true, underlineColour = BLUE)
-                    }
-                }
+        content {
+            phrase {
+                +"Next word is "
+                "underlined" and style(underlined = true)
+                crlf()
+                +"Next words are "
+                "red and underlined in red" and style(colour = RED, underlined = true)
+                crlf()
+                +"Next words are "
+                "red and underlined in blue" and style(colour = RED, underlined = true, underlineColour = BLUE)
             }
         }.approve(approver)
     }
 
     @Test
     fun `renders different font styles`(approver: PdfApprover) {
-        pdf {
-            page {
-                content {
-                    phrase {
-                        +"Next word is "
-                        "bold" and style(fontStyle = Bold)
-                        crlf()
-                        +"Next word is "
-                        "italic" and style(fontStyle = Italic)
-                        crlf()
-                        +"Next words are "
-                        "bold italic" and style(fontStyle = BoldItalic)
-                    }
-                }
+        content {
+            phrase {
+                +"Next word is "
+                "bold" and style(fontStyle = Bold)
+                crlf()
+                +"Next word is "
+                "italic" and style(fontStyle = Italic)
+                crlf()
+                +"Next words are "
+                "bold italic" and style(fontStyle = BoldItalic)
             }
         }.approve(approver)
     }
 
     @Test
     fun `applies styles to elements at different levels`(approver: PdfApprover) {
-        pdf {
-            page {
-                content {
-                    style(fontStyle = Bold) {
-                        paragraph {
-                            +"Bold\n\n"
-                            style(colour = BLUE) {
-                                +"Bold Blue\n\n"
-                            }
-                            phrase {
-                                style(colour = WHITE, background = BLACK) {
-                                    +"Bold White with Black Background"
-                                }
-                            }
+        content {
+            style(fontStyle = Bold) {
+                paragraph {
+                    +"Bold\n\n"
+                    style(colour = BLUE) {
+                        +"Bold Blue\n\n"
+                    }
+                    phrase {
+                        style(colour = WHITE, background = BLACK) {
+                            +"Bold White with Black Background"
                         }
-                        paragraph("\n\n")
-                        style(size = 16f) {
-                            +"Bold 16 outside a table\n\n"
-                            table(3) {
-                                textCell("Bold 16")
-                                style(colour = RED) {
-                                    textCell("Bold 16 Red")
-                                    textCell {
-                                        style(underline = true) {
-                                            +"Bold 16 Red Underlined "
-                                            "Green" and style(background = GREEN)
-                                        }
-                                    }
+                    }
+                }
+                paragraph("\n\n")
+                style(size = 16f) {
+                    +"Bold 16 outside a table\n\n"
+                    table(3) {
+                        textCell("Bold 16")
+                        style(colour = RED) {
+                            textCell("Bold 16 Red")
+                            textCell {
+                                style(underline = true) {
+                                    +"Bold 16 Red Underlined "
+                                    "Green" and style(background = GREEN)
                                 }
                             }
                         }
@@ -192,36 +173,31 @@ class StyleTest : AbstractPdfApproverTest() {
 
     @Test
     fun `renders different font families`(approver: PdfApprover) {
-        pdf {
-            page {
-                content {
-                    listOf(BuiltIn::class, Included::class).forEach { subType ->
-                        paragraph {
-                            (subType.simpleName ?: "UNKNOWN") and style(fontStyle = Bold)
-                        }
-                        crlf()
-                        table(2, weights = floatArrayOf(2f, 8f)) {
-                            subType.sealedSubclasses.mapNotNull { it.objectInstance }.forEach { font ->
-                                textCell { +(font::class.simpleName ?: "UNKNOWN") }
-                                textCell { "The quick brown fox jumped over the lazy hen." and style(font = font) }
-                            }
-                        }
-                        crlf()
+        content {
+            listOf(BuiltIn::class, Included::class).forEach { subType ->
+                paragraph {
+                    (subType.simpleName ?: "UNKNOWN") and style(fontStyle = Bold)
+                }
+                crlf()
+                table(2, weights = floatArrayOf(2f, 8f)) {
+                    subType.sealedSubclasses.mapNotNull { it.objectInstance }.forEach { font ->
+                        textCell { +(font::class.simpleName ?: "UNKNOWN") }
+                        textCell { "The quick brown fox jumped over the lazy hen." and style(font = font) }
                     }
                 }
+                crlf()
             }
         }.approve(approver)
     }
 
     @Test
     fun `renders custom font`(approver: PdfApprover) {
-        pdf {
-            page {
-                content {
-                    paragraph {
-                        "The quick brown fox jumped over the lazy hen." and style(font = Resource("ArianaVioleta"), size = 24f)
-                    }
-                }
+        content {
+            paragraph {
+                "The quick brown fox jumped over the lazy hen." and style(
+                    font = Resource("ArianaVioleta"),
+                    size = 24f
+                )
             }
         }.approve(approver)
     }
