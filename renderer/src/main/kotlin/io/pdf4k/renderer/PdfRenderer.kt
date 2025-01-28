@@ -1,3 +1,5 @@
+@file:Suppress("NAME_SHADOWING")
+
 package io.pdf4k.renderer
 
 import com.lowagie.text.Document
@@ -144,19 +146,18 @@ class PdfRenderer(
         outputStream: OutputStream
     ): PdfStamper {
         val keys = keyProvider.lookup(keyName)
-        return PdfStamper.createSignature(mainDocumentReader, outputStream, '\u0000').also {
-            it.signatureAppearance.apply {
-                setCrypto(
+        return PdfStamper.createSignature(mainDocumentReader, outputStream, '\u0000').also { stamper ->
+            stamper.signatureAppearance.also {
+                it.setCrypto(
                     keys.privateKey,
                     keys.certificateChain.toTypedArray(),
                     emptyArray(),
                     PdfSignatureAppearance.WINCER_SIGNED
                 )
-                reason = this@createSigningStamper.reason
-                location = this@createSigningStamper.location
-                contact = this@createSigningStamper.contact
-                signDate =
-                    Calendar.getInstance().also { it.time = Date.from(this@createSigningStamper.signDate.toInstant()) }
+                it.reason = reason
+                it.location = location
+                it.contact = contact
+                it.signDate = Calendar.getInstance().also { it.time = Date.from(this.signDate.toInstant()) }
             }
         }
     }

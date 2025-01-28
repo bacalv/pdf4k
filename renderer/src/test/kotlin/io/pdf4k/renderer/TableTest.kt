@@ -12,8 +12,8 @@ import io.pdf4k.domain.VerticalAlignment.*
 import io.pdf4k.dsl.PdfBuilder.Companion.content
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
 import io.pdf4k.dsl.StationaryBuilder.Companion.plusBlocks
+import io.pdf4k.extensions.cartesianProduct
 import io.pdf4k.testing.AbstractPdfApproverTest
-import io.pdf4k.testing.CartesianProduct.cartesianProduct
 import io.pdf4k.testing.PdfApprover
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -248,6 +248,6 @@ class TableTest : AbstractPdfApproverTest() {
 
     companion object {
         @JvmStatic
-        fun alignments() = cartesianProduct(HorizontalAlignment.entries, VerticalAlignment.entries)
+        fun alignments() = HorizontalAlignment.entries.cartesianProduct(VerticalAlignment.entries)
     }
 }

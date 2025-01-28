@@ -13,7 +13,8 @@ sealed class Component(val children: List<Component>) {
 
     class Chunk(val text: String) : Component(emptyList())
 
-    class Image(val resource: String, val width: Float?, val height: Float?, val rotation: Float?) : Component(emptyList())
+    class Image(val resource: String, val width: Float?, val height: Float?, val rotation: Float?)
+        : Component(emptyList())
 
     class QrCode(val link: String, val style: QrStyle) : Component(emptyList())
 
@@ -21,7 +22,15 @@ sealed class Component(val children: List<Component>) {
 
     object PageNumber : Component(emptyList())
 
-    class Table(val columns: Int, val widthPercentage: Float?, val weights: FloatArray?, val headerRows: Int, val extend: Boolean, children: List<Component>) : Component(children)
+    class Table(
+        val columns: Int,
+        val widthPercentage: Float?,
+        val weights: FloatArray?,
+        val headerRows: Int,
+        val extend: Boolean,
+        val style: StyleAttributes?,
+        children: List<Component>
+    ) : Component(children)
 
     sealed class Cell(val colSpan: Int, val rowSpan: Int, children: List<Component> = emptyList()) : Component(children) {
         class Style(colSpan: Int, rowSpan: Int, val style: Component.Style) : Cell(colSpan, rowSpan, listOf(style))

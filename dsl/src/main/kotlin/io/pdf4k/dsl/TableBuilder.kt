@@ -12,11 +12,7 @@ abstract class TableBuilder<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(
     abstract val tableBuilder: (TableAttributes, StyleAttributes?) -> T
 
     override fun build() = with(attributes) {
-        if (style == null) {
-            Component.Table(columns, widthPercentage, weights, headerRows, extend, children.map { it.build() })
-        } else {
-            Component.Table(columns, widthPercentage, weights, headerRows, extend, listOf(Component.Style(style, children.map { it.build() })))
-        }
+        Component.Table(columns, widthPercentage, weights, headerRows, extend, style, children.map { it.build() })
     }
 
     fun textCell(text: String, style: StyleAttributes? = null, colSpan: Int = 1, rowSpan: Int = 1) {

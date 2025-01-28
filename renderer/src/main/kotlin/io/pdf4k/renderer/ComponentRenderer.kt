@@ -82,6 +82,7 @@ object ComponentRenderer {
                 table.defaultCell.borderWidthBottom = 0f
                 table.defaultCell.borderWidthLeft = 0f
                 table.defaultCell.borderWidthRight = 0f
+                context.pushStyle(component.style)
                 context.peekStyle().let { style ->
                     table.isSplitLate = style.splitLate ?: false
                     table.isSplitRows = style.splitRows ?: true
@@ -93,6 +94,7 @@ object ComponentRenderer {
                         is PdfPCell -> table.addCell(it)
                     }
                 }
+                context.popStyle()
                 table.completeRow()
             })
 
