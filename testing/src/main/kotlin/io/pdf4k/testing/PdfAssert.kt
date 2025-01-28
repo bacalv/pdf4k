@@ -3,7 +3,6 @@ package io.pdf4k.testing
 import org.apache.pdfbox.Loader
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDDocumentCatalog
-import org.apache.pdfbox.pdmodel.common.PDNameTreeNode
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPageDestination
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPageXYZDestination
 import org.apache.pdfbox.rendering.PDFRenderer
@@ -71,29 +70,10 @@ object PdfAssert {
         val names = documentCatalog.names ?: return emptySet()
         val dests = names.dests
         if (dests.names != null) namedDestinations.putAll(dests.names)
-        val kids = dests.kids
-        traverseKids(kids, namedDestinations)
         return namedDestinations.entries.map { it.key to it.value as? PDPageXYZDestination }
             .map { (k, v) -> v?.let { NamedDestination(k, v.cosObject[0].key.number, v.left, v.top, v.zoom) } }
             .filterNotNull()
             .toSet()
-    }
-
-    private fun traverseKids(
-        kids: List<PDNameTreeNode<PDPageDestination>>?,
-        namedDestinations: MutableMap<String, PDPageDestination>
-    ) {
-        if (kids == null) return
-        for (kid in kids) {
-            if (kid.names != null) {
-                try {
-                    namedDestinations.putAll(kid.names)
-                } catch (e: Exception) {
-                    fail("Duplicate named destination found.")
-                }
-            }
-            if (kid.kids != null) traverseKids(kid.kids, namedDestinations)
-        }
     }
 
     private fun metadataAssertions(approvedDocument: PDDocument, actualDocument: PDDocument): List<() -> Unit> {

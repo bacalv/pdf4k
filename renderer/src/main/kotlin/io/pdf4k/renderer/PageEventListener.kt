@@ -33,10 +33,7 @@ class PageEventListener(private val context: RendererContext) : PdfPageEventHelp
             context.mainDocument.setPageSize(pageSize)
             context.mainDocument.setMargins(0f, 0f, 0f, 0f)
             context.contentBlocksDocument.setPageSize(pageSize)
-            val currentBlock = loadedStationary.stationary.getBlock(currentBlockCount)
-            if (currentBlock == null) {
-                context.contentBlocksDocument.setMargins(0f, 0f, 0f, 0f)
-            } else {
+            loadedStationary.stationary.getBlock(currentBlockCount)?.let { currentBlock ->
                 context.contentBlocksDocument.setMargins(
                     currentBlock.x,
                     pageSize.width - (currentBlock.x + currentBlock.w),
@@ -47,7 +44,8 @@ class PageEventListener(private val context: RendererContext) : PdfPageEventHelp
         }
     }
 
-    private fun Stationary.getBlock(sequence: Int) = contentFlow.getOrNull(sequence)?.let { blockName -> blocks[blockName] }
+    private fun Stationary.getBlock(sequence: Int) =
+        contentFlow.getOrNull(sequence)?.let { blockName -> blocks[blockName] }
 
     fun close() {
         if (currentBlockCount > 0) {
