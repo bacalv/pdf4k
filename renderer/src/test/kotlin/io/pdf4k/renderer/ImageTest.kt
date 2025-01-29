@@ -19,8 +19,7 @@ import io.pdf4k.testing.AbstractPdfApproverTest
 import io.pdf4k.testing.PdfApprover
 import org.junit.jupiter.api.Test
 import java.awt.Color
-import java.awt.Color.BLACK
-import java.awt.Color.WHITE
+import java.awt.Color.*
 
 class ImageTest : AbstractPdfApproverTest() {
     @Test
@@ -97,19 +96,41 @@ class ImageTest : AbstractPdfApproverTest() {
                 }
                 textCell("Here's some text on the line below")
             }
+            paragraph {
+                image("adams.png")
+            }
         }.approve(approver)
     }
 
     @Test
     fun `render QR code`(approver: PdfApprover) {
         content {
-            table(2, noBorder) {
+            table(4, noBorder) {
                 Shape.entries.forEach { shape ->
                     qrCodeCell("https://www.github.com", QrStyle(shape, BLACK, WHITE, 25, logo))
                     qrCodeCell("https://www.github.com", QrStyle(shape, WHITE, BLACK, 25, logo))
+                    qrCodeCell("https://www.github.com", QrStyle(shape, BLACK, null, 25, null))
+                    qrCodeCell("https://www.github.com", QrStyle(shape, BLUE, null, 25, logo.copy(resource = "not_found")))
                 }
             }
 
+        }.approve(approver)
+    }
+
+    @Test
+    fun `image scaling`(approver: PdfApprover) {
+        val resource = "adams.png"
+        content {
+            table(2, weights = floatArrayOf(1f, 9f)) {
+                textCell("Both set")
+                imageCell(resource, width = 50f, height = 50f)
+                textCell("Height")
+                imageCell(resource, width = null, height = 50f)
+                textCell("Width")
+                imageCell(resource, width = 50f, height = null)
+                textCell("Neither")
+                imageCell(resource)
+            }
         }.approve(approver)
     }
 

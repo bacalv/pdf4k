@@ -24,12 +24,14 @@ object QrRenderer {
             .withSize(style.size)
             .withErrorCorrectionLevel(HIGH).also { builder ->
                 style.logo?.let { logo ->
-                    builder.withLogo(
-                        logo = ClassLoader.getSystemResourceAsStream("images/${logo.resource}")?.readBytes() ?: ByteArray(0),
-                        width = logo.width,
-                        height = logo.height,
-                        clearLogoArea = logo.clearLogoArea
-                    )
+                    ClassLoader.getSystemResourceAsStream("images/${logo.resource}")?.let {
+                        builder.withLogo(
+                            logo = it.readBytes(),
+                            width = logo.width,
+                            height = logo.height,
+                            clearLogoArea = logo.clearLogoArea
+                        )
+                    }
                 }
             }
             .build(link)

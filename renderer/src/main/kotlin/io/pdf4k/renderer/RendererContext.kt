@@ -30,12 +30,17 @@ class RendererContext(
         styleStack.push(DEFAULT_STYLE)
     }
 
-    fun peekStyle() = styleStack.peek() ?: DEFAULT_STYLE
+    fun peekStyle(): StyleAttributes = styleStack.peek()
 
     fun pushStyle(component: Component.Style) = pushStyle(component.styleAttributes)
 
-    fun pushStyle(style: StyleAttributes?): StyleAttributes =
-        styleStack.push(style?.let { styleStack.peek() + it } ?: styleStack.peek())
+    fun pushStyle(style: StyleAttributes?): StyleAttributes = peekStyle().let { current ->
+        if (style == null) {
+            styleStack.push(current)
+        } else {
+            styleStack.push(current + style)
+        }
+    }
 
     fun popStyle(): StyleAttributes = styleStack.pop()
 
@@ -61,8 +66,8 @@ class RendererContext(
 
     fun nextPage(stationary: Stationary, blocksFilled: Int) {
         pageNumber.incrementAndGet()
-        stationaryByPage += (loadedStationary[stationary]
-            ?: throw IllegalStateException("Can't find stationary $stationary")) to blocksFilled
+        val loaded = loadedStationary[stationary] ?: throw IllegalStateException("Stationary not found")
+        stationaryByPage += loaded to blocksFilled
     }
 
     fun currentPageNumber() = pageNumber.get()
@@ -76,4 +81,10 @@ class RendererContext(
             }
             rotation?.let { img.setRotationDegrees(it) }
         }
+
+    fun getBlockPageMapping() = stationaryByPage.mapIndexed { pageNumber, (_, blocksFilled) ->
+        pageNumber to blocksFilled
+    }.map { (pageNumber, blocksFilled) ->
+        (0 until blocksFilled).map { pageNumber }
+    }.flatten()
 }

@@ -44,13 +44,13 @@ class PageEventListener(private val context: RendererContext) : PdfPageEventHelp
         }
     }
 
-    private fun Stationary.getBlock(sequence: Int) =
-        contentFlow.getOrNull(sequence)?.let { blockName -> blocks[blockName] }
+    private fun Stationary.getBlock(sequence: Int) = contentFlow[sequence].let { blockName -> blocks[blockName] }
 
     fun close() {
         if (currentBlockCount > 0) {
-            val stationary = currentPageTemplate.stationary.getOrNull(templatePageCount)
-                ?: currentPageTemplate.stationary.last()
+            val stationary = currentPageTemplate.stationary.getOrElse(templatePageCount) {
+                currentPageTemplate.stationary.last()
+            }
             context.nextPage(stationary, currentBlockCount)
         }
     }

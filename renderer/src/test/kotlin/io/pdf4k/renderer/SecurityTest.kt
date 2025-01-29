@@ -1,7 +1,8 @@
 package io.pdf4k.renderer
 
-import io.pdf4k.domain.PdfPermissions.PdfPermission.*
+import io.pdf4k.domain.PdfPermissions.PdfPermission.entries
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
+import io.pdf4k.renderer.InMemoryRenderer.defaultKeyName
 import io.pdf4k.testing.AbstractPdfApproverTest
 import io.pdf4k.testing.PdfApprover
 import io.pdf4k.testing.PdfPassword
@@ -27,7 +28,7 @@ class SecurityTest : AbstractPdfApproverTest() {
                     +"Hello, user"
                 }
             }
-            encrypt("userPass", "ownerPass", Print, ScreenReaders, DegradedPrint, ModifyContents)
+            encrypt("userPass", "ownerPass", *entries.toTypedArray())
         }.approve(approver)
     }
 
