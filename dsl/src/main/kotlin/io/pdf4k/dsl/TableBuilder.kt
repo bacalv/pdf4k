@@ -25,7 +25,7 @@ abstract class TableBuilder<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(
                 textCell(null, colSpan, rowSpan, block)
             }
         } else {
-            children += CellBuilder(colSpan, rowSpan, null, phraseBuilder().also { it.block() })
+            children += CellBuilder(colSpan, rowSpan, Margin.ZERO, phraseBuilder().also { it.block() })
         }
     }
 
@@ -33,7 +33,7 @@ abstract class TableBuilder<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(
         columns: Int,
         style: StyleAttributes? = null,
         weights: FloatArray? = null,
-        margin: Margin? = Margin.ZERO,
+        margin: Margin = Margin.ZERO,
         headerRows: Int = 0,
         extend: Boolean = false,
         colSpan: Int = 1,
@@ -50,7 +50,7 @@ abstract class TableBuilder<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(
                 imageCell(resource, null, colSpan, rowSpan, width, height, rotation)
             }
         } else {
-            children += CellBuilder(colSpan, rowSpan, null, ImageBuilder(resource, width, height, rotation))
+            children += CellBuilder(colSpan, rowSpan, Margin.ZERO, ImageBuilder(resource, width, height, rotation))
         }
     }
 
@@ -60,7 +60,7 @@ abstract class TableBuilder<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(
                 qrCodeCell(link, qrStyle, null, colSpan, rowSpan)
             }
         } else {
-            children += CellBuilder(colSpan, rowSpan, null, QrBuilder(link, qrStyle))
+            children += CellBuilder(colSpan, rowSpan, Margin.ZERO, QrBuilder(link, qrStyle))
         }
     }
 

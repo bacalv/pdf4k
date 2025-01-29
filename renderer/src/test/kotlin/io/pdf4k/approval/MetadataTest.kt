@@ -1,4 +1,4 @@
-package io.pdf4k.renderer
+package io.pdf4k.approval
 
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
 import io.pdf4k.testing.AbstractPdfApproverTest

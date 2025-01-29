@@ -7,14 +7,13 @@ import java.util.*
 class CellBuilder(
     private val colSpan: Int,
     private val rowSpan: Int,
-    private val margin: Margin?,
+    private val margin: Margin,
     private val childBuilder: ComponentBuilder<*, *>
 ) : ComponentBuilder<Component.Cell, CellBuilder> {
     override val children: MutableList<ComponentBuilder<*, *>> = EMPTY
 
     override fun build() =
         when (childBuilder) {
-            is StyleBuilder -> Component.Cell.Style(colSpan, rowSpan, childBuilder.build())
             is PhraseBuilder -> Component.Cell.Text(colSpan, rowSpan, childBuilder.build())
             is TableBuilder<*, *> -> Component.Cell.Table(colSpan, rowSpan, margin, childBuilder.build())
             is ImageBuilder -> Component.Cell.Image(colSpan, rowSpan, childBuilder.build())

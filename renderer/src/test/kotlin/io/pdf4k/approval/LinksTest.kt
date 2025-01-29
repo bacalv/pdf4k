@@ -1,12 +1,12 @@
-package io.pdf4k.renderer
+package io.pdf4k.approval
 
 import io.pdf4k.domain.Stationary.Companion.BlankA4Portrait
 import io.pdf4k.domain.StyleAttributes.Companion.style
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
 import io.pdf4k.dsl.StationaryBuilder.Companion.plusBlocks
 import io.pdf4k.testing.AbstractPdfApproverTest
-import org.junit.jupiter.api.Test
 import io.pdf4k.testing.PdfApprover
+import org.junit.jupiter.api.Test
 import java.awt.Color.BLUE
 
 class LinksTest : AbstractPdfApproverTest() {

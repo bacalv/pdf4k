@@ -10,6 +10,7 @@ dependencies {
     implementation(libs.bouncyCastleBcmail)
     testImplementation(project(":dsl"))
     testImplementation(project(":testing"))
+    testImplementation(libs.mockk)
 }
 
 tasks.withType<Test> {

@@ -1,7 +1,8 @@
-package io.pdf4k.renderer
+package io.pdf4k.approval
 
-import io.pdf4k.domain.Font.*
+import io.pdf4k.domain.Font.BuiltIn
 import io.pdf4k.domain.Font.Custom.Resource
+import io.pdf4k.domain.Font.Included
 import io.pdf4k.domain.Font.Included.Arial
 import io.pdf4k.domain.Font.Style.*
 import io.pdf4k.domain.HorizontalAlignment.Center

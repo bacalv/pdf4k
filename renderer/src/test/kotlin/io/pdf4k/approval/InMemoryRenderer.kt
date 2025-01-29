@@ -1,7 +1,8 @@
-package io.pdf4k.renderer
+package io.pdf4k.approval
 
 import io.pdf4k.domain.KeyName
 import io.pdf4k.domain.Pdf
+import io.pdf4k.renderer.*
 import io.pdf4k.renderer.KeyProvider.Companion.toCertificateChain
 import io.pdf4k.renderer.KeyProvider.Companion.toPrivateKey
 import io.pdf4k.renderer.TempStreamFactory.Companion.inMemoryTempStreamFactory

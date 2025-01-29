@@ -1,8 +1,8 @@
-package io.pdf4k.renderer
+package io.pdf4k.approval
 
+import io.pdf4k.approval.InMemoryRenderer.defaultKeyName
 import io.pdf4k.domain.PdfPermissions.PdfPermission.entries
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
-import io.pdf4k.renderer.InMemoryRenderer.defaultKeyName
 import io.pdf4k.testing.AbstractPdfApproverTest
 import io.pdf4k.testing.PdfApprover
 import io.pdf4k.testing.PdfPassword

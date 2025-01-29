@@ -1,6 +1,7 @@
 package io.pdf4k.dsl
 
 import io.pdf4k.domain.Component
+import io.pdf4k.domain.Margin
 import io.pdf4k.domain.StyleAttributes
 import io.pdf4k.domain.TableAttributes
 
@@ -46,8 +47,8 @@ abstract class ContentBuilder<F : PhraseBuilder<F>, P : ParagraphBuilder<F, P>, 
         style(style) { phrase(block) }
     }
 
-    fun table(columns: Int, style: StyleAttributes? = null, widthPercentage: Float = 100f, weights: FloatArray? = null, headerRows: Int = 0, extend: Boolean = false, block: T.() -> Unit) {
-        children += tableBuilder(TableAttributes(columns, widthPercentage, weights, null, headerRows, extend), style).also { it.block() }
+    fun table(columns: Int, style: StyleAttributes? = null, widthPercentage: Float? = null, weights: FloatArray? = null, headerRows: Int = 0, extend: Boolean = false, block: T.() -> Unit) {
+        children += tableBuilder(TableAttributes(columns, widthPercentage, weights, Margin.ZERO, headerRows, extend), style).also { it.block() }
     }
 
     override fun build() = Component.Content(children.map { it.build() })

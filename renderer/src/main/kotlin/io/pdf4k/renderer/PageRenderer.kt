@@ -8,7 +8,7 @@ object PageRenderer {
     fun Page.render(context: RendererContext) {
         context.pushStyle(style)
         content.children.ifEmpty { context.add(listOf(Chunk(""))) }
-        context.add(content.children.render(context))
+        context.add(listOf(content).render(context))
         context.popStyle()
     }
 }

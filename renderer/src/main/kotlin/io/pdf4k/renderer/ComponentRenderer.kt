@@ -1,15 +1,13 @@
 package io.pdf4k.renderer
 
 import com.lowagie.text.*
-import com.lowagie.text.Element.*
 import com.lowagie.text.Rectangle.NO_BORDER
-import com.lowagie.text.pdf.PdfContentByte
 import com.lowagie.text.pdf.PdfPCell
 import com.lowagie.text.pdf.PdfPTable
 import io.pdf4k.domain.Component
-import io.pdf4k.domain.HorizontalAlignment
 import io.pdf4k.domain.StyleAttributes.Companion.DEFAULT_LEADING
-import io.pdf4k.domain.VerticalAlignment
+import io.pdf4k.renderer.StyleSetter.setHorizontalAlignment
+import io.pdf4k.renderer.StyleSetter.setStyle
 
 object ComponentRenderer {
     fun List<Component>.render(context: RendererContext): List<Element> = map { component ->
@@ -36,7 +34,7 @@ object ComponentRenderer {
                     cell.paddingTop = 0f
                     cell.paddingBottom = 0f
                     cell.border = NO_BORDER
-                    cell.setHorizontalAlignment(context.peekStyle().align)
+                    setHorizontalAlignment(cell, context.peekStyle().align)
                     context.currentLeading().let { cell.setLeading(it.fixed, it.multiplier) }
                     cell.phrase = Paragraph().also { paragraph ->
                         paragraph.keepTogether = false
@@ -89,17 +87,12 @@ object ComponentRenderer {
                 }
                 component.weights?.let { table.setWidths(it) }
                 table.headerRows = component.headerRows
-                component.children.render(context).forEach {
-                    when (it) {
-                        is PdfPCell -> table.addCell(it)
-                    }
-                }
+                component.children.render(context).filterIsInstance<PdfPCell>().forEach { table.addCell(it) }
                 context.popStyle()
                 table.completeRow()
             })
 
             is Component.Cell -> listOf(when (component) {
-                is Component.Cell.Style -> component.style.render(context)
                 is Component.Cell.Text -> component.phrase.render<Phrase>(context)
                 is Component.Cell.Table -> component.table.render<PdfPTable>(context)
                 is Component.Cell.Image -> component.image.render<Image>(context)
@@ -109,7 +102,7 @@ object ComponentRenderer {
                     is Phrase -> PdfPCell(element).also { it.setStyle(context) }
                     is PdfPTable -> PdfPCell(element).also {
                         it.setStyle(context)
-                        (component as Component.Cell.Table).margin?.let { margin ->
+                        (component as Component.Cell.Table).margin.let { margin ->
                             it.paddingLeft = margin.left
                             it.paddingRight = margin.right
                             it.paddingTop = margin.top
@@ -135,54 +128,4 @@ object ComponentRenderer {
         listOf(this).render(context).first() as T
 
     private fun RendererContext.currentLeading() = peekStyle().leading ?: DEFAULT_LEADING
-
-    private fun Chunk.setStyle(context: RendererContext) {
-        font = context.currentFont()
-
-        context.peekStyle().let { style ->
-            style.background?.let { setBackground(it) }
-            takeIf { style.underlined == true }?.let {
-                setUnderline(style.underlineColour, 1f, 0f, -2f, 0f, PdfContentByte.LINE_CAP_BUTT)
-            }
-        }
-    }
-
-    private fun PdfPCell.setStyle(context: RendererContext) {
-        context.peekStyle().let { style ->
-            setHorizontalAlignment(style.align ?: HorizontalAlignment.Left)
-
-            verticalAlignment = when(style.valign) {
-                VerticalAlignment.Top -> ALIGN_TOP
-                VerticalAlignment.Middle -> ALIGN_MIDDLE
-                VerticalAlignment.Bottom -> ALIGN_BOTTOM
-                null -> verticalAlignment
-            }
-
-            style.leading?.let { setLeading(it.fixed, it.multiplier) }
-            style.cellBackground?.let { backgroundColor = it }
-            style.paddingLeft?.let { paddingLeft = it }
-            style.paddingRight?.let { paddingRight = it }
-            style.paddingTop?.let { paddingTop = it }
-            style.paddingBottom?.let { paddingBottom = it }
-            style.borderColourTop?.let { borderColorTop = it }
-            style.borderColourBottom?.let { borderColorBottom = it }
-            style.borderColourLeft?.let { borderColorLeft = it }
-            style.borderColourRight?.let { borderColorRight = it }
-            style.borderWidthTop?.let { borderWidthTop = it }
-            style.borderWidthBottom?.let { borderWidthBottom = it }
-            style.borderWidthLeft?.let { borderWidthLeft = it }
-            style.borderWidthRight?.let { borderWidthRight = it }
-        }
-    }
-
-    private fun PdfPCell.setHorizontalAlignment(align: HorizontalAlignment?) {
-        horizontalAlignment = when (align) {
-            HorizontalAlignment.Left -> ALIGN_LEFT
-            HorizontalAlignment.Center -> ALIGN_CENTER
-            HorizontalAlignment.Right -> ALIGN_RIGHT
-            HorizontalAlignment.Justified -> ALIGN_JUSTIFIED
-            HorizontalAlignment.JustifiedAll -> ALIGN_JUSTIFIED_ALL
-            null -> horizontalAlignment
-        }
-    }
 }

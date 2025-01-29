@@ -1,4 +1,4 @@
-package io.pdf4k.renderer
+package io.pdf4k.approval
 
 import io.pdf4k.domain.Font.Style.Bold
 import io.pdf4k.domain.HorizontalAlignment.Justified
@@ -13,8 +13,8 @@ import io.pdf4k.dsl.StationaryBuilder.Companion.stationary
 import io.pdf4k.dsl.StationaryBuilder.Companion.withMargin
 import io.pdf4k.extensions.splitParagraphs
 import io.pdf4k.testing.AbstractPdfApproverTest
-import org.junit.jupiter.api.Test
 import io.pdf4k.testing.PdfApprover
+import org.junit.jupiter.api.Test
 
 class StationaryTest : AbstractPdfApproverTest() {
     @Test

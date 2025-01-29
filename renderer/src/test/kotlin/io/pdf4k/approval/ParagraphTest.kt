@@ -1,4 +1,4 @@
-package io.pdf4k.renderer
+package io.pdf4k.approval
 
 import io.pdf4k.domain.Font.Style.Bold
 import io.pdf4k.domain.HorizontalAlignment
@@ -11,11 +11,11 @@ import io.pdf4k.dsl.PdfBuilder.Companion.content
 import io.pdf4k.extensions.singleLine
 import io.pdf4k.extensions.splitParagraphs
 import io.pdf4k.testing.AbstractPdfApproverTest
+import io.pdf4k.testing.PdfApprover
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments.arguments
 import org.junit.jupiter.params.provider.MethodSource
-import io.pdf4k.testing.PdfApprover
 
 class ParagraphTest : AbstractPdfApproverTest() {
     @Test
@@ -129,21 +129,23 @@ class ParagraphTest : AbstractPdfApproverTest() {
     @Test
     fun `renders unicode text`(approver: PdfApprover) {
         content {
-            """
-                Water boiled up beneath the bubble, it seethed and spouted. The bubble
-                surged into the air, bobbing and rolling on the water spout. Up, up it
-                climbed, throwing stilts of light at the cliff. Up it surged on the jet, the
-                water falling from beneath it, crashing back into the sea hundreds of feet
-                below
-
-                水在气泡下面沸腾，它沸腾着喷涌而出。泡沫 冲向空中，在喷水口上晃动滚动。向上，向上 爬上去，
-                向悬崖投掷光高跷。它在喷气式飞机上汹涌而上， 水从它下面落下，撞回数百英尺高的海中 下面
-
-                El agua hirvió debajo de la burbuja, hirvió y brotó. La burbuja se elevó en el aire,
-                moviéndose y rodando sobre el chorro de agua. Subió, subió, arrojando zancos de luz 
-                al acantilado. Subió sobre el chorro, el agua cayó desde debajo de ella, estrellándose 
-                de nuevo contra el mar a cientos de pies debajo
-            """.splitParagraphs().map(::paragraph)
+            style(splitLate = true, splitRows = false) {
+                """
+                    Water boiled up beneath the bubble, it seethed and spouted. The bubble
+                    surged into the air, bobbing and rolling on the water spout. Up, up it
+                    climbed, throwing stilts of light at the cliff. Up it surged on the jet, the
+                    water falling from beneath it, crashing back into the sea hundreds of feet
+                    below
+    
+                    水在气泡下面沸腾，它沸腾着喷涌而出。泡沫 冲向空中，在喷水口上晃动滚动。向上，向上 爬上去，
+                    向悬崖投掷光高跷。它在喷气式飞机上汹涌而上， 水从它下面落下，撞回数百英尺高的海中 下面
+    
+                    El agua hirvió debajo de la burbuja, hirvió y brotó. La burbuja se elevó en el aire,
+                    moviéndose y rodando sobre el chorro de agua. Subió, subió, arrojando zancos de luz 
+                    al acantilado. Subió sobre el chorro, el agua cayó desde debajo de ella, estrellándose 
+                    de nuevo contra el mar a cientos de pies debajo
+                """.splitParagraphs().map(::paragraph)
+            }
         }.approve(approver)
     }
 

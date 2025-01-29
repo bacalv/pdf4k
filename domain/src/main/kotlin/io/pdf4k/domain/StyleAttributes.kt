@@ -1,8 +1,6 @@
 package io.pdf4k.domain
 
-import io.pdf4k.domain.HorizontalAlignment.Left
 import io.pdf4k.domain.Leading.Companion.leading
-import io.pdf4k.domain.VerticalAlignment.Top
 import java.awt.Color
 
 data class StyleAttributes(
@@ -35,21 +33,10 @@ data class StyleAttributes(
     companion object {
         val DEFAULT_LEADING = leading(0f, 1.2f)
         val DEFAULT_STYLE = StyleAttributes(
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            DEFAULT_LEADING,
-            Left,
-            Top,
-            null,
-            0f,
-            5f,
-            4f,
-            4f
+            paddingTop = 0f,
+            paddingBottom = 5f,
+            paddingLeft = 4f,
+            paddingRight = 4f
         )
 
         fun style(
@@ -121,30 +108,30 @@ data class StyleAttributes(
     }
 
     operator fun plus(other: StyleAttributes) = StyleAttributes(
-        other.font ?: font ?: DEFAULT_STYLE.font,
-        other.fontStyle ?: fontStyle ?: DEFAULT_STYLE.fontStyle,
-        other.size ?: size ?: DEFAULT_STYLE.size,
-        other.colour ?: colour ?: DEFAULT_STYLE.colour,
-        other.background ?: background ?: DEFAULT_STYLE.background,
-        other.underlined ?: underlined ?: DEFAULT_STYLE.underlined,
-        other.underlineColour ?: underlineColour ?: DEFAULT_STYLE.underlineColour,
-        other.leading ?: leading ?: DEFAULT_STYLE.leading,
-        other.align ?: align ?: DEFAULT_STYLE.align,
-        other.valign ?: valign ?: DEFAULT_STYLE.valign,
-        other.cellBackground ?: cellBackground ?: DEFAULT_STYLE.cellBackground,
+        other.font ?: font,
+        other.fontStyle ?: fontStyle,
+        other.size ?: size,
+        other.colour ?: colour,
+        other.background ?: background,
+        other.underlined ?: underlined,
+        other.underlineColour ?: underlineColour,
+        other.leading ?: leading,
+        other.align ?: align,
+        other.valign ?: valign,
+        other.cellBackground ?: cellBackground,
         other.paddingTop ?: paddingTop ?: DEFAULT_STYLE.paddingTop,
         other.paddingBottom ?: paddingBottom ?: DEFAULT_STYLE.paddingBottom,
         other.paddingLeft ?: paddingLeft ?: DEFAULT_STYLE.paddingLeft,
         other.paddingRight ?: paddingRight ?: DEFAULT_STYLE.paddingRight,
-        other.borderWidthTop ?: borderWidthTop ?: DEFAULT_STYLE.borderWidthTop,
-        other.borderWidthBottom ?: borderWidthBottom ?: DEFAULT_STYLE.borderWidthBottom,
-        other.borderWidthLeft ?: borderWidthLeft ?: DEFAULT_STYLE.borderWidthLeft,
-        other.borderWidthRight ?: borderWidthRight ?: DEFAULT_STYLE.borderWidthRight,
-        other.borderColourTop ?: borderColourTop ?: DEFAULT_STYLE.borderColourTop,
-        other.borderColourBottom ?: borderColourBottom ?: DEFAULT_STYLE.borderColourBottom,
-        other.borderColourLeft ?: borderColourLeft ?: DEFAULT_STYLE.borderColourLeft,
-        other.borderColourRight ?: borderColourRight ?: DEFAULT_STYLE.borderColourRight,
-        other.splitLate ?: splitLate ?: DEFAULT_STYLE.splitLate,
-        other.splitRows ?: splitRows ?: DEFAULT_STYLE.splitRows
+        other.borderWidthTop ?: borderWidthTop,
+        other.borderWidthBottom ?: borderWidthBottom,
+        other.borderWidthLeft ?: borderWidthLeft,
+        other.borderWidthRight ?: borderWidthRight,
+        other.borderColourTop ?: borderColourTop,
+        other.borderColourBottom ?: borderColourBottom,
+        other.borderColourLeft ?: borderColourLeft,
+        other.borderColourRight ?: borderColourRight,
+        other.splitLate ?: splitLate,
+        other.splitRows ?: splitRows
     )
 }

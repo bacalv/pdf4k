@@ -51,7 +51,7 @@ object ClasspathFontProvider: FontProvider {
 
             is Included -> {
                 val name = when (defaultedFont) {
-                    Arial -> "arial unicode ms"
+                    is Arial -> "arial unicode ms"
                 }
                 fontWithName(name, defaultedSize, defaultedStyle, defaultedColour)
             }

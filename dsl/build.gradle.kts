@@ -4,4 +4,5 @@ plugins {
 
 dependencies {
     api(project(":domain"))
+    testImplementation(libs.mockk)
 }

@@ -33,11 +33,9 @@ sealed class Component(val children: List<Component>) {
     ) : Component(children)
 
     sealed class Cell(val colSpan: Int, val rowSpan: Int, children: List<Component> = emptyList()) : Component(children) {
-        class Style(colSpan: Int, rowSpan: Int, val style: Component.Style) : Cell(colSpan, rowSpan, listOf(style))
-
         class Text(colSpan: Int, rowSpan: Int, val phrase: Phrase) : Cell(colSpan, rowSpan)
 
-        class Table(colSpan: Int, rowSpan: Int, val margin: Margin?, val table: Component.Table) : Cell(colSpan, rowSpan)
+        class Table(colSpan: Int, rowSpan: Int, val margin: Margin, val table: Component.Table) : Cell(colSpan, rowSpan)
 
         class Image(colSpan: Int, rowSpan: Int, val image: Component.Image) : Cell(colSpan, rowSpan)
 

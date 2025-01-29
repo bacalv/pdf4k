@@ -23,11 +23,6 @@ sealed interface Outcome<T, E> {
         is Failure -> null
     }
 
-//    fun <F> mapFailure(fn: (E) -> F) = when (this) {
-//        is Success -> Success<T, F>(result)
-//        is Failure -> Failure(fn(error))
-//    }
-
     data class Success<T, E>(val result: T): Outcome<T, E>
     data class Failure<T, E>(val error: E): Outcome<T, E>
 }

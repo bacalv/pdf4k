@@ -1,7 +1,7 @@
 package io.pdf4k.testing
 
+import io.pdf4k.approval.InMemoryRenderer.renderer
 import io.pdf4k.domain.Pdf
-import io.pdf4k.renderer.InMemoryRenderer.renderer
 import org.junit.jupiter.api.extension.ExtendWith
 import java.io.ByteArrayOutputStream
 

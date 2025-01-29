@@ -4,7 +4,7 @@ data class TableAttributes(
     val columns: Int,
     val widthPercentage: Float?,
     val weights: FloatArray?,
-    val margin: Margin?,
+    val margin: Margin,
     val headerRows: Int,
     val extend: Boolean
 )
