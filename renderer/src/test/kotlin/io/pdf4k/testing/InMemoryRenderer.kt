@@ -2,14 +2,13 @@ package io.pdf4k.testing
 
 import io.pdf4k.domain.KeyName
 import io.pdf4k.domain.Pdf
+import io.pdf4k.provider.ClasspathFontProvider
 import io.pdf4k.provider.CustomResourceProvider
 import io.pdf4k.provider.KeyProvider
 import io.pdf4k.provider.KeyProvider.Companion.toCertificateChain
 import io.pdf4k.provider.KeyProvider.Companion.toPrivateKey
 import io.pdf4k.provider.ResourceLocators
 import io.pdf4k.provider.UriResourceLoader.Companion.defaultResourceLoader
-import io.pdf4k.renderer.ClasspathFontProvider
-import io.pdf4k.renderer.ClasspathStationaryLoader
 import io.pdf4k.renderer.DocumentAssembler
 import io.pdf4k.renderer.PdfRenderer
 import io.pdf4k.renderer.TempStreamFactory.Companion.inMemoryTempStreamFactory
@@ -33,7 +32,7 @@ object InMemoryRenderer {
         override fun load(name: String) = this::class.java.getResourceAsStream("/custom/$name")
     }
     private val resourceLocators =
-        ResourceLocators(defaultResourceLoader, mapOf("custom" to customProvider), ClasspathFontProvider, ClasspathStationaryLoader)
+        ResourceLocators(defaultResourceLoader, mapOf("custom" to customProvider), ClasspathFontProvider)
     val renderer = PdfRenderer(resourceLocators, inMemoryTempStreamFactory, documentAssembler)
 
     fun Pdf.render(outputStream: OutputStream = ByteArrayOutputStream()) = renderer.render(this, outputStream)

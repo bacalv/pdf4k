@@ -5,6 +5,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import io.pdf4k.domain.LoadedStationary
 import io.pdf4k.domain.Page
+import io.pdf4k.domain.ResourceLocation.Local
 import io.pdf4k.domain.Stationary.Companion.BlankA4Portrait
 import io.pdf4k.dsl.StationaryBuilder.Companion.withBlocks
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -21,7 +22,7 @@ class PageEventListenerTest {
         every { context.loadedStationary }.returns(emptyMap())
 
         val exception = assertThrows<IllegalStateException> { listener.setCurrentPageTemplate(page) }
-        assertEquals("Cannot find loaded stationary for template 'blank-a4-portrait'", exception.message)
+        assertEquals("Cannot find loaded stationary for template '${Local("blank-a4-portrait")}'", exception.message)
     }
 
     @Test
@@ -35,7 +36,7 @@ class PageEventListenerTest {
         every { context.mainDocument }.returns(mockk(relaxed = true))
 
         val exception = assertThrows<IllegalStateException> { listener.setCurrentPageTemplate(page) }
-        assertEquals("Cannot find block #0 for template 'blank-a4-portrait'", exception.message)
+        assertEquals("Cannot find block #0 for template '${Local("blank-a4-portrait")}'", exception.message)
     }
 
     @Test

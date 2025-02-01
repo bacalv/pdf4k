@@ -1,4 +1,4 @@
-package io.pdf4k.renderer
+package io.pdf4k.provider
 
 import com.lowagie.text.FontFactoryImp
 import com.lowagie.text.pdf.BaseFont
@@ -8,7 +8,6 @@ import io.pdf4k.domain.Font.BuiltIn.*
 import io.pdf4k.domain.Font.Custom.Resource
 import io.pdf4k.domain.Font.Included.Arial
 import io.pdf4k.domain.Font.Style.*
-import io.pdf4k.provider.FontProvider
 import io.pdf4k.renderer.PdfError.Companion.PdfErrorException
 import io.pdf4k.renderer.PdfError.FontNotFound
 import io.pdf4k.util.BasicClasspathScanner

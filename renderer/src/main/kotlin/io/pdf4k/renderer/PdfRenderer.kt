@@ -5,6 +5,7 @@ import com.lowagie.text.pdf.*
 import io.pdf4k.domain.*
 import io.pdf4k.domain.Outcome.Success
 import io.pdf4k.provider.ResourceLocators
+import io.pdf4k.provider.StationaryLoader.loadStationary
 import io.pdf4k.renderer.PageRenderer.render
 import io.pdf4k.renderer.PdfError.Companion.PdfErrorException
 import io.pdf4k.renderer.PdfError.RenderingError
@@ -18,9 +19,7 @@ class PdfRenderer(
     fun render(pdf: Pdf, outputStream: OutputStream) = with(pdf) {
         val mainDocumentStream = tempStreamFactory.createTempOutputStream()
         val contentBlocksDocumentStream = tempStreamFactory.createTempOutputStream()
-        resourceLocators.stationaryLoader.loadStationary(
-            pages.map { it.stationary }.flatten()
-        ).map { loadedStationary ->
+        resourceLocators.stationaryResourceLocator.loadStationary(pages).map { loadedStationary ->
             createContext(
                 mainDocumentStream.outputStream,
                 contentBlocksDocumentStream.outputStream,

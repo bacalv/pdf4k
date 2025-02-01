@@ -20,7 +20,7 @@ sealed class Component(val children: List<Component>) {
 
     class Link(val target: String, val text: String) : Component(emptyList())
 
-    object PageNumber : Component(emptyList())
+    data object PageNumber : Component(emptyList())
 
     class Table(
         val columns: Int,

@@ -1,14 +1,16 @@
 package io.pdf4k.dsl
 
+import io.pdf4k.domain.Block
 import io.pdf4k.domain.Margin
 import io.pdf4k.domain.Margin.Companion.DEFAULT_MARGIN
-import io.pdf4k.domain.Block
+import io.pdf4k.domain.ResourceLocation
 import io.pdf4k.domain.Stationary
 import io.pdf4k.domain.Stationary.Companion.MainBlockName
+import java.net.URI
 
 @PdfDsl
 class StationaryBuilder(
-    private val template: String,
+    private val template: ResourceLocation,
     private val templatePage: Int,
     private val width: Float,
     private val height: Float,
@@ -41,7 +43,7 @@ class StationaryBuilder(
         fun Stationary.withMargin(margin: Margin) = copy(blocks = blocks + (MainBlockName to margin.toBlock(width, height)))
 
         fun stationary(
-            template: String,
+            template: ResourceLocation,
             templatePage: Int = 1,
             width: Float,
             height: Float,
@@ -59,5 +61,24 @@ class StationaryBuilder(
             builder.block()
             return builder.build()
         }
+
+        fun stationary(
+            template: String,
+            templatePage: Int = 1,
+            width: Float,
+            height: Float,
+            margin: Margin = DEFAULT_MARGIN,
+            block: StationaryBuilder.() -> Unit = {}
+        ) = stationary(ResourceLocation.Local(template), templatePage, width, height, margin, block)
+
+        fun stationary(
+            template: URI,
+            templatePage: Int = 1,
+            width: Float,
+            height: Float,
+            margin: Margin = DEFAULT_MARGIN,
+            block: StationaryBuilder.() -> Unit = {}
+        ) = stationary(ResourceLocation.Remote.Uri(template), templatePage, width, height, margin, block)
+
     }
 }
