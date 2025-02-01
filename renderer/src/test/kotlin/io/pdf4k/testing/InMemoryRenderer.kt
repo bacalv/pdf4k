@@ -2,6 +2,7 @@ package io.pdf4k.testing
 
 import io.pdf4k.domain.KeyName
 import io.pdf4k.domain.Pdf
+import io.pdf4k.provider.CustomResourceProvider
 import io.pdf4k.provider.KeyProvider
 import io.pdf4k.provider.KeyProvider.Companion.toCertificateChain
 import io.pdf4k.provider.KeyProvider.Companion.toPrivateKey
@@ -28,8 +29,11 @@ object InMemoryRenderer {
         override fun lookup(keyName: KeyName) = key[keyName] ?: fail("Key not found: $keyName")
     }
     private val documentAssembler = DocumentAssembler(keyProvider)
+    private val customProvider = object : CustomResourceProvider {
+        override fun load(name: String) = this::class.java.getResourceAsStream("/custom/$name")
+    }
     private val resourceLocators =
-        ResourceLocators(defaultResourceLoader, emptyMap(), ClasspathFontProvider, ClasspathStationaryLoader)
+        ResourceLocators(defaultResourceLoader, mapOf("custom" to customProvider), ClasspathFontProvider, ClasspathStationaryLoader)
     val renderer = PdfRenderer(resourceLocators, inMemoryTempStreamFactory, documentAssembler)
 
     fun Pdf.render(outputStream: OutputStream = ByteArrayOutputStream()) = renderer.render(this, outputStream)

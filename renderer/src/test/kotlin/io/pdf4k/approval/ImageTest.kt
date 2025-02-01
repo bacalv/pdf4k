@@ -11,6 +11,7 @@ import io.pdf4k.domain.QrStyle.Companion.Logo
 import io.pdf4k.domain.QrStyle.Companion.Shape
 import io.pdf4k.domain.QrStyle.Companion.Shape.Square
 import io.pdf4k.domain.ResourceLocation.Local
+import io.pdf4k.domain.ResourceLocation.Remote.Custom
 import io.pdf4k.domain.StyleAttributes.Companion.border
 import io.pdf4k.domain.StyleAttributes.Companion.noBorder
 import io.pdf4k.domain.StyleAttributes.Companion.style
@@ -18,9 +19,11 @@ import io.pdf4k.domain.VerticalAlignment.Middle
 import io.pdf4k.dsl.PdfBuilder.Companion.content
 import io.pdf4k.testing.AbstractPdfRendererTest
 import io.pdf4k.testing.PdfApprover
+import io.pdf4k.testing.RemoteServer
 import org.junit.jupiter.api.Test
 import java.awt.Color
 import java.awt.Color.*
+import java.net.URI
 
 class ImageTest : AbstractPdfRendererTest() {
     @Test
@@ -80,6 +83,38 @@ class ImageTest : AbstractPdfRendererTest() {
                 listOf(45f, 135f, 225f, 315f).forEach { it ->
                     imageCell("musicians/gallagher.jpeg", width = 200f, height = 200f, rotation = it)
                 }
+            }
+
+        }.approve(approver)
+    }
+
+    @Test
+    fun `load image from url`(approver: PdfApprover) {
+        RemoteServer().let { server ->
+            val port = server.start()
+            content {
+                table(style = noBorder) {
+                    imageCell(
+                        URI("http://localhost:$port/ELO_A_New_World_Record.jpg"),
+                        width = 200f,
+                        height = 200f
+                    )
+                }
+
+            }.approve(approver)
+            server.stop()
+        }
+    }
+
+    @Test
+    fun `load image from custom provider`(approver: PdfApprover) {
+        content {
+            table(style = noBorder) {
+                imageCell(
+                    Custom("custom", "dsotm.jpg"),
+                    width = 200f,
+                    height = 200f
+                )
             }
 
         }.approve(approver)

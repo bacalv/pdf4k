@@ -1,6 +1,7 @@
 package io.pdf4k.dsl
 
 import io.pdf4k.domain.*
+import java.net.URI
 
 @PdfDsl
 abstract class TableBuilder<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(
@@ -43,16 +44,24 @@ abstract class TableBuilder<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(
         children += CellBuilder(colSpan, rowSpan, margin, tableBuilder(TableAttributes(columns, 100f, weights, margin, headerRows, extend), style).also { it.block() })
     }
 
+    fun imageCell(resource: URI, style: StyleAttributes? = null, colSpan: Int = 1, rowSpan: Int = 1, width: Float? = null, height: Float? = null,
+                  rotation: Float? = null) {
+        imageCell(ResourceLocation.Remote.Uri(resource), style, colSpan, rowSpan, width, height, rotation)
+    }
+
     fun imageCell(resource: String, style: StyleAttributes? = null, colSpan: Int = 1, rowSpan: Int = 1, width: Float? = null, height: Float? = null,
+                  rotation: Float? = null) {
+        imageCell(ResourceLocation.Local(resource), style, colSpan, rowSpan, width, height, rotation)
+    }
+
+    fun imageCell(resourceLocation: ResourceLocation, style: StyleAttributes? = null, colSpan: Int = 1, rowSpan: Int = 1, width: Float? = null, height: Float? = null,
                   rotation: Float? = null) {
         if (style != null) {
             style(style) {
-                imageCell(resource, null, colSpan, rowSpan, width, height, rotation)
+                imageCell(resourceLocation, null, colSpan, rowSpan, width, height, rotation)
             }
         } else {
-            children += CellBuilder(colSpan, rowSpan, Margin.ZERO, ImageBuilder(
-                ResourceLocation.Local(resource), width, height, rotation
-            ))
+            children += CellBuilder(colSpan, rowSpan, Margin.ZERO, ImageBuilder(resourceLocation, width, height, rotation))
         }
     }
 

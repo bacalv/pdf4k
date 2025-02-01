@@ -7,6 +7,7 @@ import io.pdf4k.domain.Outcome.Success
 import io.pdf4k.domain.QrStyle
 import io.pdf4k.domain.QrStyle.Companion.Shape.Square
 import io.pdf4k.domain.ResourceLocation
+import io.pdf4k.domain.ResourceLocation.Remote.Custom
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
 import io.pdf4k.dsl.StationaryBuilder.Companion.stationary
 import io.pdf4k.provider.KeyProvider.Companion.toPrivateKey
@@ -86,6 +87,41 @@ class ErrorHandlingTest {
             }.render()
         }.let { error ->
             assertEquals("not_found", (error.resource as ResourceLocation.Local).name)
+        }
+    }
+
+    @Test
+    fun `unknown custom image provider`() {
+        assertError<CustomResourceProviderNotFound> {
+            pdf {
+                page {
+                    content {
+                        table {
+                            imageCell(Custom("not_found", "ignored.png"))
+                        }
+                    }
+                }
+            }.render()
+        }.let { error ->
+            assertEquals("not_found", error.providerName)
+        }
+    }
+
+    @Test
+    fun `custom provider image not found`() {
+        assertError<ImageNotFound> {
+            pdf {
+                page {
+                    content {
+                        table {
+                            imageCell(Custom("custom", "not_found"))
+                        }
+                    }
+                }
+            }.render()
+        }.let { error ->
+            assertEquals("custom", (error.resource as Custom).providerName)
+            assertEquals("not_found", (error.resource as Custom).name)
         }
     }
 

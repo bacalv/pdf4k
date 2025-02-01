@@ -9,5 +9,5 @@ typealias PdfOutcome<T> = Outcome<T, PdfError>
 fun <T> success(result: T) = Success<T, PdfError>(result)
 fun <T> failure(error: PdfError) = Failure<T, PdfError>(error)
 
-fun <T> T.asSuccess() = Success<T, PdfError>(this)
+fun <T: Any> T.asSuccess(): Success<T, PdfError> = Success(this)
 fun <T> PdfError.asFailure() = Failure<T, PdfError>(this)
