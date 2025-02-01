@@ -1,7 +1,7 @@
 package io.pdf4k.domain
 
 import io.pdf4k.domain.Margin.Companion.DEFAULT_MARGIN
-import io.pdf4k.domain.ResourceLocation.Local
+import io.pdf4k.domain.ResourceLocation.Companion.local
 
 data class Stationary(
     val template: ResourceLocation,
@@ -22,7 +22,7 @@ data class Stationary(
 
     companion object {
         val MainBlockName = "main"
-        val BlankA4Landscape = Stationary(Local("blank-a4-landscape"), 1, 842.88f, 595.92f, DEFAULT_MARGIN)
-        val BlankA4Portrait = Stationary(Local("blank-a4-portrait"), 1, 595.92f, 842.88f, DEFAULT_MARGIN)
+        val BlankA4Landscape = Stationary(local("blank-a4-landscape"), 1, 842.88f, 595.92f, DEFAULT_MARGIN)
+        val BlankA4Portrait = Stationary(local("blank-a4-portrait"), 1, 595.92f, 842.88f, DEFAULT_MARGIN)
     }
 }

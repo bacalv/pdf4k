@@ -6,6 +6,7 @@ import io.pdf4k.domain.*
 import io.pdf4k.domain.Outcome.Success
 import io.pdf4k.provider.ResourceLocators
 import io.pdf4k.provider.StationaryLoader.loadStationary
+import io.pdf4k.provider.TempStreamFactory
 import io.pdf4k.renderer.PageRenderer.render
 import io.pdf4k.renderer.PdfError.Companion.PdfErrorException
 import io.pdf4k.renderer.PdfError.RenderingError

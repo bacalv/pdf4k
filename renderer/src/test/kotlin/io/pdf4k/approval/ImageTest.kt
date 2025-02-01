@@ -10,8 +10,8 @@ import io.pdf4k.domain.QrStyle
 import io.pdf4k.domain.QrStyle.Companion.Logo
 import io.pdf4k.domain.QrStyle.Companion.Shape
 import io.pdf4k.domain.QrStyle.Companion.Shape.Square
-import io.pdf4k.domain.ResourceLocation.Local
-import io.pdf4k.domain.ResourceLocation.Remote.Custom
+import io.pdf4k.domain.ResourceLocation.Companion.custom
+import io.pdf4k.domain.ResourceLocation.Companion.local
 import io.pdf4k.domain.StyleAttributes.Companion.border
 import io.pdf4k.domain.StyleAttributes.Companion.noBorder
 import io.pdf4k.domain.StyleAttributes.Companion.style
@@ -111,7 +111,7 @@ class ImageTest : AbstractPdfRendererTest() {
         content {
             table(style = noBorder) {
                 imageCell(
-                    Custom("custom", "dsotm.jpg"),
+                    custom("custom", "dsotm.jpg"),
                     width = 200f,
                     height = 200f
                 )
@@ -209,6 +209,6 @@ class ImageTest : AbstractPdfRendererTest() {
             colour = WHITE,
             cellBackground = Color(0x31, 0x3D, 0x5A)
         )
-        val logo = Logo(Local("spades.png"), 300, 300)
+        val logo = Logo(local("spades.png"), 300, 300)
     }
 }

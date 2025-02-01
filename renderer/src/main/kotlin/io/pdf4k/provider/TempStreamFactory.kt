@@ -1,4 +1,4 @@
-package io.pdf4k.renderer
+package io.pdf4k.provider
 
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream

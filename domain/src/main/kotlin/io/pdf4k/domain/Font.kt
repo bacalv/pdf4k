@@ -13,9 +13,7 @@ sealed class Font {
         data object TimesRoman: BuiltIn()
     }
 
-    sealed class Custom: Font() {
-        data class Resource(val name: String) : Custom()
-    }
+    data class Resource(val resourceLocation: ResourceLocation, val name: String, val type: String = "ttf") : Font()
 
     enum class Style {
         Plain,

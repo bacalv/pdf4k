@@ -5,7 +5,10 @@ import io.pdf4k.domain.Outcome
 import io.pdf4k.domain.Outcome.Failure
 import io.pdf4k.domain.Outcome.Success
 import io.pdf4k.domain.QrStyle
+import io.pdf4k.domain.QrStyle.Companion.Logo
 import io.pdf4k.domain.QrStyle.Companion.Shape.Square
+import io.pdf4k.domain.ResourceLocation.Companion.custom
+import io.pdf4k.domain.ResourceLocation.Companion.local
 import io.pdf4k.domain.ResourceLocation.Local
 import io.pdf4k.domain.ResourceLocation.Remote.Custom
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
@@ -27,7 +30,7 @@ class ErrorHandlingTest {
                 page(stationary = stationary("not_found", 1, 1f, 1f))
             }.render()
         }.let { error ->
-            assertEquals(Local("not_found"), error.resource)
+            assertEquals(local("not_found"), error.resource)
         }
     }
 
@@ -45,14 +48,14 @@ class ErrorHandlingTest {
             pdf {
                 page {
                     content {
-                        style(font = Font.Custom.Resource("not_found")) {
+                        style(font = Font.Resource(local("not_found"), "not_found")) {
                             +"Hello"
                         }
                     }
                 }
             }.render()
         }.let { error ->
-            assertEquals("not_found", error.name)
+            assertEquals(local("not_found").toString(), error.name)
         }
     }
 
@@ -97,7 +100,7 @@ class ErrorHandlingTest {
                 page {
                     content {
                         table {
-                            imageCell(Custom("not_found", "ignored.png"))
+                            imageCell(custom("not_found", "ignored.png"))
                         }
                     }
                 }
@@ -114,7 +117,7 @@ class ErrorHandlingTest {
                 page {
                     content {
                         table {
-                            imageCell(Custom("custom", "not_found"))
+                            imageCell(custom("custom", "not_found"))
                         }
                     }
                 }
@@ -126,7 +129,7 @@ class ErrorHandlingTest {
     }
 
     companion object {
-        private val badLogo = QrStyle.Companion.Logo(Local("not_found"), 10, 10)
+        private val badLogo = Logo(local("not_found"), 10, 10)
 
         inline fun <reified E : PdfError> assertError(block: () -> Outcome<*, *>): E = when (val outcome = block()) {
             is Success -> fail("Expected a failure")

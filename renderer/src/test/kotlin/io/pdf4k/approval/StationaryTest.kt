@@ -4,8 +4,8 @@ import io.pdf4k.domain.Font.Style.Bold
 import io.pdf4k.domain.HorizontalAlignment.Justified
 import io.pdf4k.domain.HorizontalAlignment.Right
 import io.pdf4k.domain.Margin
-import io.pdf4k.domain.ResourceLocation.Remote.Custom
-import io.pdf4k.domain.ResourceLocation.Remote.Uri
+import io.pdf4k.domain.ResourceLocation.Companion.custom
+import io.pdf4k.domain.ResourceLocation.Companion.uri
 import io.pdf4k.domain.Stationary.Companion.BlankA4Landscape
 import io.pdf4k.domain.Stationary.Companion.BlankA4Portrait
 import io.pdf4k.domain.StyleAttributes.Companion.style
@@ -19,7 +19,6 @@ import io.pdf4k.testing.PdfApprover
 import io.pdf4k.testing.RemoteServer
 import org.junit.jupiter.api.Test
 import java.awt.Color
-import java.net.URI
 
 class StationaryTest : AbstractPdfRendererTest() {
     @Test
@@ -217,7 +216,7 @@ class StationaryTest : AbstractPdfRendererTest() {
     fun `loads stationary from a URI`(approver: PdfApprover) {
         RemoteServer().let { server ->
             val port = server.start()
-            val remoteStationary = BlankA4Portrait.copy(Uri(URI("http://localhost:$port/RemotePageTemplate.pdf")) )
+            val remoteStationary = BlankA4Portrait.copy(uri("http://localhost:$port/RemotePageTemplate.pdf"))
             pdf {
                 page(style(background = Color(100, 200, 0, 128)), stationary = remoteStationary) {
                     content {
@@ -231,7 +230,7 @@ class StationaryTest : AbstractPdfRendererTest() {
 
     @Test
     fun `loads stationary from a custom provider`(approver: PdfApprover) {
-        val remoteStationary = BlankA4Portrait.copy(Custom("custom", "custom.pdf") )
+        val remoteStationary = BlankA4Portrait.copy(custom("custom", "custom.pdf") )
         pdf {
             page(style(background = Color(100, 200, 0, 128)), stationary = remoteStationary) {
                 content {

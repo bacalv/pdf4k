@@ -2,16 +2,17 @@ package io.pdf4k.testing
 
 import io.pdf4k.domain.KeyName
 import io.pdf4k.domain.Pdf
-import io.pdf4k.provider.ClasspathFontProvider
 import io.pdf4k.provider.CustomResourceProvider
+import io.pdf4k.provider.FontProviderFactory
 import io.pdf4k.provider.KeyProvider
 import io.pdf4k.provider.KeyProvider.Companion.toCertificateChain
 import io.pdf4k.provider.KeyProvider.Companion.toPrivateKey
 import io.pdf4k.provider.ResourceLocators
+import io.pdf4k.provider.TempFileFactory.Companion.defaultTempFileFactory
+import io.pdf4k.provider.TempStreamFactory.Companion.inMemoryTempStreamFactory
 import io.pdf4k.provider.UriResourceLoader.Companion.defaultResourceLoader
 import io.pdf4k.renderer.DocumentAssembler
 import io.pdf4k.renderer.PdfRenderer
-import io.pdf4k.renderer.TempStreamFactory.Companion.inMemoryTempStreamFactory
 import org.junit.jupiter.api.Assertions.fail
 import java.io.ByteArrayOutputStream
 import java.io.OutputStream
@@ -31,8 +32,9 @@ object InMemoryRenderer {
     private val customProvider = object : CustomResourceProvider {
         override fun load(name: String) = this::class.java.getResourceAsStream("/custom/$name")
     }
+    private val fontProviderFactory = FontProviderFactory(defaultTempFileFactory)
     private val resourceLocators =
-        ResourceLocators(defaultResourceLoader, mapOf("custom" to customProvider), ClasspathFontProvider)
+        ResourceLocators(defaultResourceLoader, mapOf("custom" to customProvider), fontProviderFactory)
     val renderer = PdfRenderer(resourceLocators, inMemoryTempStreamFactory, documentAssembler)
 
     fun Pdf.render(outputStream: OutputStream = ByteArrayOutputStream()) = renderer.render(this, outputStream)

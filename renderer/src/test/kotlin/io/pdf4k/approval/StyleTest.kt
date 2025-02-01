@@ -1,11 +1,12 @@
 package io.pdf4k.approval
 
-import io.pdf4k.domain.Font.BuiltIn
-import io.pdf4k.domain.Font.Custom.Resource
-import io.pdf4k.domain.Font.Included
+import io.pdf4k.domain.Font.*
 import io.pdf4k.domain.Font.Included.Arial
 import io.pdf4k.domain.Font.Style.*
 import io.pdf4k.domain.HorizontalAlignment.Center
+import io.pdf4k.domain.ResourceLocation.Companion.custom
+import io.pdf4k.domain.ResourceLocation.Companion.local
+import io.pdf4k.domain.ResourceLocation.Companion.uri
 import io.pdf4k.domain.Stationary
 import io.pdf4k.domain.StyleAttributes.Companion.noBorder
 import io.pdf4k.domain.StyleAttributes.Companion.style
@@ -15,6 +16,7 @@ import io.pdf4k.dsl.PdfBuilder.Companion.pdf
 import io.pdf4k.dsl.StationaryBuilder.Companion.plusBlocks
 import io.pdf4k.testing.AbstractPdfRendererTest
 import io.pdf4k.testing.PdfApprover
+import io.pdf4k.testing.RemoteServer
 import org.junit.jupiter.api.Test
 import java.awt.Color
 import java.awt.Color.*
@@ -192,11 +194,39 @@ class StyleTest : AbstractPdfRendererTest() {
     }
 
     @Test
-    fun `renders custom font`(approver: PdfApprover) {
+    fun `renders local font`(approver: PdfApprover) {
         content {
             paragraph {
                 "The quick brown fox jumped over the lazy hen." and style(
-                    font = Resource("ArianaVioleta"),
+                    font = Resource(local("ArianaVioleta-dz2K.ttf"), "ArianaVioleta"),
+                    size = 24f
+                )
+            }
+        }.approve(approver)
+    }
+
+    @Test
+    fun `renders font from URI`(approver: PdfApprover) {
+        RemoteServer().let { server ->
+            val port = server.start()
+            content {
+                paragraph {
+                    "The quick brown fox jumped over the lazy hen." and style(
+                        font = Resource(uri("http://localhost:$port/HappyFestive-MAYVn.ttf"), "Happy Festive"),
+                        size = 24f
+                    )
+                }
+            }.approve(approver)
+            server.stop()
+        }
+    }
+
+    @Test
+    fun `renders font from custom provider`(approver: PdfApprover) {
+        content {
+            paragraph {
+                "The quick brown fox jumped over the lazy hen." and style(
+                    font = Resource(custom("custom", "ShadeBlue-2OozX.ttf"), "Shade Blue"),
                     size = 24f
                 )
             }
