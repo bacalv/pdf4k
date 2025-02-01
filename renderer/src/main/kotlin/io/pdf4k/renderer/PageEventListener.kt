@@ -47,7 +47,7 @@ class PageEventListener(private val context: RendererContext) : PdfPageEventHelp
     }
 
     private fun Stationary.getBlock(sequence: Int) = contentFlow.getOrNull(sequence)
-        .let { blockName -> blocks[blockName] }
+        ?.let { blockName -> blocks[blockName] }
 
     fun close() {
         if (currentBlockCount > 0) {

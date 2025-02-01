@@ -12,6 +12,6 @@ data class QrStyle(val shape: Shape, val colour: Color = BLACK, val background: 
             RoundedSquare
         }
 
-        data class Logo(val resource: String, val width: Int, val height: Int, val clearLogoArea: Boolean = true)
+        data class Logo(val resource: ResourceLocation, val width: Int, val height: Int, val clearLogoArea: Boolean = true)
     }
 }

@@ -10,12 +10,12 @@ import io.pdf4k.dsl.PdfBuilder.Companion.pdf
 import io.pdf4k.dsl.StationaryBuilder.Companion.plusBlocks
 import io.pdf4k.dsl.StationaryBuilder.Companion.withBlocks
 import io.pdf4k.extensions.splitParagraphs
-import io.pdf4k.testing.AbstractPdfApproverTest
+import io.pdf4k.testing.AbstractPdfRendererTest
 import io.pdf4k.testing.PdfApprover
 import org.junit.jupiter.api.Test
 import java.awt.Color.RED
 
-class BlocksTest : AbstractPdfApproverTest() {
+class BlocksTest : AbstractPdfRendererTest() {
     @Test
     fun `render a paragraph in a block`(approver: PdfApprover) {
         pdf {
@@ -123,7 +123,7 @@ class BlocksTest : AbstractPdfApproverTest() {
         pdf {
             page(stationary = twoColumns) {
                 content(noBorder) {
-                    table(1) {
+                    table {
                         musicians.forEach { musician ->
                             tableCell(1, style(align = Center)) {
                                 textCell(musician.name, style(fontStyle = Bold, size = 16f))

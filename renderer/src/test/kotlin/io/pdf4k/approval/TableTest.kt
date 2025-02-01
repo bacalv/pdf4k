@@ -13,7 +13,7 @@ import io.pdf4k.dsl.PdfBuilder.Companion.content
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
 import io.pdf4k.dsl.StationaryBuilder.Companion.plusBlocks
 import io.pdf4k.extensions.cartesianProduct
-import io.pdf4k.testing.AbstractPdfApproverTest
+import io.pdf4k.testing.AbstractPdfRendererTest
 import io.pdf4k.testing.PdfApprover
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -21,7 +21,7 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.awt.Color
 import java.awt.Color.*
 
-class TableTest : AbstractPdfApproverTest() {
+class TableTest : AbstractPdfRendererTest() {
     @Test
     fun `draws a 3x2 table`(approver: PdfApprover) {
         content {

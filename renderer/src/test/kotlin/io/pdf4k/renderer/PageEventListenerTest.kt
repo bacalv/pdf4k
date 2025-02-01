@@ -3,6 +3,7 @@ package io.pdf4k.renderer
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import io.pdf4k.domain.LoadedStationary
 import io.pdf4k.domain.Page
 import io.pdf4k.domain.Stationary.Companion.BlankA4Portrait
 import io.pdf4k.dsl.StationaryBuilder.Companion.withBlocks

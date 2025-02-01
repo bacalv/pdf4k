@@ -7,4 +7,5 @@ dependencies {
     api(libs.junitJupiterParams)
     api(libs.okeyDoke)
     implementation(libs.pdfBox)
+    testImplementation(libs.openPdf)
 }

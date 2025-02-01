@@ -5,6 +5,7 @@ import io.pdf4k.domain.Pdf
 import io.pdf4k.domain.PdfPermissions
 import io.pdf4k.domain.PdfPermissions.PdfPermission.*
 import io.pdf4k.domain.Signature
+import io.pdf4k.provider.KeyProvider
 import java.io.OutputStream
 import java.util.*
 
@@ -30,7 +31,7 @@ class DocumentAssembler(private val keyProvider: KeyProvider) {
                 PdfWriter.ENCRYPTION_AES_256_V3
             )
         }
-        stampPageTemplates(stamper, contentReader, context)
+        stamper.stampPageTemplates(contentReader, context)
         val info: PdfDictionary = stamper.reader.trailer.getAsDict(PdfName.INFO)
         metadata.customProperties.forEach {
             info.put(PdfName(it.key),  PdfString(it.value))
@@ -73,23 +74,22 @@ class DocumentAssembler(private val keyProvider: KeyProvider) {
             } or acc
         }
 
-    private fun stampPageTemplates(stamper: PdfStamper, contentReader: PdfReader, context: RendererContext) {
+    private fun PdfStamper.stampPageTemplates(contentReader: PdfReader, context: RendererContext) {
         var contentPage = 1
         val pageNumberMap =
-            (1..stamper.reader.numberOfPages).map { contentReader.getPageOrigRef(it).number to it }.toMap()
+            (1..reader.numberOfPages).map { contentReader.getPageOrigRef(it).number to it }.toMap()
         val blockPageMapping = context.getBlockPageMapping()
         val namedDestinations = mutableMapOf<String, PdfIndirectReference>()
         context.stationaryByPage.forEachIndexed { pageNumber, (template, blocksFilled) ->
-            val imported = stamper.getImportedPage(template.reader, template.stationary.templatePage)
-            stamper.getUnderContent(pageNumber + 1).addTemplate(imported, 0f, 0f)
+            val imported = getImportedPage(template.reader, template.stationary.templatePage)
+            getUnderContent(pageNumber + 1).addTemplate(imported, 0f, 0f)
             template.stationary.contentFlow.forEachIndexed { blockNumber, _ ->
                 if (blockNumber < blocksFilled) {
-                    val importedBlock = stamper.getImportedPage(contentReader, contentPage)
-                    stamper.getOverContent(pageNumber + 1).addTemplate(importedBlock, 0f, 0f)
-                    copyLinks(
+                    val importedBlock = getImportedPage(contentReader, contentPage)
+                    getOverContent(pageNumber + 1).addTemplate(importedBlock, 0f, 0f)
+                    this.copyLinks(
                         contentReader,
                         contentPage,
-                        stamper,
                         pageNumber,
                         pageNumberMap,
                         blockPageMapping,
@@ -101,10 +101,9 @@ class DocumentAssembler(private val keyProvider: KeyProvider) {
         }
     }
 
-    private fun copyLinks(
+    private fun PdfStamper.copyLinks(
         contentReader: PdfReader,
         contentPage: Int,
-        stamper: PdfStamper,
         pageNumber: Int,
         pageNumberMap: Map<Int, Int>,
         blockPageMapping: List<Int>,
@@ -116,8 +115,8 @@ class DocumentAssembler(private val keyProvider: KeyProvider) {
                 val page = array.elements[0] as PRIndirectReference
                 val destinationBlockNumber = pageNumberMap.getOrDefault(page.number, 1)
                 val destinationPage = blockPageMapping[(destinationBlockNumber) - 1]
-                val destinationPageRef = stamper.writer.getPageReference(destinationPage + 1)
-                val annotation = accessor.link.createAnnotation(stamper.writer)
+                val destinationPageRef = writer.getPageReference(destinationPage + 1)
+                val annotation = accessor.link.createAnnotation(writer)
                 annotation.setPage(destinationPage + 1)
                 val name = contentReader.namedDestination.filter { it.value == array }.map { it.key }.first().toString()
                 val destination = namedDestinations.getOrPut(name) {
@@ -130,16 +129,15 @@ class DocumentAssembler(private val keyProvider: KeyProvider) {
                             array.elements[4]
                         )
                     )
-                    stamper.writer.addToBody(newArray).indirectReference
+                    writer.addToBody(newArray).indirectReference
                 }
                 (annotation.get(PdfName.A) as PdfDictionary).put(PdfName.D, destination)
-                stamper.addAnnotation(annotation, pageNumber + 1)
+                addAnnotation(annotation, pageNumber + 1)
             } else {
-                accessor.link.createAnnotation(stamper.writer).also {
-                    stamper.addAnnotation(it, pageNumber + 1)
+                accessor.link.createAnnotation(writer).also {
+                    addAnnotation(it, pageNumber + 1)
                 }
             }
         }
     }
-
 }

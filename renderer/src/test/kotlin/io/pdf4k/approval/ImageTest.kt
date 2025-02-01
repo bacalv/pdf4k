@@ -10,18 +10,19 @@ import io.pdf4k.domain.QrStyle
 import io.pdf4k.domain.QrStyle.Companion.Logo
 import io.pdf4k.domain.QrStyle.Companion.Shape
 import io.pdf4k.domain.QrStyle.Companion.Shape.Square
+import io.pdf4k.domain.ResourceLocation.Local
 import io.pdf4k.domain.StyleAttributes.Companion.border
 import io.pdf4k.domain.StyleAttributes.Companion.noBorder
 import io.pdf4k.domain.StyleAttributes.Companion.style
 import io.pdf4k.domain.VerticalAlignment.Middle
 import io.pdf4k.dsl.PdfBuilder.Companion.content
-import io.pdf4k.testing.AbstractPdfApproverTest
+import io.pdf4k.testing.AbstractPdfRendererTest
 import io.pdf4k.testing.PdfApprover
 import org.junit.jupiter.api.Test
 import java.awt.Color
 import java.awt.Color.*
 
-class ImageTest : AbstractPdfApproverTest() {
+class ImageTest : AbstractPdfRendererTest() {
     @Test
     fun `renders images`(approver: PdfApprover) {
         content {
@@ -110,7 +111,7 @@ class ImageTest : AbstractPdfApproverTest() {
                     qrCodeCell("https://www.github.com", QrStyle(shape, BLACK, WHITE, 25, logo))
                     qrCodeCell("https://www.github.com", QrStyle(shape, WHITE, BLACK, 25, logo))
                     qrCodeCell("https://www.github.com", QrStyle(shape, BLACK, null, 25, null))
-                    qrCodeCell("https://www.github.com", QrStyle(shape, BLUE, null, 25, logo.copy(resource = "not_found")))
+                    qrCodeCell("https://www.github.com", QrStyle(shape, BLUE, null, 25, null))
                 }
             }
 
@@ -173,6 +174,6 @@ class ImageTest : AbstractPdfApproverTest() {
             colour = WHITE,
             cellBackground = Color(0x31, 0x3D, 0x5A)
         )
-        val logo = Logo("spades.png", 300, 300)
+        val logo = Logo(Local("spades.png"), 300, 300)
     }
 }

@@ -13,13 +13,13 @@ import io.pdf4k.domain.VerticalAlignment.Middle
 import io.pdf4k.dsl.PdfBuilder.Companion.content
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
 import io.pdf4k.dsl.StationaryBuilder.Companion.plusBlocks
-import io.pdf4k.testing.AbstractPdfApproverTest
+import io.pdf4k.testing.AbstractPdfRendererTest
 import io.pdf4k.testing.PdfApprover
 import org.junit.jupiter.api.Test
 import java.awt.Color
 import java.awt.Color.*
 
-class StyleTest : AbstractPdfApproverTest() {
+class StyleTest : AbstractPdfRendererTest() {
     @Test
     fun `renders different colour text`(approver: PdfApprover) {
         content {

@@ -2,8 +2,12 @@ package io.pdf4k.renderer
 
 import com.lowagie.text.Chunk
 import com.lowagie.text.Element.*
+import com.lowagie.text.Paragraph
+import com.lowagie.text.Rectangle.NO_BORDER
 import com.lowagie.text.pdf.PdfContentByte
 import com.lowagie.text.pdf.PdfPCell
+import com.lowagie.text.pdf.PdfPTable
+import io.pdf4k.domain.Component
 import io.pdf4k.domain.HorizontalAlignment
 import io.pdf4k.domain.StyleAttributes.Companion.DEFAULT_LEADING
 import io.pdf4k.domain.VerticalAlignment
@@ -24,7 +28,7 @@ object StyleSetter {
         context.peekStyle().let { style ->
             setHorizontalAlignment(this, style.align ?: HorizontalAlignment.Left)
 
-            verticalAlignment = when(style.valign ?: VerticalAlignment.Top) {
+            verticalAlignment = when (style.valign ?: VerticalAlignment.Top) {
                 VerticalAlignment.Top -> ALIGN_TOP
                 VerticalAlignment.Middle -> ALIGN_MIDDLE
                 VerticalAlignment.Bottom -> ALIGN_BOTTOM
@@ -45,6 +49,43 @@ object StyleSetter {
             style.borderWidthLeft?.let { borderWidthLeft = it }
             style.borderWidthRight?.let { borderWidthRight = it }
         }
+    }
+
+    fun PdfPTable.forParagraph(context: RendererContext, block: Paragraph.() -> Unit) {
+        widthPercentage = 100.0f
+        keepTogether = false
+        context.peekStyle().let { style ->
+            isSplitLate = style.splitLate ?: false
+            isSplitRows = style.splitRows ?: true
+            addCell(PdfPCell().also { cell ->
+                cell.paddingLeft = 0f
+                cell.paddingRight = 0f
+                cell.paddingTop = 0f
+                cell.paddingBottom = 0f
+                cell.border = NO_BORDER
+                setHorizontalAlignment(cell, style.align)
+                (style.leading ?: DEFAULT_LEADING).let { cell.setLeading(it.fixed, it.multiplier) }
+                cell.phrase = Paragraph().also { paragraph ->
+                    paragraph.keepTogether = false
+                    paragraph.block()
+                }
+            })
+        }
+    }
+
+    fun PdfPTable.setStyle(context: RendererContext, component: Component.Table) {
+        isExtendLastRow = component.extend
+        widthPercentage = component.widthPercentage ?: 100f
+        headerRows = component.headerRows
+        defaultCell.borderWidthTop = 0f
+        defaultCell.borderWidthBottom = 0f
+        defaultCell.borderWidthLeft = 0f
+        defaultCell.borderWidthRight = 0f
+        context.peekStyle().let { style ->
+            isSplitLate = style.splitLate ?: false
+            isSplitRows = style.splitRows ?: true
+        }
+        component.weights?.let { setWidths(it) }
     }
 
     fun setHorizontalAlignment(cell: PdfPCell, align: HorizontalAlignment?) {

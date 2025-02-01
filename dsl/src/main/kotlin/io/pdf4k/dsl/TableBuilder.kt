@@ -50,7 +50,9 @@ abstract class TableBuilder<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(
                 imageCell(resource, null, colSpan, rowSpan, width, height, rotation)
             }
         } else {
-            children += CellBuilder(colSpan, rowSpan, Margin.ZERO, ImageBuilder(resource, width, height, rotation))
+            children += CellBuilder(colSpan, rowSpan, Margin.ZERO, ImageBuilder(
+                ResourceLocation.Local(resource), width, height, rotation
+            ))
         }
     }
 

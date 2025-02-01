@@ -1,11 +1,11 @@
 package io.pdf4k.approval
 
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
-import io.pdf4k.testing.AbstractPdfApproverTest
+import io.pdf4k.testing.AbstractPdfRendererTest
 import io.pdf4k.testing.PdfApprover
 import org.junit.jupiter.api.Test
 
-class MetadataTest : AbstractPdfApproverTest() {
+class MetadataTest : AbstractPdfRendererTest() {
     @Test
     fun `adds metadata`(approver: PdfApprover) {
         pdf {

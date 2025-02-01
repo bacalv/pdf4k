@@ -1,7 +1,10 @@
-package io.pdf4k.renderer
+package io.pdf4k.util
 
 import java.net.URI
-import java.nio.file.*
+import java.nio.file.FileSystems
+import java.nio.file.Files
+import java.nio.file.NoSuchFileException
+import java.nio.file.Path
 import kotlin.io.path.extension
 
 object BasicClasspathScanner {

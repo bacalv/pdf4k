@@ -1,10 +1,7 @@
 package io.pdf4k.renderer
 
 import com.lowagie.text.pdf.PdfReader
-import io.pdf4k.domain.PdfOutcome
-import io.pdf4k.domain.Stationary
-import io.pdf4k.domain.failure
-import io.pdf4k.domain.success
+import io.pdf4k.domain.*
 import io.pdf4k.renderer.PdfError.PageTemplateNotFound
 
 object ClasspathStationaryLoader: StationaryLoader {

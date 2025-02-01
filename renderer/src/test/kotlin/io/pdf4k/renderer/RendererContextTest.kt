@@ -2,6 +2,7 @@ package io.pdf4k.renderer
 
 import com.lowagie.text.Document
 import com.lowagie.text.pdf.PdfWriter
+import io.mockk.mockk
 import io.pdf4k.domain.Stationary
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -16,7 +17,7 @@ class RendererContextTest {
             Document(),
             PdfWriter.getInstance(Document(), ByteArrayOutputStream()),
             emptyMap(),
-            ClasspathFontProvider
+            mockk()
         )
         assertThrows<IllegalStateException> { context.nextPage(Stationary.BlankA4Portrait, 1) }
     }

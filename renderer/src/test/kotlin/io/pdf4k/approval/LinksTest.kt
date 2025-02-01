@@ -4,12 +4,12 @@ import io.pdf4k.domain.Stationary.Companion.BlankA4Portrait
 import io.pdf4k.domain.StyleAttributes.Companion.style
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
 import io.pdf4k.dsl.StationaryBuilder.Companion.plusBlocks
-import io.pdf4k.testing.AbstractPdfApproverTest
+import io.pdf4k.testing.AbstractPdfRendererTest
 import io.pdf4k.testing.PdfApprover
 import org.junit.jupiter.api.Test
 import java.awt.Color.BLUE
 
-class LinksTest : AbstractPdfApproverTest() {
+class LinksTest : AbstractPdfRendererTest() {
     @Test
     fun `adds a link to another part of the document`(approver: PdfApprover) {
         pdf {

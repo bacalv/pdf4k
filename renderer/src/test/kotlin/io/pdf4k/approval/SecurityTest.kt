@@ -1,14 +1,14 @@
 package io.pdf4k.approval
 
-import io.pdf4k.approval.InMemoryRenderer.defaultKeyName
 import io.pdf4k.domain.PdfPermissions.PdfPermission.entries
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
-import io.pdf4k.testing.AbstractPdfApproverTest
+import io.pdf4k.testing.AbstractPdfRendererTest
+import io.pdf4k.testing.InMemoryRenderer.defaultKeyName
 import io.pdf4k.testing.PdfApprover
 import io.pdf4k.testing.PdfPassword
 import org.junit.jupiter.api.Test
 
-class SecurityTest : AbstractPdfApproverTest() {
+class SecurityTest : AbstractPdfRendererTest() {
     @Test
     fun `render a signed PDF`(approver: PdfApprover) {
         pdf {

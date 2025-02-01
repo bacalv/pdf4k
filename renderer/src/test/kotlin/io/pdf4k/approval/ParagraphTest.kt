@@ -10,14 +10,14 @@ import io.pdf4k.domain.StyleAttributes.Companion.style
 import io.pdf4k.dsl.PdfBuilder.Companion.content
 import io.pdf4k.extensions.singleLine
 import io.pdf4k.extensions.splitParagraphs
-import io.pdf4k.testing.AbstractPdfApproverTest
+import io.pdf4k.testing.AbstractPdfRendererTest
 import io.pdf4k.testing.PdfApprover
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments.arguments
 import org.junit.jupiter.params.provider.MethodSource
 
-class ParagraphTest : AbstractPdfApproverTest() {
+class ParagraphTest : AbstractPdfRendererTest() {
     @Test
     fun `render simple paragraph`(approver: PdfApprover) {
         content {

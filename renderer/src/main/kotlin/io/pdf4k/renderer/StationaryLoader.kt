@@ -1,5 +1,6 @@
 package io.pdf4k.renderer
 
+import io.pdf4k.domain.LoadedStationary
 import io.pdf4k.domain.PdfOutcome
 import io.pdf4k.domain.Stationary
 

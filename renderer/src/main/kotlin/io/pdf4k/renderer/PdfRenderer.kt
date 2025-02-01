@@ -2,29 +2,31 @@ package io.pdf4k.renderer
 
 import com.lowagie.text.Document
 import com.lowagie.text.pdf.*
-import io.pdf4k.domain.Pdf
-import io.pdf4k.domain.PdfMetadata
-import io.pdf4k.domain.Stationary
+import io.pdf4k.domain.*
+import io.pdf4k.domain.Outcome.Success
+import io.pdf4k.provider.ResourceLocators
 import io.pdf4k.renderer.PageRenderer.render
+import io.pdf4k.renderer.PdfError.Companion.PdfErrorException
+import io.pdf4k.renderer.PdfError.RenderingError
 import java.io.OutputStream
 
 class PdfRenderer(
-    private val fontProvider: FontProvider,
-    private val stationaryLoader: StationaryLoader,
+    private val resourceLocators: ResourceLocators,
     private val tempStreamFactory: TempStreamFactory,
     private val documentAssembler: DocumentAssembler
 ) {
     fun render(pdf: Pdf, outputStream: OutputStream) = with(pdf) {
         val mainDocumentStream = tempStreamFactory.createTempOutputStream()
         val contentBlocksDocumentStream = tempStreamFactory.createTempOutputStream()
-        stationaryLoader.loadStationary(pages.map { it.stationary }.flatten()).map { loadedStationary ->
+        resourceLocators.stationaryLoader.loadStationary(
+            pages.map { it.stationary }.flatten()
+        ).map { loadedStationary ->
             createContext(
                 mainDocumentStream.outputStream,
                 contentBlocksDocumentStream.outputStream,
                 loadedStationary
             )
-        }.map { context ->
-            paginateDocument(context)
+        }.combine { context -> paginateDocument(context) }.map { (context, _) ->
             contentBlocksDocumentStream.outputStream.close()
             val contentReader = PdfReader(contentBlocksDocumentStream.read())
             context.copyNamedDestinations(contentReader)
@@ -51,23 +53,30 @@ class PdfRenderer(
                 contentBlocksDocument = contentBlocksDocument,
                 contentBlocksDocumentWriter = PdfWriter.getInstance(contentBlocksDocument, contentBlocksDocumentStream),
                 loadedStationary = loadedStationary,
-                fontProvider = fontProvider
+                resourceLocators = resourceLocators
             )
         }
     }
 
-    private fun Pdf.paginateDocument(context: RendererContext) = with(context) {
-        val eventListener = PageEventListener(context)
-        contentBlocksDocumentWriter.pageEvent = eventListener
-        context.pushStyle(style)
-        pages.forEach {
-            eventListener.setCurrentPageTemplate(it)
-            it.render(context)
+    private fun Pdf.paginateDocument(context: RendererContext): PdfOutcome<Unit> = with(context) {
+        try {
+            val eventListener = PageEventListener(context)
+            contentBlocksDocumentWriter.pageEvent = eventListener
+            context.pushStyle(style)
+            pages.forEach {
+                eventListener.setCurrentPageTemplate(it)
+                it.render(context)
+            }
+            context.popStyle()
+            contentBlocksDocumentWriter.pageEvent = null
+            eventListener.close()
+            contentBlocksDocument.close()
+            Success(Unit)
+        } catch (e: PdfErrorException) {
+            Outcome.Failure(e.error)
+        } catch (e: Exception) {
+            Outcome.Failure(RenderingError(e))
         }
-        context.popStyle()
-        contentBlocksDocumentWriter.pageEvent = null
-        eventListener.close()
-        contentBlocksDocument.close()
     }
 
     private fun Document.setMetadata(metadata: PdfMetadata) {

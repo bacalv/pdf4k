@@ -1,6 +1,7 @@
 package io.pdf4k.dsl
 
 import io.pdf4k.domain.Component
+import io.pdf4k.domain.ResourceLocation
 import io.pdf4k.domain.StyleAttributes
 
 @PdfDsl
@@ -18,7 +19,7 @@ abstract class PhraseBuilder<P : PhraseBuilder<P>> : BuildsTextStyle<Component.P
     }
 
     fun image(resource: String, width: Float? = null, height: Float? = null, rotation: Float? = null) {
-        children += ImageBuilder(resource, width, height, rotation)
+        children += ImageBuilder(ResourceLocation.Local(resource), width, height, rotation)
     }
 
     fun link(target: String, text: String) {

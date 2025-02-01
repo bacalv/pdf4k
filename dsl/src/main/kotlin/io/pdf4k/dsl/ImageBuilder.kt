@@ -1,10 +1,11 @@
 package io.pdf4k.dsl
 
 import io.pdf4k.domain.Component
+import io.pdf4k.domain.ResourceLocation
 import java.util.*
 
 class ImageBuilder(
-    val resource: String,
+    val resource: ResourceLocation,
     val width: Float?,
     val height: Float?,
     val rotation: Float?

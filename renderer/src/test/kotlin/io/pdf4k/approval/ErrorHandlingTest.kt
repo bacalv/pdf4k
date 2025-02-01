@@ -1,19 +1,22 @@
 package io.pdf4k.approval
 
-import io.pdf4k.approval.InMemoryRenderer.render
 import io.pdf4k.domain.Font
 import io.pdf4k.domain.Outcome
 import io.pdf4k.domain.Outcome.Failure
 import io.pdf4k.domain.Outcome.Success
+import io.pdf4k.domain.QrStyle
+import io.pdf4k.domain.QrStyle.Companion.Shape.Square
+import io.pdf4k.domain.ResourceLocation
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
 import io.pdf4k.dsl.StationaryBuilder.Companion.stationary
-import io.pdf4k.renderer.KeyProvider.Companion.toPrivateKey
+import io.pdf4k.provider.KeyProvider.Companion.toPrivateKey
 import io.pdf4k.renderer.PdfError
-import io.pdf4k.renderer.PdfError.KeyParseError
-import io.pdf4k.renderer.PdfError.PageTemplateNotFound
+import io.pdf4k.renderer.PdfError.*
+import io.pdf4k.testing.InMemoryRenderer.render
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
+import java.awt.Color.BLACK
+import java.awt.Color.WHITE
 
 class ErrorHandlingTest {
     @Test
@@ -35,10 +38,9 @@ class ErrorHandlingTest {
         assertError<KeyParseError> { toPrivateKey("-----BEGIN PRIVATE KEY-----\n-----END PRIVATE KEY-----") }
     }
 
-    @Disabled
     @Test
     fun `font not found`() {
-        assertError<PageTemplateNotFound> {
+        assertError<FontNotFound> {
             pdf {
                 page {
                     content {
@@ -49,11 +51,47 @@ class ErrorHandlingTest {
                 }
             }.render()
         }.let { error ->
-            assertEquals("not_found", error.templateName)
+            assertEquals("not_found", error.name)
+        }
+    }
+
+    @Test
+    fun `image not found`() {
+        assertError<ImageNotFound> {
+            pdf {
+                page {
+                    content {
+                        paragraph {
+                            image("not_found")
+                        }
+                    }
+                }
+            }.render()
+        }.let { error ->
+            assertEquals("not_found", (error.resource as ResourceLocation.Local).name)
+        }
+    }
+
+    @Test
+    fun `qr logo not found`() {
+        assertError<ImageNotFound> {
+            pdf {
+                page {
+                    content {
+                        table {
+                            qrCodeCell("LINK", QrStyle(Square, BLACK, WHITE, 25, badLogo))
+                        }
+                    }
+                }
+            }.render()
+        }.let { error ->
+            assertEquals("not_found", (error.resource as ResourceLocation.Local).name)
         }
     }
 
     companion object {
+        private val badLogo = QrStyle.Companion.Logo(ResourceLocation.Local("not_found"), 10, 10)
+
         inline fun <reified E : PdfError> assertError(block: () -> Outcome<*, *>): E = when (val outcome = block()) {
             is Success -> fail("Expected a failure")
             is Failure -> {

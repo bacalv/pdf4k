@@ -5,12 +5,11 @@ import com.lowagie.text.Element
 import com.lowagie.text.Image
 import com.lowagie.text.pdf.ColumnText
 import com.lowagie.text.pdf.PdfWriter
-import io.pdf4k.domain.Component
-import io.pdf4k.domain.Page
-import io.pdf4k.domain.Stationary
-import io.pdf4k.domain.StyleAttributes
+import io.pdf4k.domain.*
 import io.pdf4k.domain.StyleAttributes.Companion.DEFAULT_STYLE
+import io.pdf4k.provider.ResourceLocators
 import io.pdf4k.renderer.ComponentRenderer.render
+import io.pdf4k.renderer.PdfError.Companion.PdfErrorException
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -20,7 +19,7 @@ class RendererContext(
     val contentBlocksDocument: Document,
     val contentBlocksDocumentWriter: PdfWriter,
     val loadedStationary: Map<Stationary, LoadedStationary>,
-    val fontProvider: FontProvider
+    val resourceLocators: ResourceLocators
 ) {
     private val styleStack: Stack<StyleAttributes> = Stack()
     private val pageNumber: AtomicInteger = AtomicInteger()
@@ -45,7 +44,7 @@ class RendererContext(
     fun popStyle(): StyleAttributes = styleStack.pop()
 
     fun currentFont() = with(peekStyle()) {
-        fontProvider.getFont(font, size, fontStyle, colour)
+        resourceLocators.fontProvider.getFont(font, size, fontStyle, colour)
     }
 
     fun drawBlocks(page: Page, stationary: Stationary) {
@@ -72,15 +71,23 @@ class RendererContext(
 
     fun currentPageNumber() = pageNumber.get()
 
-    fun getImage(resource: String, width: Float?, height: Float?, rotation: Float?): Image =
-        Image.getInstanceFromClasspath("images/${resource}").also { img ->
-            when {
-                width != null && height != null -> img.scaleToFit(width, height)
-                width != null -> img.scaleAbsoluteWidth(width)
-                height != null -> img.scaleAbsoluteHeight(height)
-            }
-            rotation?.let { img.setRotationDegrees(it) }
-        }
+    fun getImage(resource: ResourceLocation, width: Float?, height: Float?, rotation: Float?): Image =
+        resourceLocators.imageResourceLocator.load(resource)
+            .map { stream -> Image.getInstance(stream.readAllBytes()) }
+            .onSuccess { img ->
+                when {
+                    width != null && height != null -> img.scaleToFit(width, height)
+                    width != null -> img.scaleAbsoluteWidth(width)
+                    height != null -> img.scaleAbsoluteHeight(height)
+                }
+                rotation?.let { img.setRotationDegrees(it) }
+            }.getOrElse { throw PdfErrorException(it) }
+
+    fun getQrCode(component: Component.QrCode) =
+        QrRenderer(resourceLocators).render(component.link, component.style)
+            .map { Image.getInstance(it) }
+            .onSuccess { it.scaleToFit(component.style.size.toFloat(), component.style.size.toFloat()) }
+            .getOrElse { throw PdfErrorException(it) }
 
     fun getBlockPageMapping() = stationaryByPage.mapIndexed { pageNumber, (_, blocksFilled) ->
         pageNumber to blocksFilled

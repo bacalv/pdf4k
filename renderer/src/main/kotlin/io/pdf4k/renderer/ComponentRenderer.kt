@@ -1,20 +1,16 @@
 package io.pdf4k.renderer
 
 import com.lowagie.text.*
-import com.lowagie.text.Rectangle.NO_BORDER
 import com.lowagie.text.pdf.PdfPCell
 import com.lowagie.text.pdf.PdfPTable
 import io.pdf4k.domain.Component
-import io.pdf4k.domain.StyleAttributes.Companion.DEFAULT_LEADING
-import io.pdf4k.renderer.StyleSetter.setHorizontalAlignment
+import io.pdf4k.renderer.StyleSetter.forParagraph
 import io.pdf4k.renderer.StyleSetter.setStyle
 
 object ComponentRenderer {
     fun List<Component>.render(context: RendererContext): List<Element> = map { component ->
         when (component) {
-            is Component.Content -> {
-                component.children.render(context)
-            }
+            is Component.Content -> component.children.render(context)
 
             is Component.Style -> {
                 context.pushStyle(component)
@@ -22,25 +18,7 @@ object ComponentRenderer {
             }
 
             is Component.Paragraph -> listOf(PdfPTable(1).also { table ->
-                table.widthPercentage = 100.0f
-                table.keepTogether = false
-                context.peekStyle().let { style ->
-                    table.isSplitLate = style.splitLate ?: false
-                    table.isSplitRows = style.splitRows ?: true
-                }
-                table.addCell(PdfPCell().also { cell ->
-                    cell.paddingLeft = 0f
-                    cell.paddingRight = 0f
-                    cell.paddingTop = 0f
-                    cell.paddingBottom = 0f
-                    cell.border = NO_BORDER
-                    setHorizontalAlignment(cell, context.peekStyle().align)
-                    context.currentLeading().let { cell.setLeading(it.fixed, it.multiplier) }
-                    cell.phrase = Paragraph().also { paragraph ->
-                        paragraph.keepTogether = false
-                        paragraph.addAll(component.children.render(context))
-                    }
-                })
+                table.forParagraph(context) { addAll(component.children.render(context)) }
             })
 
             is Component.Phrase -> listOf(Phrase().also { phrase ->
@@ -69,24 +47,15 @@ object ComponentRenderer {
                 chunk.setStyle(context)
             })
 
-            is Component.Image -> listOf(context.getImage(component.resource, component.width, component.height, component.rotation))
+            is Component.Image -> listOf(
+                context.getImage(component.resource, component.width, component.height, component.rotation)
+            )
 
-            is Component.QrCode -> listOf(getQrCode(component))
+            is Component.QrCode -> listOf(context.getQrCode(component))
 
             is Component.Table -> listOf(PdfPTable(component.columns).also { table ->
-                table.isExtendLastRow = component.extend
-                table.widthPercentage = component.widthPercentage ?: 100f
-                table.defaultCell.borderWidthTop = 0f
-                table.defaultCell.borderWidthBottom = 0f
-                table.defaultCell.borderWidthLeft = 0f
-                table.defaultCell.borderWidthRight = 0f
                 context.pushStyle(component.style)
-                context.peekStyle().let { style ->
-                    table.isSplitLate = style.splitLate ?: false
-                    table.isSplitRows = style.splitRows ?: true
-                }
-                component.weights?.let { table.setWidths(it) }
-                table.headerRows = component.headerRows
+                table.setStyle(context, component)
                 component.children.render(context).filterIsInstance<PdfPCell>().forEach { table.addCell(it) }
                 context.popStyle()
                 table.completeRow()
@@ -119,13 +88,6 @@ object ComponentRenderer {
         }
     }.flatten()
 
-    private fun getQrCode(component: Component.QrCode) =
-        Image.getInstance(QrRenderer.render(component.link, component.style)).also {
-            it.scaleToFit(component.style.size.toFloat(), component.style.size.toFloat())
-        }
-
     private inline fun <reified T : Element> Component.render(context: RendererContext): T =
         listOf(this).render(context).first() as T
-
-    private fun RendererContext.currentLeading() = peekStyle().leading ?: DEFAULT_LEADING
 }

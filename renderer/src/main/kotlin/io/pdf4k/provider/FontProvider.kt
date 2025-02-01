@@ -1,4 +1,4 @@
-package io.pdf4k.renderer
+package io.pdf4k.provider
 
 import io.pdf4k.domain.Font
 import io.pdf4k.domain.Font.Style

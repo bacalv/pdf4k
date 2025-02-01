@@ -12,11 +12,11 @@ import io.pdf4k.dsl.PdfBuilder.Companion.pdf
 import io.pdf4k.dsl.StationaryBuilder.Companion.stationary
 import io.pdf4k.dsl.StationaryBuilder.Companion.withMargin
 import io.pdf4k.extensions.splitParagraphs
-import io.pdf4k.testing.AbstractPdfApproverTest
+import io.pdf4k.testing.AbstractPdfRendererTest
 import io.pdf4k.testing.PdfApprover
 import org.junit.jupiter.api.Test
 
-class StationaryTest : AbstractPdfApproverTest() {
+class StationaryTest : AbstractPdfRendererTest() {
     @Test
     fun `render empty page`(approver: PdfApprover) {
         pdf {

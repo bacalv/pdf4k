@@ -13,7 +13,7 @@ sealed class Component(val children: List<Component>) {
 
     class Chunk(val text: String) : Component(emptyList())
 
-    class Image(val resource: String, val width: Float?, val height: Float?, val rotation: Float?)
+    class Image(val resource: ResourceLocation, val width: Float?, val height: Float?, val rotation: Float?)
         : Component(emptyList())
 
     class QrCode(val link: String, val style: QrStyle) : Component(emptyList())
