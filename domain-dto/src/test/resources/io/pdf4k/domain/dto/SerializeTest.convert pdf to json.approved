@@ -1,6 +1,6 @@
 {
   "resourceMap" : {
-    "colours" : [ "ff0000ff", "ffffffff", "313d5aff", "000000ff", "cbc5eaff", "eaeaeaff" ],
+    "colours" : [ "0000ffff", "ff0000ff", "ffffffff", "313d5aff", "000000ff", "cbc5eaff", "eaeaeaff" ],
     "fonts" : [ {
       "type" : "resource",
       "resourceLocation" : {
@@ -11,9 +11,11 @@
       "name" : "Shade Blue",
       "type" : "ttf"
     } ],
-    "styles" : [ {
-      "font" : 0,
+    "styles" : [ { }, {
       "colour" : 0
+    }, {
+      "font" : 0,
+      "colour" : 1
     }, {
       "underlined" : false,
       "splitLate" : true,
@@ -21,9 +23,9 @@
     }, {
       "fontStyle" : "Bold",
       "size" : 12.0,
-      "colour" : 1,
+      "colour" : 2,
       "align" : "Center",
-      "cellBackground" : 2,
+      "cellBackground" : 3,
       "paddingTop" : 4.0,
       "paddingBottom" : 8.0,
       "paddingLeft" : 8.0,
@@ -32,16 +34,16 @@
       "borderWidthBottom" : 0.5,
       "borderWidthLeft" : 0.5,
       "borderWidthRight" : 0.5,
-      "borderColourTop" : 1,
-      "borderColourBottom" : 1,
-      "borderColourLeft" : 1,
-      "borderColourRight" : 1
+      "borderColourTop" : 2,
+      "borderColourBottom" : 2,
+      "borderColourLeft" : 2,
+      "borderColourRight" : 2
     }, {
       "fontStyle" : "Plain",
       "size" : 10.0,
-      "colour" : 3,
+      "colour" : 4,
       "align" : "Left",
-      "cellBackground" : 4,
+      "cellBackground" : 5,
       "paddingTop" : 4.0,
       "paddingBottom" : 8.0,
       "paddingLeft" : 8.0,
@@ -50,10 +52,10 @@
       "borderWidthBottom" : 0.5,
       "borderWidthLeft" : 0.5,
       "borderWidthRight" : 0.5,
-      "borderColourTop" : 1,
-      "borderColourBottom" : 1,
-      "borderColourLeft" : 1,
-      "borderColourRight" : 1
+      "borderColourTop" : 2,
+      "borderColourBottom" : 2,
+      "borderColourLeft" : 2,
+      "borderColourRight" : 2
     }, {
       "align" : "Center",
       "valign" : "Middle"
@@ -76,7 +78,7 @@
       "paddingBottom" : 24.0
     }, {
       "size" : 10.0,
-      "cellBackground" : 1,
+      "cellBackground" : 2,
       "paddingTop" : 0.0,
       "paddingBottom" : 5.0,
       "paddingLeft" : 4.0,
@@ -85,31 +87,31 @@
       "borderWidthBottom" : 1.0,
       "borderWidthLeft" : 1.0,
       "borderWidthRight" : 1.0,
-      "borderColourTop" : 2,
-      "borderColourBottom" : 2,
-      "borderColourLeft" : 2,
-      "borderColourRight" : 2
+      "borderColourTop" : 3,
+      "borderColourBottom" : 3,
+      "borderColourLeft" : 3,
+      "borderColourRight" : 3
     }, {
       "fontStyle" : "Bold",
       "size" : 10.0,
-      "colour" : 1,
-      "cellBackground" : 2,
+      "colour" : 2,
+      "cellBackground" : 3,
       "paddingTop" : 0.0,
       "paddingBottom" : 5.0,
       "paddingLeft" : 4.0,
       "paddingRight" : 4.0,
-      "borderColourBottom" : 1
+      "borderColourBottom" : 2
     }, {
       "fontStyle" : "Bold",
       "size" : 10.0,
-      "colour" : 1,
-      "cellBackground" : 2
+      "colour" : 2,
+      "cellBackground" : 3
     }, {
       "fontStyle" : "Plain",
       "size" : 10.0,
-      "colour" : 3,
+      "colour" : 4,
       "align" : "Left",
-      "cellBackground" : 5,
+      "cellBackground" : 6,
       "paddingTop" : 4.0,
       "paddingBottom" : 8.0,
       "paddingLeft" : 8.0,
@@ -118,10 +120,10 @@
       "borderWidthBottom" : 0.5,
       "borderWidthLeft" : 0.5,
       "borderWidthRight" : 0.5,
-      "borderColourTop" : 1,
-      "borderColourBottom" : 1,
-      "borderColourLeft" : 1,
-      "borderColourRight" : 1
+      "borderColourTop" : 2,
+      "borderColourBottom" : 2,
+      "borderColourLeft" : 2,
+      "borderColourRight" : 2
     } ],
     "stationary" : [ {
       "template" : 0,
@@ -163,12 +165,63 @@
   },
   "pages" : [ {
     "stationary" : [ 0 ],
-    "style" : 0,
     "content" : {
       "type" : "content",
       "children" : [ {
         "type" : "style",
-        "ref" : 1,
+        "ref" : 0,
+        "children" : [ {
+          "type" : "paragraph",
+          "children" : [ {
+            "type" : "phrase",
+            "children" : [ {
+              "type" : "chunk",
+              "text" : "Here is a paragraph with an empty style "
+            } ]
+          }, {
+            "type" : "style",
+            "ref" : 1,
+            "children" : [ {
+              "type" : "phrase",
+              "children" : [ {
+                "type" : "link",
+                "target" : "#link",
+                "text" : "Link"
+              } ]
+            } ]
+          } ]
+        } ]
+      } ]
+    },
+    "blockContent" : { }
+  }, {
+    "stationary" : [ 0 ],
+    "content" : {
+      "type" : "content",
+      "children" : [ {
+        "type" : "paragraph",
+        "children" : [ {
+          "type" : "phrase",
+          "children" : [ {
+            "type" : "a",
+            "name" : "link",
+            "children" : [ {
+              "type" : "chunk",
+              "text" : "Here's an anchor"
+            } ]
+          } ]
+        } ]
+      } ]
+    },
+    "blockContent" : { }
+  }, {
+    "stationary" : [ 0 ],
+    "style" : 2,
+    "content" : {
+      "type" : "content",
+      "children" : [ {
+        "type" : "style",
+        "ref" : 3,
         "children" : [ {
           "type" : "table",
           "columns" : 2,
@@ -177,7 +230,7 @@
           "extend" : false,
           "children" : [ {
             "type" : "style",
-            "ref" : 2,
+            "ref" : 4,
             "children" : [ {
               "type" : "text-cell",
               "phrase" : {
@@ -199,10 +252,10 @@
             } ]
           }, {
             "type" : "style",
-            "ref" : 3,
+            "ref" : 5,
             "children" : [ {
               "type" : "style",
-              "ref" : 4,
+              "ref" : 6,
               "children" : [ {
                 "type" : "image-cell",
                 "colSpan" : 1,
@@ -226,7 +279,7 @@
                 "type" : "table",
                 "columns" : 1,
                 "widthPercentage" : 100.0,
-                "style" : 5,
+                "style" : 7,
                 "children" : [ {
                   "type" : "table-cell",
                   "margin" : {
@@ -241,7 +294,7 @@
                     "widthPercentage" : 100.0,
                     "children" : [ {
                       "type" : "style",
-                      "ref" : 6,
+                      "ref" : 8,
                       "children" : [ {
                         "type" : "text-cell",
                         "phrase" : {
@@ -254,7 +307,7 @@
                       } ]
                     }, {
                       "type" : "style",
-                      "ref" : 7,
+                      "ref" : 9,
                       "children" : [ {
                         "type" : "qr-cell",
                         "colSpan" : 1,
@@ -264,8 +317,8 @@
                           "link" : "https://en.wikipedia.org/wiki/Jimi_Hendrix",
                           "style" : {
                             "shape" : "Square",
-                            "colour" : 3,
-                            "background" : 4,
+                            "colour" : 4,
+                            "background" : 5,
                             "size" : 50,
                             "logo" : {
                               "ref" : 2,
@@ -280,7 +333,7 @@
                   }
                 }, {
                   "type" : "style",
-                  "ref" : 8,
+                  "ref" : 10,
                   "children" : [ {
                     "type" : "text-cell",
                     "phrase" : {
@@ -316,10 +369,10 @@
                         "columns" : 2,
                         "widthPercentage" : 100.0,
                         "weights" : [ 1.0, 3.0 ],
-                        "style" : 9,
+                        "style" : 11,
                         "children" : [ {
                           "type" : "style",
-                          "ref" : 10,
+                          "ref" : 12,
                           "children" : [ {
                             "type" : "text-cell",
                             "phrase" : {
@@ -341,7 +394,7 @@
                           }
                         }, {
                           "type" : "style",
-                          "ref" : 11,
+                          "ref" : 13,
                           "children" : [ {
                             "type" : "text-cell",
                             "phrase" : {
@@ -379,10 +432,10 @@
             } ]
           }, {
             "type" : "style",
-            "ref" : 12,
+            "ref" : 14,
             "children" : [ {
               "type" : "style",
-              "ref" : 4,
+              "ref" : 6,
               "children" : [ {
                 "type" : "image-cell",
                 "colSpan" : 1,
@@ -406,7 +459,7 @@
                 "type" : "table",
                 "columns" : 1,
                 "widthPercentage" : 100.0,
-                "style" : 5,
+                "style" : 7,
                 "children" : [ {
                   "type" : "table-cell",
                   "margin" : {
@@ -421,7 +474,7 @@
                     "widthPercentage" : 100.0,
                     "children" : [ {
                       "type" : "style",
-                      "ref" : 6,
+                      "ref" : 8,
                       "children" : [ {
                         "type" : "text-cell",
                         "phrase" : {
@@ -434,7 +487,7 @@
                       } ]
                     }, {
                       "type" : "style",
-                      "ref" : 7,
+                      "ref" : 9,
                       "children" : [ {
                         "type" : "qr-cell",
                         "colSpan" : 1,
@@ -444,8 +497,8 @@
                           "link" : "https://en.wikipedia.org/wiki/David_Gilmour",
                           "style" : {
                             "shape" : "Square",
-                            "colour" : 3,
-                            "background" : 5,
+                            "colour" : 4,
+                            "background" : 6,
                             "size" : 50,
                             "logo" : {
                               "ref" : 2,
@@ -460,7 +513,7 @@
                   }
                 }, {
                   "type" : "style",
-                  "ref" : 8,
+                  "ref" : 10,
                   "children" : [ {
                     "type" : "text-cell",
                     "phrase" : {
@@ -496,10 +549,10 @@
                         "columns" : 2,
                         "widthPercentage" : 100.0,
                         "weights" : [ 1.0, 3.0 ],
-                        "style" : 9,
+                        "style" : 11,
                         "children" : [ {
                           "type" : "style",
-                          "ref" : 10,
+                          "ref" : 12,
                           "children" : [ {
                             "type" : "text-cell",
                             "phrase" : {
@@ -521,7 +574,7 @@
                           }
                         }, {
                           "type" : "style",
-                          "ref" : 11,
+                          "ref" : 13,
                           "children" : [ {
                             "type" : "text-cell",
                             "phrase" : {
@@ -559,10 +612,10 @@
             } ]
           }, {
             "type" : "style",
-            "ref" : 3,
+            "ref" : 5,
             "children" : [ {
               "type" : "style",
-              "ref" : 4,
+              "ref" : 6,
               "children" : [ {
                 "type" : "image-cell",
                 "colSpan" : 1,
@@ -586,7 +639,7 @@
                 "type" : "table",
                 "columns" : 1,
                 "widthPercentage" : 100.0,
-                "style" : 5,
+                "style" : 7,
                 "children" : [ {
                   "type" : "table-cell",
                   "margin" : {
@@ -601,7 +654,7 @@
                     "widthPercentage" : 100.0,
                     "children" : [ {
                       "type" : "style",
-                      "ref" : 6,
+                      "ref" : 8,
                       "children" : [ {
                         "type" : "text-cell",
                         "phrase" : {
@@ -614,7 +667,7 @@
                       } ]
                     }, {
                       "type" : "style",
-                      "ref" : 7,
+                      "ref" : 9,
                       "children" : [ {
                         "type" : "qr-cell",
                         "colSpan" : 1,
@@ -624,8 +677,8 @@
                           "link" : "https://en.wikipedia.org/wiki/Rory_Gallagher",
                           "style" : {
                             "shape" : "Square",
-                            "colour" : 3,
-                            "background" : 4,
+                            "colour" : 4,
+                            "background" : 5,
                             "size" : 50,
                             "logo" : {
                               "ref" : 2,
@@ -640,7 +693,7 @@
                   }
                 }, {
                   "type" : "style",
-                  "ref" : 8,
+                  "ref" : 10,
                   "children" : [ {
                     "type" : "text-cell",
                     "phrase" : {
@@ -676,10 +729,10 @@
                         "columns" : 2,
                         "widthPercentage" : 100.0,
                         "weights" : [ 1.0, 3.0 ],
-                        "style" : 9,
+                        "style" : 11,
                         "children" : [ {
                           "type" : "style",
-                          "ref" : 10,
+                          "ref" : 12,
                           "children" : [ {
                             "type" : "text-cell",
                             "phrase" : {
@@ -701,7 +754,7 @@
                           }
                         }, {
                           "type" : "style",
-                          "ref" : 11,
+                          "ref" : 13,
                           "children" : [ {
                             "type" : "text-cell",
                             "phrase" : {
@@ -739,10 +792,10 @@
             } ]
           }, {
             "type" : "style",
-            "ref" : 12,
+            "ref" : 14,
             "children" : [ {
               "type" : "style",
-              "ref" : 4,
+              "ref" : 6,
               "children" : [ {
                 "type" : "image-cell",
                 "colSpan" : 1,
@@ -766,7 +819,7 @@
                 "type" : "table",
                 "columns" : 1,
                 "widthPercentage" : 100.0,
-                "style" : 5,
+                "style" : 7,
                 "children" : [ {
                   "type" : "table-cell",
                   "margin" : {
@@ -781,7 +834,7 @@
                     "widthPercentage" : 100.0,
                     "children" : [ {
                       "type" : "style",
-                      "ref" : 6,
+                      "ref" : 8,
                       "children" : [ {
                         "type" : "text-cell",
                         "phrase" : {
@@ -794,7 +847,7 @@
                       } ]
                     }, {
                       "type" : "style",
-                      "ref" : 7,
+                      "ref" : 9,
                       "children" : [ {
                         "type" : "qr-cell",
                         "colSpan" : 1,
@@ -804,8 +857,8 @@
                           "link" : "https://en.wikipedia.org/wiki/Frank_Zappa",
                           "style" : {
                             "shape" : "Square",
-                            "colour" : 3,
-                            "background" : 5,
+                            "colour" : 4,
+                            "background" : 6,
                             "size" : 50,
                             "logo" : {
                               "ref" : 2,
@@ -820,7 +873,7 @@
                   }
                 }, {
                   "type" : "style",
-                  "ref" : 8,
+                  "ref" : 10,
                   "children" : [ {
                     "type" : "text-cell",
                     "phrase" : {
@@ -856,10 +909,10 @@
                         "columns" : 2,
                         "widthPercentage" : 100.0,
                         "weights" : [ 1.0, 3.0 ],
-                        "style" : 9,
+                        "style" : 11,
                         "children" : [ {
                           "type" : "style",
-                          "ref" : 10,
+                          "ref" : 12,
                           "children" : [ {
                             "type" : "text-cell",
                             "phrase" : {
@@ -881,7 +934,7 @@
                           }
                         }, {
                           "type" : "style",
-                          "ref" : 11,
+                          "ref" : 13,
                           "children" : [ {
                             "type" : "text-cell",
                             "phrase" : {
@@ -919,10 +972,10 @@
             } ]
           }, {
             "type" : "style",
-            "ref" : 3,
+            "ref" : 5,
             "children" : [ {
               "type" : "style",
-              "ref" : 4,
+              "ref" : 6,
               "children" : [ {
                 "type" : "image-cell",
                 "colSpan" : 1,
@@ -946,7 +999,7 @@
                 "type" : "table",
                 "columns" : 1,
                 "widthPercentage" : 100.0,
-                "style" : 5,
+                "style" : 7,
                 "children" : [ {
                   "type" : "table-cell",
                   "margin" : {
@@ -961,7 +1014,7 @@
                     "widthPercentage" : 100.0,
                     "children" : [ {
                       "type" : "style",
-                      "ref" : 6,
+                      "ref" : 8,
                       "children" : [ {
                         "type" : "text-cell",
                         "phrase" : {
@@ -974,7 +1027,7 @@
                       } ]
                     }, {
                       "type" : "style",
-                      "ref" : 7,
+                      "ref" : 9,
                       "children" : [ {
                         "type" : "qr-cell",
                         "colSpan" : 1,
@@ -984,8 +1037,8 @@
                           "link" : "https://en.wikipedia.org/wiki/Debbie_Harry",
                           "style" : {
                             "shape" : "Square",
-                            "colour" : 3,
-                            "background" : 4,
+                            "colour" : 4,
+                            "background" : 5,
                             "size" : 50,
                             "logo" : {
                               "ref" : 2,
@@ -1000,7 +1053,7 @@
                   }
                 }, {
                   "type" : "style",
-                  "ref" : 8,
+                  "ref" : 10,
                   "children" : [ {
                     "type" : "text-cell",
                     "phrase" : {
@@ -1036,10 +1089,10 @@
                         "columns" : 2,
                         "widthPercentage" : 100.0,
                         "weights" : [ 1.0, 3.0 ],
-                        "style" : 9,
+                        "style" : 11,
                         "children" : [ {
                           "type" : "style",
-                          "ref" : 10,
+                          "ref" : 12,
                           "children" : [ {
                             "type" : "text-cell",
                             "phrase" : {
@@ -1061,7 +1114,7 @@
                           }
                         }, {
                           "type" : "style",
-                          "ref" : 11,
+                          "ref" : 13,
                           "children" : [ {
                             "type" : "text-cell",
                             "phrase" : {

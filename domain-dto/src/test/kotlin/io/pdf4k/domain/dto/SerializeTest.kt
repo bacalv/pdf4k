@@ -57,7 +57,21 @@ class SerializeTest {
                 customProperty("CUSTOM_KEY", "CUSTOM_KEY Value")
                 customProperty("ANOTHER_CUSTOM_KEY", "ANOTHER_CUSTOM_KEY Value")
             }
-
+            page {
+                content {
+                    paragraph(style()) {
+                        +"Here is a paragraph with an empty style "
+                        link("#link", "Link", style(colour = BLUE))
+                    }
+                }
+            }
+            page {
+                content {
+                    paragraph {
+                        anchor("link", "Here's an anchor")
+                    }
+                }
+            }
             page(style(font, colour = RED)) {
                 content {
                     style(splitLate = true, splitRows = true) {
