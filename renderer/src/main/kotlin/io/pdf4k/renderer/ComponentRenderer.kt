@@ -81,8 +81,8 @@ object ComponentRenderer {
                     is Image -> PdfPCell(element).also { it.setStyle(context) }
                     else -> throw IllegalStateException("Unexpected element: " + element::class.simpleName)
                 }.also { cell ->
-                    cell.colspan = component.colSpan
-                    cell.rowspan = component.rowSpan
+                    cell.colspan = component.colSpan ?: 1
+                    cell.rowspan = component.rowSpan ?: 1
                 }
             })
         }

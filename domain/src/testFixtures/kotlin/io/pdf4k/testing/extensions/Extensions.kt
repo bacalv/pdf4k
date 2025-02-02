@@ -1,4 +1,4 @@
-package io.pdf4k.extensions
+package io.pdf4k.testing.extensions
 
 import org.junit.jupiter.params.provider.Arguments
 

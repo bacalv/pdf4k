@@ -11,6 +11,7 @@ dependencies {
     testImplementation(platform(libs.http4kBom))
     testImplementation(libs.http4kCore)
     testImplementation(libs.http4kServerUndertow)
+    testImplementation(testFixtures(project(":domain")))
     testImplementation(project(":dsl"))
     testImplementation(project(":testing"))
     testImplementation(libs.mockk)

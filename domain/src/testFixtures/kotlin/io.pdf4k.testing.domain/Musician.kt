@@ -1,6 +1,6 @@
-package io.pdf4k.domain
+package io.pdf4k.testing.domain
 
-import io.pdf4k.extensions.singleLine
+import io.pdf4k.testing.extensions.singleLine
 import java.time.LocalDate
 
 data class Musician(

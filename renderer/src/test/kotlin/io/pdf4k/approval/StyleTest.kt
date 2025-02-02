@@ -182,7 +182,7 @@ class StyleTest : AbstractPdfRendererTest() {
                     (subType.simpleName ?: "UNKNOWN") and style(fontStyle = Bold)
                 }
                 crlf()
-                table(2, weights = floatArrayOf(2f, 8f)) {
+                table(2, weights = listOf(2f, 8f)) {
                     subType.sealedSubclasses.mapNotNull { it.objectInstance }.forEach { font ->
                         textCell { +(font::class.simpleName ?: "UNKNOWN") }
                         textCell { "The quick brown fox jumped over the lazy hen." and style(font = font) }

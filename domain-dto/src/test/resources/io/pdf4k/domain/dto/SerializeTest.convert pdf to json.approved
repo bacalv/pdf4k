@@ -1,0 +1,1132 @@
+{
+  "resourceMap" : {
+    "colours" : [ "ff0000ff", "ffffffff", "313d5aff", "000000ff", "cbc5eaff", "eaeaeaff" ],
+    "fonts" : [ {
+      "type" : "resource",
+      "resourceLocation" : {
+        "type" : "custom",
+        "providerName" : "custom",
+        "name" : "ShadeBlue-2OozX.ttf"
+      },
+      "name" : "Shade Blue",
+      "type" : "ttf"
+    } ],
+    "styles" : [ {
+      "font" : 0,
+      "colour" : 0
+    }, {
+      "underlined" : false,
+      "splitLate" : true,
+      "splitRows" : true
+    }, {
+      "fontStyle" : "Bold",
+      "size" : 12.0,
+      "colour" : 1,
+      "align" : "Center",
+      "cellBackground" : 2,
+      "paddingTop" : 4.0,
+      "paddingBottom" : 8.0,
+      "paddingLeft" : 8.0,
+      "paddingRight" : 8.0,
+      "borderWidthTop" : 0.5,
+      "borderWidthBottom" : 0.5,
+      "borderWidthLeft" : 0.5,
+      "borderWidthRight" : 0.5,
+      "borderColourTop" : 1,
+      "borderColourBottom" : 1,
+      "borderColourLeft" : 1,
+      "borderColourRight" : 1
+    }, {
+      "fontStyle" : "Plain",
+      "size" : 10.0,
+      "colour" : 3,
+      "align" : "Left",
+      "cellBackground" : 4,
+      "paddingTop" : 4.0,
+      "paddingBottom" : 8.0,
+      "paddingLeft" : 8.0,
+      "paddingRight" : 8.0,
+      "borderWidthTop" : 0.5,
+      "borderWidthBottom" : 0.5,
+      "borderWidthLeft" : 0.5,
+      "borderWidthRight" : 0.5,
+      "borderColourTop" : 1,
+      "borderColourBottom" : 1,
+      "borderColourLeft" : 1,
+      "borderColourRight" : 1
+    }, {
+      "align" : "Center",
+      "valign" : "Middle"
+    }, {
+      "borderWidthTop" : 0.0,
+      "borderWidthBottom" : 0.0,
+      "borderWidthLeft" : 0.0,
+      "borderWidthRight" : 0.0
+    }, {
+      "fontStyle" : "Bold",
+      "size" : 14.0
+    }, {
+      "align" : "Right"
+    }, {
+      "leading" : {
+        "fixed" : 0.0,
+        "multiplier" : 2.0
+      },
+      "align" : "Justified",
+      "paddingBottom" : 24.0
+    }, {
+      "size" : 10.0,
+      "cellBackground" : 1,
+      "paddingTop" : 0.0,
+      "paddingBottom" : 5.0,
+      "paddingLeft" : 4.0,
+      "paddingRight" : 4.0,
+      "borderWidthTop" : 1.0,
+      "borderWidthBottom" : 1.0,
+      "borderWidthLeft" : 1.0,
+      "borderWidthRight" : 1.0,
+      "borderColourTop" : 2,
+      "borderColourBottom" : 2,
+      "borderColourLeft" : 2,
+      "borderColourRight" : 2
+    }, {
+      "fontStyle" : "Bold",
+      "size" : 10.0,
+      "colour" : 1,
+      "cellBackground" : 2,
+      "paddingTop" : 0.0,
+      "paddingBottom" : 5.0,
+      "paddingLeft" : 4.0,
+      "paddingRight" : 4.0,
+      "borderColourBottom" : 1
+    }, {
+      "fontStyle" : "Bold",
+      "size" : 10.0,
+      "colour" : 1,
+      "cellBackground" : 2
+    }, {
+      "fontStyle" : "Plain",
+      "size" : 10.0,
+      "colour" : 3,
+      "align" : "Left",
+      "cellBackground" : 5,
+      "paddingTop" : 4.0,
+      "paddingBottom" : 8.0,
+      "paddingLeft" : 8.0,
+      "paddingRight" : 8.0,
+      "borderWidthTop" : 0.5,
+      "borderWidthBottom" : 0.5,
+      "borderWidthLeft" : 0.5,
+      "borderWidthRight" : 0.5,
+      "borderColourTop" : 1,
+      "borderColourBottom" : 1,
+      "borderColourLeft" : 1,
+      "borderColourRight" : 1
+    } ],
+    "stationary" : [ {
+      "template" : 0,
+      "templatePage" : 1,
+      "width" : 595.92,
+      "height" : 842.88,
+      "blocks" : {
+        "main" : {
+          "x" : 36.0,
+          "y" : 36.0,
+          "w" : 523.92,
+          "h" : 770.88
+        }
+      },
+      "contentFlow" : [ "main" ]
+    } ],
+    "resourceLocations" : [ {
+      "type" : "local",
+      "name" : "blank-a4-portrait"
+    }, {
+      "type" : "local",
+      "name" : "musicians/hendrix.png"
+    }, {
+      "type" : "local",
+      "name" : "spades.png"
+    }, {
+      "type" : "local",
+      "name" : "musicians/gilmour.png"
+    }, {
+      "type" : "local",
+      "name" : "musicians/gallagher.jpeg"
+    }, {
+      "type" : "local",
+      "name" : "musicians/zappa.png"
+    }, {
+      "type" : "local",
+      "name" : "musicians/blondie.png"
+    } ]
+  },
+  "pages" : [ {
+    "stationary" : [ 0 ],
+    "style" : 0,
+    "content" : {
+      "type" : "content",
+      "children" : [ {
+        "type" : "style",
+        "ref" : 1,
+        "children" : [ {
+          "type" : "table",
+          "columns" : 2,
+          "weights" : [ 2.0, 3.0 ],
+          "headerRows" : 1,
+          "extend" : false,
+          "children" : [ {
+            "type" : "style",
+            "ref" : 2,
+            "children" : [ {
+              "type" : "text-cell",
+              "phrase" : {
+                "type" : "phrase",
+                "children" : [ {
+                  "type" : "chunk",
+                  "text" : "Musician"
+                } ]
+              }
+            }, {
+              "type" : "text-cell",
+              "phrase" : {
+                "type" : "phrase",
+                "children" : [ {
+                  "type" : "chunk",
+                  "text" : "Details"
+                } ]
+              }
+            } ]
+          }, {
+            "type" : "style",
+            "ref" : 3,
+            "children" : [ {
+              "type" : "style",
+              "ref" : 4,
+              "children" : [ {
+                "type" : "image-cell",
+                "colSpan" : 1,
+                "rowSpan" : 1,
+                "image" : {
+                  "type" : "image",
+                  "ref" : 1,
+                  "width" : 200.0,
+                  "height" : 200.0
+                }
+              } ]
+            }, {
+              "type" : "table-cell",
+              "margin" : {
+                "top" : 0.0,
+                "bottom" : 0.0,
+                "left" : 0.0,
+                "right" : 0.0
+              },
+              "table" : {
+                "type" : "table",
+                "columns" : 1,
+                "widthPercentage" : 100.0,
+                "style" : 5,
+                "children" : [ {
+                  "type" : "table-cell",
+                  "margin" : {
+                    "top" : 0.0,
+                    "bottom" : 0.0,
+                    "left" : 0.0,
+                    "right" : 0.0
+                  },
+                  "table" : {
+                    "type" : "table",
+                    "columns" : 2,
+                    "widthPercentage" : 100.0,
+                    "children" : [ {
+                      "type" : "style",
+                      "ref" : 6,
+                      "children" : [ {
+                        "type" : "text-cell",
+                        "phrase" : {
+                          "type" : "phrase",
+                          "children" : [ {
+                            "type" : "chunk",
+                            "text" : "Jimi Hendrix"
+                          } ]
+                        }
+                      } ]
+                    }, {
+                      "type" : "style",
+                      "ref" : 7,
+                      "children" : [ {
+                        "type" : "qr-cell",
+                        "colSpan" : 1,
+                        "rowSpan" : 1,
+                        "qrCode" : {
+                          "type" : "qr",
+                          "link" : "https://en.wikipedia.org/wiki/Jimi_Hendrix",
+                          "style" : {
+                            "shape" : "Square",
+                            "colour" : 3,
+                            "background" : 4,
+                            "size" : 50,
+                            "logo" : {
+                              "ref" : 2,
+                              "width" : 300,
+                              "height" : 300,
+                              "clearLogoArea" : true
+                            }
+                          }
+                        }
+                      } ]
+                    } ]
+                  }
+                }, {
+                  "type" : "style",
+                  "ref" : 8,
+                  "children" : [ {
+                    "type" : "text-cell",
+                    "phrase" : {
+                      "type" : "phrase",
+                      "children" : [ {
+                        "type" : "chunk",
+                        "text" : "Born in Seattle, Washington, Hendrix began playing guitar at age 15. In 1961, he enlisted in the US Army, but was discharged the following year. Soon afterward, he moved to Clarksville, then Nashville, Tennessee, and began playing gigs on the chitlin' circuit, earning a place in the Isley Brothers' backing band and later with Little Richard, with whom he continued to work through mid-1965. He then played with Curtis Knight and the Squires before moving to England in late 1966 after bassist Chas Chandler of the Animals became his manager. Within months, Hendrix had earned three UK top ten hits with his band"
+                      } ]
+                    }
+                  } ]
+                }, {
+                  "type" : "table-cell",
+                  "margin" : {
+                    "top" : 0.0,
+                    "bottom" : 0.0,
+                    "left" : 24.0,
+                    "right" : 24.0
+                  },
+                  "table" : {
+                    "type" : "table",
+                    "columns" : 1,
+                    "widthPercentage" : 100.0,
+                    "children" : [ {
+                      "type" : "table-cell",
+                      "margin" : {
+                        "top" : 0.0,
+                        "bottom" : 0.0,
+                        "left" : 0.0,
+                        "right" : 0.0
+                      },
+                      "table" : {
+                        "type" : "table",
+                        "columns" : 2,
+                        "widthPercentage" : 100.0,
+                        "weights" : [ 1.0, 3.0 ],
+                        "style" : 9,
+                        "children" : [ {
+                          "type" : "style",
+                          "ref" : 10,
+                          "children" : [ {
+                            "type" : "text-cell",
+                            "phrase" : {
+                              "type" : "phrase",
+                              "children" : [ {
+                                "type" : "chunk",
+                                "text" : "DOB"
+                              } ]
+                            }
+                          } ]
+                        }, {
+                          "type" : "text-cell",
+                          "phrase" : {
+                            "type" : "phrase",
+                            "children" : [ {
+                              "type" : "chunk",
+                              "text" : "1942-10-27"
+                            } ]
+                          }
+                        }, {
+                          "type" : "style",
+                          "ref" : 11,
+                          "children" : [ {
+                            "type" : "text-cell",
+                            "phrase" : {
+                              "type" : "phrase",
+                              "children" : [ {
+                                "type" : "chunk",
+                                "text" : "Address"
+                              } ]
+                            }
+                          } ]
+                        }, {
+                          "type" : "text-cell",
+                          "phrase" : {
+                            "type" : "phrase",
+                            "children" : [ {
+                              "type" : "chunk",
+                              "text" : "25 Brook Street, W1K 4HB"
+                            } ]
+                          }
+                        } ]
+                      }
+                    } ]
+                  }
+                }, {
+                  "type" : "text-cell",
+                  "phrase" : {
+                    "type" : "phrase",
+                    "children" : [ {
+                      "type" : "chunk",
+                      "text" : " "
+                    } ]
+                  }
+                } ]
+              }
+            } ]
+          }, {
+            "type" : "style",
+            "ref" : 12,
+            "children" : [ {
+              "type" : "style",
+              "ref" : 4,
+              "children" : [ {
+                "type" : "image-cell",
+                "colSpan" : 1,
+                "rowSpan" : 1,
+                "image" : {
+                  "type" : "image",
+                  "ref" : 3,
+                  "width" : 200.0,
+                  "height" : 200.0
+                }
+              } ]
+            }, {
+              "type" : "table-cell",
+              "margin" : {
+                "top" : 0.0,
+                "bottom" : 0.0,
+                "left" : 0.0,
+                "right" : 0.0
+              },
+              "table" : {
+                "type" : "table",
+                "columns" : 1,
+                "widthPercentage" : 100.0,
+                "style" : 5,
+                "children" : [ {
+                  "type" : "table-cell",
+                  "margin" : {
+                    "top" : 0.0,
+                    "bottom" : 0.0,
+                    "left" : 0.0,
+                    "right" : 0.0
+                  },
+                  "table" : {
+                    "type" : "table",
+                    "columns" : 2,
+                    "widthPercentage" : 100.0,
+                    "children" : [ {
+                      "type" : "style",
+                      "ref" : 6,
+                      "children" : [ {
+                        "type" : "text-cell",
+                        "phrase" : {
+                          "type" : "phrase",
+                          "children" : [ {
+                            "type" : "chunk",
+                            "text" : "David Gilmour"
+                          } ]
+                        }
+                      } ]
+                    }, {
+                      "type" : "style",
+                      "ref" : 7,
+                      "children" : [ {
+                        "type" : "qr-cell",
+                        "colSpan" : 1,
+                        "rowSpan" : 1,
+                        "qrCode" : {
+                          "type" : "qr",
+                          "link" : "https://en.wikipedia.org/wiki/David_Gilmour",
+                          "style" : {
+                            "shape" : "Square",
+                            "colour" : 3,
+                            "background" : 5,
+                            "size" : 50,
+                            "logo" : {
+                              "ref" : 2,
+                              "width" : 300,
+                              "height" : 300,
+                              "clearLogoArea" : true
+                            }
+                          }
+                        }
+                      } ]
+                    } ]
+                  }
+                }, {
+                  "type" : "style",
+                  "ref" : 8,
+                  "children" : [ {
+                    "type" : "text-cell",
+                    "phrase" : {
+                      "type" : "phrase",
+                      "children" : [ {
+                        "type" : "chunk",
+                        "text" : "As a member of Pink Floyd, Gilmour was inducted into the US Rock and Roll Hall of Fame in 1996, and the UK Music Hall of Fame in 2005. In 2003, Gilmour was made a Commander of the Order of the British Empire (CBE). He received the award for Outstanding Contribution at the 2008 Q Awards.[4] In 2023, Rolling Stone named him the 28th-greatest guitarist."
+                      } ]
+                    }
+                  } ]
+                }, {
+                  "type" : "table-cell",
+                  "margin" : {
+                    "top" : 0.0,
+                    "bottom" : 0.0,
+                    "left" : 24.0,
+                    "right" : 24.0
+                  },
+                  "table" : {
+                    "type" : "table",
+                    "columns" : 1,
+                    "widthPercentage" : 100.0,
+                    "children" : [ {
+                      "type" : "table-cell",
+                      "margin" : {
+                        "top" : 0.0,
+                        "bottom" : 0.0,
+                        "left" : 0.0,
+                        "right" : 0.0
+                      },
+                      "table" : {
+                        "type" : "table",
+                        "columns" : 2,
+                        "widthPercentage" : 100.0,
+                        "weights" : [ 1.0, 3.0 ],
+                        "style" : 9,
+                        "children" : [ {
+                          "type" : "style",
+                          "ref" : 10,
+                          "children" : [ {
+                            "type" : "text-cell",
+                            "phrase" : {
+                              "type" : "phrase",
+                              "children" : [ {
+                                "type" : "chunk",
+                                "text" : "DOB"
+                              } ]
+                            }
+                          } ]
+                        }, {
+                          "type" : "text-cell",
+                          "phrase" : {
+                            "type" : "phrase",
+                            "children" : [ {
+                              "type" : "chunk",
+                              "text" : "1946-03-06"
+                            } ]
+                          }
+                        }, {
+                          "type" : "style",
+                          "ref" : 11,
+                          "children" : [ {
+                            "type" : "text-cell",
+                            "phrase" : {
+                              "type" : "phrase",
+                              "children" : [ {
+                                "type" : "chunk",
+                                "text" : "Address"
+                              } ]
+                            }
+                          } ]
+                        }, {
+                          "type" : "text-cell",
+                          "phrase" : {
+                            "type" : "phrase",
+                            "children" : [ {
+                              "type" : "chunk",
+                              "text" : "1 Globe House, N8 8PN"
+                            } ]
+                          }
+                        } ]
+                      }
+                    } ]
+                  }
+                }, {
+                  "type" : "text-cell",
+                  "phrase" : {
+                    "type" : "phrase",
+                    "children" : [ {
+                      "type" : "chunk",
+                      "text" : " "
+                    } ]
+                  }
+                } ]
+              }
+            } ]
+          }, {
+            "type" : "style",
+            "ref" : 3,
+            "children" : [ {
+              "type" : "style",
+              "ref" : 4,
+              "children" : [ {
+                "type" : "image-cell",
+                "colSpan" : 1,
+                "rowSpan" : 1,
+                "image" : {
+                  "type" : "image",
+                  "ref" : 4,
+                  "width" : 200.0,
+                  "height" : 200.0
+                }
+              } ]
+            }, {
+              "type" : "table-cell",
+              "margin" : {
+                "top" : 0.0,
+                "bottom" : 0.0,
+                "left" : 0.0,
+                "right" : 0.0
+              },
+              "table" : {
+                "type" : "table",
+                "columns" : 1,
+                "widthPercentage" : 100.0,
+                "style" : 5,
+                "children" : [ {
+                  "type" : "table-cell",
+                  "margin" : {
+                    "top" : 0.0,
+                    "bottom" : 0.0,
+                    "left" : 0.0,
+                    "right" : 0.0
+                  },
+                  "table" : {
+                    "type" : "table",
+                    "columns" : 2,
+                    "widthPercentage" : 100.0,
+                    "children" : [ {
+                      "type" : "style",
+                      "ref" : 6,
+                      "children" : [ {
+                        "type" : "text-cell",
+                        "phrase" : {
+                          "type" : "phrase",
+                          "children" : [ {
+                            "type" : "chunk",
+                            "text" : "Rory Gallagher"
+                          } ]
+                        }
+                      } ]
+                    }, {
+                      "type" : "style",
+                      "ref" : 7,
+                      "children" : [ {
+                        "type" : "qr-cell",
+                        "colSpan" : 1,
+                        "rowSpan" : 1,
+                        "qrCode" : {
+                          "type" : "qr",
+                          "link" : "https://en.wikipedia.org/wiki/Rory_Gallagher",
+                          "style" : {
+                            "shape" : "Square",
+                            "colour" : 3,
+                            "background" : 4,
+                            "size" : 50,
+                            "logo" : {
+                              "ref" : 2,
+                              "width" : 300,
+                              "height" : 300,
+                              "clearLogoArea" : true
+                            }
+                          }
+                        }
+                      } ]
+                    } ]
+                  }
+                }, {
+                  "type" : "style",
+                  "ref" : 8,
+                  "children" : [ {
+                    "type" : "text-cell",
+                    "phrase" : {
+                      "type" : "phrase",
+                      "children" : [ {
+                        "type" : "chunk",
+                        "text" : "In 1966, Gallagher formed the blues rock power trio Taste, which experienced moderate commercial success and popularity in the United Kingdom. After the dissolution of Taste, Gallagher pursued a solo career, releasing music throughout the 1970s and 1980s and selling more than 30 million records worldwide."
+                      } ]
+                    }
+                  } ]
+                }, {
+                  "type" : "table-cell",
+                  "margin" : {
+                    "top" : 0.0,
+                    "bottom" : 0.0,
+                    "left" : 24.0,
+                    "right" : 24.0
+                  },
+                  "table" : {
+                    "type" : "table",
+                    "columns" : 1,
+                    "widthPercentage" : 100.0,
+                    "children" : [ {
+                      "type" : "table-cell",
+                      "margin" : {
+                        "top" : 0.0,
+                        "bottom" : 0.0,
+                        "left" : 0.0,
+                        "right" : 0.0
+                      },
+                      "table" : {
+                        "type" : "table",
+                        "columns" : 2,
+                        "widthPercentage" : 100.0,
+                        "weights" : [ 1.0, 3.0 ],
+                        "style" : 9,
+                        "children" : [ {
+                          "type" : "style",
+                          "ref" : 10,
+                          "children" : [ {
+                            "type" : "text-cell",
+                            "phrase" : {
+                              "type" : "phrase",
+                              "children" : [ {
+                                "type" : "chunk",
+                                "text" : "DOB"
+                              } ]
+                            }
+                          } ]
+                        }, {
+                          "type" : "text-cell",
+                          "phrase" : {
+                            "type" : "phrase",
+                            "children" : [ {
+                              "type" : "chunk",
+                              "text" : "1948-03-02"
+                            } ]
+                          }
+                        }, {
+                          "type" : "style",
+                          "ref" : 11,
+                          "children" : [ {
+                            "type" : "text-cell",
+                            "phrase" : {
+                              "type" : "phrase",
+                              "children" : [ {
+                                "type" : "chunk",
+                                "text" : "Address"
+                              } ]
+                            }
+                          } ]
+                        }, {
+                          "type" : "text-cell",
+                          "phrase" : {
+                            "type" : "phrase",
+                            "children" : [ {
+                              "type" : "chunk",
+                              "text" : "Ballyshannon, County Donegal"
+                            } ]
+                          }
+                        } ]
+                      }
+                    } ]
+                  }
+                }, {
+                  "type" : "text-cell",
+                  "phrase" : {
+                    "type" : "phrase",
+                    "children" : [ {
+                      "type" : "chunk",
+                      "text" : " "
+                    } ]
+                  }
+                } ]
+              }
+            } ]
+          }, {
+            "type" : "style",
+            "ref" : 12,
+            "children" : [ {
+              "type" : "style",
+              "ref" : 4,
+              "children" : [ {
+                "type" : "image-cell",
+                "colSpan" : 1,
+                "rowSpan" : 1,
+                "image" : {
+                  "type" : "image",
+                  "ref" : 5,
+                  "width" : 200.0,
+                  "height" : 200.0
+                }
+              } ]
+            }, {
+              "type" : "table-cell",
+              "margin" : {
+                "top" : 0.0,
+                "bottom" : 0.0,
+                "left" : 0.0,
+                "right" : 0.0
+              },
+              "table" : {
+                "type" : "table",
+                "columns" : 1,
+                "widthPercentage" : 100.0,
+                "style" : 5,
+                "children" : [ {
+                  "type" : "table-cell",
+                  "margin" : {
+                    "top" : 0.0,
+                    "bottom" : 0.0,
+                    "left" : 0.0,
+                    "right" : 0.0
+                  },
+                  "table" : {
+                    "type" : "table",
+                    "columns" : 2,
+                    "widthPercentage" : 100.0,
+                    "children" : [ {
+                      "type" : "style",
+                      "ref" : 6,
+                      "children" : [ {
+                        "type" : "text-cell",
+                        "phrase" : {
+                          "type" : "phrase",
+                          "children" : [ {
+                            "type" : "chunk",
+                            "text" : "Frank Zappa"
+                          } ]
+                        }
+                      } ]
+                    }, {
+                      "type" : "style",
+                      "ref" : 7,
+                      "children" : [ {
+                        "type" : "qr-cell",
+                        "colSpan" : 1,
+                        "rowSpan" : 1,
+                        "qrCode" : {
+                          "type" : "qr",
+                          "link" : "https://en.wikipedia.org/wiki/Frank_Zappa",
+                          "style" : {
+                            "shape" : "Square",
+                            "colour" : 3,
+                            "background" : 5,
+                            "size" : 50,
+                            "logo" : {
+                              "ref" : 2,
+                              "width" : 300,
+                              "height" : 300,
+                              "clearLogoArea" : true
+                            }
+                          }
+                        }
+                      } ]
+                    } ]
+                  }
+                }, {
+                  "type" : "style",
+                  "ref" : 8,
+                  "children" : [ {
+                    "type" : "text-cell",
+                    "phrase" : {
+                      "type" : "phrase",
+                      "children" : [ {
+                        "type" : "chunk",
+                        "text" : "As a mostly self-taught composer and performer, Zappa had diverse musical influences that led him  to create music that was sometimes difficult to categorize. While in his teens, he acquired a taste  for 20th-century classical modernism, African-American rhythm and blues, and doo-wop music.[7] He  began writing classical music in high school, while simultaneously playing drums in rhythm and  blues bands, later switching to electric guitar. His debut studio album with the Mothers of  Invention, Freak Out! (1966), combined satirical but seemingly conventional rock and roll songs  with extended sound collages. He continued this eclectic and experimental approach throughout his career."
+                      } ]
+                    }
+                  } ]
+                }, {
+                  "type" : "table-cell",
+                  "margin" : {
+                    "top" : 0.0,
+                    "bottom" : 0.0,
+                    "left" : 24.0,
+                    "right" : 24.0
+                  },
+                  "table" : {
+                    "type" : "table",
+                    "columns" : 1,
+                    "widthPercentage" : 100.0,
+                    "children" : [ {
+                      "type" : "table-cell",
+                      "margin" : {
+                        "top" : 0.0,
+                        "bottom" : 0.0,
+                        "left" : 0.0,
+                        "right" : 0.0
+                      },
+                      "table" : {
+                        "type" : "table",
+                        "columns" : 2,
+                        "widthPercentage" : 100.0,
+                        "weights" : [ 1.0, 3.0 ],
+                        "style" : 9,
+                        "children" : [ {
+                          "type" : "style",
+                          "ref" : 10,
+                          "children" : [ {
+                            "type" : "text-cell",
+                            "phrase" : {
+                              "type" : "phrase",
+                              "children" : [ {
+                                "type" : "chunk",
+                                "text" : "DOB"
+                              } ]
+                            }
+                          } ]
+                        }, {
+                          "type" : "text-cell",
+                          "phrase" : {
+                            "type" : "phrase",
+                            "children" : [ {
+                              "type" : "chunk",
+                              "text" : "1940-12-21"
+                            } ]
+                          }
+                        }, {
+                          "type" : "style",
+                          "ref" : 11,
+                          "children" : [ {
+                            "type" : "text-cell",
+                            "phrase" : {
+                              "type" : "phrase",
+                              "children" : [ {
+                                "type" : "chunk",
+                                "text" : "Address"
+                              } ]
+                            }
+                          } ]
+                        }, {
+                          "type" : "text-cell",
+                          "phrase" : {
+                            "type" : "phrase",
+                            "children" : [ {
+                              "type" : "chunk",
+                              "text" : "Baltimore, Maryland, U.S."
+                            } ]
+                          }
+                        } ]
+                      }
+                    } ]
+                  }
+                }, {
+                  "type" : "text-cell",
+                  "phrase" : {
+                    "type" : "phrase",
+                    "children" : [ {
+                      "type" : "chunk",
+                      "text" : " "
+                    } ]
+                  }
+                } ]
+              }
+            } ]
+          }, {
+            "type" : "style",
+            "ref" : 3,
+            "children" : [ {
+              "type" : "style",
+              "ref" : 4,
+              "children" : [ {
+                "type" : "image-cell",
+                "colSpan" : 1,
+                "rowSpan" : 1,
+                "image" : {
+                  "type" : "image",
+                  "ref" : 6,
+                  "width" : 200.0,
+                  "height" : 200.0
+                }
+              } ]
+            }, {
+              "type" : "table-cell",
+              "margin" : {
+                "top" : 0.0,
+                "bottom" : 0.0,
+                "left" : 0.0,
+                "right" : 0.0
+              },
+              "table" : {
+                "type" : "table",
+                "columns" : 1,
+                "widthPercentage" : 100.0,
+                "style" : 5,
+                "children" : [ {
+                  "type" : "table-cell",
+                  "margin" : {
+                    "top" : 0.0,
+                    "bottom" : 0.0,
+                    "left" : 0.0,
+                    "right" : 0.0
+                  },
+                  "table" : {
+                    "type" : "table",
+                    "columns" : 2,
+                    "widthPercentage" : 100.0,
+                    "children" : [ {
+                      "type" : "style",
+                      "ref" : 6,
+                      "children" : [ {
+                        "type" : "text-cell",
+                        "phrase" : {
+                          "type" : "phrase",
+                          "children" : [ {
+                            "type" : "chunk",
+                            "text" : "Debbie Harry"
+                          } ]
+                        }
+                      } ]
+                    }, {
+                      "type" : "style",
+                      "ref" : 7,
+                      "children" : [ {
+                        "type" : "qr-cell",
+                        "colSpan" : 1,
+                        "rowSpan" : 1,
+                        "qrCode" : {
+                          "type" : "qr",
+                          "link" : "https://en.wikipedia.org/wiki/Debbie_Harry",
+                          "style" : {
+                            "shape" : "Square",
+                            "colour" : 3,
+                            "background" : 4,
+                            "size" : 50,
+                            "logo" : {
+                              "ref" : 2,
+                              "width" : 300,
+                              "height" : 300,
+                              "clearLogoArea" : true
+                            }
+                          }
+                        }
+                      } ]
+                    } ]
+                  }
+                }, {
+                  "type" : "style",
+                  "ref" : 8,
+                  "children" : [ {
+                    "type" : "text-cell",
+                    "phrase" : {
+                      "type" : "phrase",
+                      "children" : [ {
+                        "type" : "chunk",
+                        "text" : "Deborah Ann Harry (born Angela Trimble; July 1, 1945) is an American singer, songwriter and actress best known as the lead vocalist of the band Blondie. Four of her songs with the band reached  No. 1 on the US charts between 1979 and 1981.  Born in Miami, Florida, Harry was adopted as an  infant and raised in Hawthorne, New Jersey. After college she worked various jobs—as a dancer,  a Playboy Bunny, and a secretary (including at the BBC in New York)—before her breakthrough in  the music industry"
+                      } ]
+                    }
+                  } ]
+                }, {
+                  "type" : "table-cell",
+                  "margin" : {
+                    "top" : 0.0,
+                    "bottom" : 0.0,
+                    "left" : 24.0,
+                    "right" : 24.0
+                  },
+                  "table" : {
+                    "type" : "table",
+                    "columns" : 1,
+                    "widthPercentage" : 100.0,
+                    "children" : [ {
+                      "type" : "table-cell",
+                      "margin" : {
+                        "top" : 0.0,
+                        "bottom" : 0.0,
+                        "left" : 0.0,
+                        "right" : 0.0
+                      },
+                      "table" : {
+                        "type" : "table",
+                        "columns" : 2,
+                        "widthPercentage" : 100.0,
+                        "weights" : [ 1.0, 3.0 ],
+                        "style" : 9,
+                        "children" : [ {
+                          "type" : "style",
+                          "ref" : 10,
+                          "children" : [ {
+                            "type" : "text-cell",
+                            "phrase" : {
+                              "type" : "phrase",
+                              "children" : [ {
+                                "type" : "chunk",
+                                "text" : "DOB"
+                              } ]
+                            }
+                          } ]
+                        }, {
+                          "type" : "text-cell",
+                          "phrase" : {
+                            "type" : "phrase",
+                            "children" : [ {
+                              "type" : "chunk",
+                              "text" : "1946-06-01"
+                            } ]
+                          }
+                        }, {
+                          "type" : "style",
+                          "ref" : 11,
+                          "children" : [ {
+                            "type" : "text-cell",
+                            "phrase" : {
+                              "type" : "phrase",
+                              "children" : [ {
+                                "type" : "chunk",
+                                "text" : "Address"
+                              } ]
+                            }
+                          } ]
+                        }, {
+                          "type" : "text-cell",
+                          "phrase" : {
+                            "type" : "phrase",
+                            "children" : [ {
+                              "type" : "chunk",
+                              "text" : "Miami, Florida, U.S.."
+                            } ]
+                          }
+                        } ]
+                      }
+                    } ]
+                  }
+                }, {
+                  "type" : "text-cell",
+                  "phrase" : {
+                    "type" : "phrase",
+                    "children" : [ {
+                      "type" : "chunk",
+                      "text" : " "
+                    } ]
+                  }
+                } ]
+              }
+            } ]
+          } ]
+        } ]
+      } ]
+    },
+    "blockContent" : { }
+  } ],
+  "metadata" : {
+    "title" : "Hitchhiker's Guide to the Galaxy",
+    "author" : "Douglas Adams",
+    "subject" : "Science Fiction",
+    "keywords" : "42",
+    "creator" : "io.pdf4k",
+    "producer" : "io.pdf4k",
+    "customProperties" : {
+      "CUSTOM_KEY" : "CUSTOM_KEY Value",
+      "ANOTHER_CUSTOM_KEY" : "ANOTHER_CUSTOM_KEY Value"
+    }
+  },
+  "signature" : {
+    "keyName" : {
+      "name" : "key-name"
+    },
+    "reason" : "Test signing a PDF",
+    "location" : "Bedford Taxi",
+    "contact" : "01234567890",
+    "signDateUtc" : 1356220800.000000000
+  },
+  "permissions" : {
+    "userPassword" : "userPass",
+    "ownerPassword" : "ownerPass",
+    "permissions" : [ "Print", "ModifyContents", "Copy", "ModifyAnnotations", "FillIn", "ScreenReaders", "Assembly", "DegradedPrint" ]
+  }
+}

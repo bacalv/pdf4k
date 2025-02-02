@@ -47,7 +47,7 @@ abstract class ContentBuilder<F : PhraseBuilder<F>, P : ParagraphBuilder<F, P>, 
         style(style) { phrase(block) }
     }
 
-    fun table(columns: Int = 1, style: StyleAttributes? = null, widthPercentage: Float? = null, weights: FloatArray? = null, headerRows: Int = 0, extend: Boolean = false, block: T.() -> Unit) {
+    fun table(columns: Int = 1, style: StyleAttributes? = null, widthPercentage: Float? = null, weights: List<Float>? = null, headerRows: Int = 0, extend: Boolean = false, block: T.() -> Unit) {
         children += tableBuilder(TableAttributes(columns, widthPercentage, weights, Margin.ZERO, headerRows, extend), style).also { it.block() }
     }
 

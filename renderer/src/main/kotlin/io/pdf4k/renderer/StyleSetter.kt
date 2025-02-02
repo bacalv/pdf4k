@@ -74,9 +74,9 @@ object StyleSetter {
     }
 
     fun PdfPTable.setStyle(context: RendererContext, component: Component.Table) {
-        isExtendLastRow = component.extend
+        isExtendLastRow = component.extend ?: false
         widthPercentage = component.widthPercentage ?: 100f
-        headerRows = component.headerRows
+        headerRows = component.headerRows ?: 0
         defaultCell.borderWidthTop = 0f
         defaultCell.borderWidthBottom = 0f
         defaultCell.borderWidthLeft = 0f
@@ -85,7 +85,7 @@ object StyleSetter {
             isSplitLate = style.splitLate ?: false
             isSplitRows = style.splitRows ?: true
         }
-        component.weights?.let { setWidths(it) }
+        component.weights?.let { setWidths(it.toFloatArray()) }
     }
 
     fun setHorizontalAlignment(cell: PdfPCell, align: HorizontalAlignment?) {

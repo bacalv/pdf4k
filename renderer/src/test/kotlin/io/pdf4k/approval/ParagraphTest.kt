@@ -8,10 +8,10 @@ import io.pdf4k.domain.Leading.Companion.leading
 import io.pdf4k.domain.Leading.Companion.multiplier
 import io.pdf4k.domain.StyleAttributes.Companion.style
 import io.pdf4k.dsl.PdfBuilder.Companion.content
-import io.pdf4k.extensions.singleLine
-import io.pdf4k.extensions.splitParagraphs
 import io.pdf4k.testing.AbstractPdfRendererTest
 import io.pdf4k.testing.PdfApprover
+import io.pdf4k.testing.extensions.singleLine
+import io.pdf4k.testing.extensions.splitParagraphs
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments.arguments

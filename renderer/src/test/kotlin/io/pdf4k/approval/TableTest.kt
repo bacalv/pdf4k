@@ -12,9 +12,9 @@ import io.pdf4k.domain.VerticalAlignment.*
 import io.pdf4k.dsl.PdfBuilder.Companion.content
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
 import io.pdf4k.dsl.StationaryBuilder.Companion.plusBlocks
-import io.pdf4k.extensions.cartesianProduct
 import io.pdf4k.testing.AbstractPdfRendererTest
 import io.pdf4k.testing.PdfApprover
+import io.pdf4k.testing.extensions.cartesianProduct
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
@@ -177,7 +177,7 @@ class TableTest : AbstractPdfRendererTest() {
         val evenRow = oddRow + style(cellBackground = Color(0xCB, 0xC5, 0xEA))
 
         content {
-            table(columns = 4, weights = floatArrayOf(2f, 2f, 1f, 3f)) {
+            table(columns = 4, weights = listOf(2f, 2f, 1f, 3f)) {
                 style(header) {
                     textCell("Employee Number")
                     textCell("Name")

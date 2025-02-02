@@ -5,8 +5,8 @@ import io.pdf4k.domain.Margin
 import java.util.*
 
 class CellBuilder(
-    private val colSpan: Int,
-    private val rowSpan: Int,
+    private val colSpan: Int?,
+    private val rowSpan: Int?,
     private val margin: Margin,
     private val childBuilder: ComponentBuilder<*, *>
 ) : ComponentBuilder<Component.Cell, CellBuilder> {

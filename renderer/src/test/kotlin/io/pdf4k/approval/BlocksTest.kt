@@ -2,16 +2,16 @@ package io.pdf4k.approval
 
 import io.pdf4k.domain.Font.Style.Bold
 import io.pdf4k.domain.HorizontalAlignment.*
-import io.pdf4k.domain.Musician.Companion.musicians
 import io.pdf4k.domain.Stationary.Companion.BlankA4Portrait
 import io.pdf4k.domain.StyleAttributes.Companion.noBorder
 import io.pdf4k.domain.StyleAttributes.Companion.style
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
 import io.pdf4k.dsl.StationaryBuilder.Companion.plusBlocks
 import io.pdf4k.dsl.StationaryBuilder.Companion.withBlocks
-import io.pdf4k.extensions.splitParagraphs
 import io.pdf4k.testing.AbstractPdfRendererTest
 import io.pdf4k.testing.PdfApprover
+import io.pdf4k.testing.domain.Musician.Companion.musicians
+import io.pdf4k.testing.extensions.splitParagraphs
 import org.junit.jupiter.api.Test
 import java.awt.Color.RED
 

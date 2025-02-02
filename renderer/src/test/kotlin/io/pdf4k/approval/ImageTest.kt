@@ -5,7 +5,6 @@ import io.pdf4k.domain.Font.Style.Bold
 import io.pdf4k.domain.HorizontalAlignment.*
 import io.pdf4k.domain.Leading.Companion.multiplier
 import io.pdf4k.domain.Margin
-import io.pdf4k.domain.Musician.Companion.musicians
 import io.pdf4k.domain.QrStyle
 import io.pdf4k.domain.QrStyle.Companion.Logo
 import io.pdf4k.domain.QrStyle.Companion.Shape
@@ -20,6 +19,7 @@ import io.pdf4k.dsl.PdfBuilder.Companion.content
 import io.pdf4k.testing.AbstractPdfRendererTest
 import io.pdf4k.testing.PdfApprover
 import io.pdf4k.testing.RemoteServer
+import io.pdf4k.testing.domain.Musician.Companion.musicians
 import org.junit.jupiter.api.Test
 import java.awt.Color
 import java.awt.Color.*
@@ -30,7 +30,7 @@ class ImageTest : AbstractPdfRendererTest() {
     fun `renders images`(approver: PdfApprover) {
         content {
             style(splitLate = true, splitRows = true) {
-                table(columns = 2, weights = floatArrayOf(2f, 3f), headerRows = 1) {
+                table(columns = 2, weights = listOf(2f, 3f), headerRows = 1) {
                     style(header) {
                         textCell("Musician")
                         textCell("Details")
@@ -60,7 +60,7 @@ class ImageTest : AbstractPdfRendererTest() {
                                 }
                                 textCell(bioStyle) { +artist.bio }
                                 tableCell(columns = 1, margin = Margin(0f, 0f, 24f, 24f)) {
-                                    tableCell(2, bioTable, weights = floatArrayOf(1f, 3f)) {
+                                    tableCell(2, bioTable, weights = listOf(1f, 3f)) {
                                         textCell("DOB", bioHeader + style(borderColourBottom = WHITE))
                                         textCell(artist.dob.toString())
                                         textCell("Address", bioHeader)
@@ -157,7 +157,7 @@ class ImageTest : AbstractPdfRendererTest() {
     fun `image scaling`(approver: PdfApprover) {
         val resource = "adams.png"
         content {
-            table(2, weights = floatArrayOf(1f, 9f)) {
+            table(2, weights = listOf(1f, 9f)) {
                 textCell("Both set")
                 imageCell(resource, width = 50f, height = 50f)
                 textCell("Height")

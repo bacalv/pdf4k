@@ -16,11 +16,11 @@ abstract class TableBuilder<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(
         Component.Table(columns, widthPercentage, weights, headerRows, extend, style, children.map { it.build() })
     }
 
-    fun textCell(text: String, style: StyleAttributes? = null, colSpan: Int = 1, rowSpan: Int = 1) {
+    fun textCell(text: String, style: StyleAttributes? = null, colSpan: Int? = null, rowSpan: Int? = null) {
         textCell(style, colSpan, rowSpan) { +text }
     }
 
-    fun textCell(style: StyleAttributes? = null, colSpan: Int = 1, rowSpan: Int = 1, block: F.() -> Unit) {
+    fun textCell(style: StyleAttributes? = null, colSpan: Int? = null, rowSpan: Int? = null, block: F.() -> Unit) {
         if (style != null) {
             style(style) {
                 textCell(null, colSpan, rowSpan, block)
@@ -33,12 +33,12 @@ abstract class TableBuilder<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(
     fun tableCell(
         columns: Int,
         style: StyleAttributes? = null,
-        weights: FloatArray? = null,
+        weights: List<Float>? = null,
         margin: Margin = Margin.ZERO,
-        headerRows: Int = 0,
-        extend: Boolean = false,
-        colSpan: Int = 1,
-        rowSpan: Int = 1,
+        headerRows: Int? = null,
+        extend: Boolean? = null,
+        colSpan: Int? = null,
+        rowSpan: Int? = null,
         block: T.() -> Unit
     ) {
         children += CellBuilder(colSpan, rowSpan, margin, tableBuilder(TableAttributes(columns, 100f, weights, margin, headerRows, extend), style).also { it.block() })

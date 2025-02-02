@@ -13,10 +13,10 @@ import io.pdf4k.dsl.PdfBuilder.Companion.content
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
 import io.pdf4k.dsl.StationaryBuilder.Companion.stationary
 import io.pdf4k.dsl.StationaryBuilder.Companion.withMargin
-import io.pdf4k.extensions.splitParagraphs
 import io.pdf4k.testing.AbstractPdfRendererTest
 import io.pdf4k.testing.PdfApprover
 import io.pdf4k.testing.RemoteServer
+import io.pdf4k.testing.extensions.splitParagraphs
 import org.junit.jupiter.api.Test
 import java.awt.Color
 

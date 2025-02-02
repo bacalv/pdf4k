@@ -1,6 +1,7 @@
 [versions]
 bouncyCastleBcmailVersion = "1.80"
 http4kVersion = "5.46.0.0"
+jacksonVersion = "2.18.2"
 junitJupiterVersion = "5.11.3"
 kotlin-gradle-plugin = "2.0.21"
 kotlinReflectVersion = "2.1.0"
@@ -15,6 +16,10 @@ bouncyCastleBcmail = { module = "org.bouncycastle:bcmail-jdk18on", version.ref="
 http4kBom = { module = "org.http4k:http4k-bom", version.ref="http4kVersion" }
 http4kCore = { module = "org.http4k:http4k-core", version.ref="http4kVersion" }
 http4kServerUndertow = { module = "org.http4k:http4k-server-undertow", version.ref="http4kVersion" }
+jacksonAnnotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref="jacksonVersion"}
+jacksonCore = { module = "com.fasterxml.jackson.core:jackson-core", version.ref="jacksonVersion"}
+jacksonDatatypeJsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref="jacksonVersion" }
+jacksonModuleKotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref="jacksonVersion"}
 junitJupiterApi = { module = "org.junit.jupiter:junit-jupiter-api", version.ref="junitJupiterVersion" }
 junitJupiterParams = { module = "org.junit.jupiter:junit-jupiter-params", version.ref="junitJupiterVersion" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-gradle-plugin" }
