@@ -32,7 +32,7 @@ sealed class FontDto {
         data object TimesRoman: BuiltIn()
     }
 
-    data class Resource(val resourceLocation: ResourceLocationDto, val name: String, val type: String) : FontDto()
+    data class Resource(val ref: ResourceRef, val name: String, val type: String) : FontDto()
 
     enum class Style {
         Plain,
@@ -42,14 +42,14 @@ sealed class FontDto {
     }
 }
 
-fun Font.toDto() = when (this) {
+fun Font.toDto(resourceMap: ResourceMapDto.Builder) = when (this) {
     Font.BuiltIn.Courier -> FontDto.BuiltIn.Courier
     Font.BuiltIn.Dingbats -> FontDto.BuiltIn.Dingbats
     Font.BuiltIn.Helvetica -> FontDto.BuiltIn.Helvetica
     Font.BuiltIn.Symbol -> FontDto.BuiltIn.Symbol
     Font.BuiltIn.TimesRoman -> FontDto.BuiltIn.TimesRoman
     Font.Included.Arial -> FontDto.Included.Arial
-    is Font.Resource -> FontDto.Resource(resourceLocation.toDto(), name, type)
+    is Font.Resource -> FontDto.Resource(resourceMap.resourceRef(resourceLocation.toDto()), name, type)
 }
 
 fun Font.Style.toDto() = when (this) {
@@ -57,4 +57,21 @@ fun Font.Style.toDto() = when (this) {
     Font.Style.Bold -> FontDto.Style.Bold
     Font.Style.Italic -> FontDto.Style.Italic
     Font.Style.BoldItalic -> FontDto.Style.BoldItalic
+}
+
+fun FontDto.toDomain(resourceMap: ResourceMap) = when (this) {
+    FontDto.BuiltIn.Courier -> Font.BuiltIn.Courier
+    FontDto.BuiltIn.Dingbats -> Font.BuiltIn.Dingbats
+    FontDto.BuiltIn.Helvetica -> Font.BuiltIn.Helvetica
+    FontDto.BuiltIn.Symbol -> Font.BuiltIn.Symbol
+    FontDto.BuiltIn.TimesRoman -> Font.BuiltIn.TimesRoman
+    FontDto.Included.Arial -> Font.Included.Arial
+    is FontDto.Resource -> Font.Resource(resourceMap.getResourceLocation(ref), name)
+}
+
+fun FontDto.Style.toDomain(): Font.Style = when (this) {
+    FontDto.Style.Plain -> Font.Style.Plain
+    FontDto.Style.Bold -> Font.Style.Bold
+    FontDto.Style.Italic -> Font.Style.Italic
+    FontDto.Style.BoldItalic -> Font.Style.BoldItalic
 }

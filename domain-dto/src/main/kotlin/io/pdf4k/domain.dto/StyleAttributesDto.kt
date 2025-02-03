@@ -30,8 +30,8 @@ data class StyleAttributesDto(
     val splitRows: Boolean? = null,
 )
 
-fun StyleAttributes.toDto(resourceMapBuilder: ResourceMap.Builder) = StyleAttributesDto(
-    font = font?.toDto()?.let(resourceMapBuilder::fontRef),
+fun StyleAttributes.toDto(resourceMapBuilder: ResourceMapDto.Builder) = StyleAttributesDto(
+    font = font?.toDto(resourceMapBuilder)?.let(resourceMapBuilder::fontRef),
     fontStyle = fontStyle?.toDto(),
     size = size,
     colour = colour?.toDto()?.let(resourceMapBuilder::colourRef),
@@ -54,6 +54,34 @@ fun StyleAttributes.toDto(resourceMapBuilder: ResourceMap.Builder) = StyleAttrib
     borderColourBottom = borderColourBottom?.toDto()?.let(resourceMapBuilder::colourRef),
     borderColourLeft = borderColourLeft?.toDto()?.let(resourceMapBuilder::colourRef),
     borderColourRight = borderColourRight?.toDto()?.let(resourceMapBuilder::colourRef),
+    splitLate = splitLate,
+    splitRows = splitRows
+)
+
+fun StyleAttributesDto.toDomain(resourceMap: ResourceMap): StyleAttributes = StyleAttributes(
+    font = font?.let { resourceMap.getFont(it) },
+    fontStyle = fontStyle?.toDomain(),
+    size = size,
+    colour = colour?.let { resourceMap.getColour(it) },
+    background = background?.let { resourceMap.getColour(it) },
+    underlined = underlined,
+    underlineColour = underlineColour?.let { resourceMap.getColour(it) },
+    leading = leading?.toDomain(),
+    align = align?.toDomain(),
+    valign = valign?.toDomain(),
+    cellBackground = cellBackground?.let { resourceMap.getColour(it) },
+    paddingTop = paddingTop,
+    paddingBottom = paddingBottom,
+    paddingLeft = paddingLeft,
+    paddingRight = paddingRight,
+    borderWidthTop = borderWidthTop,
+    borderWidthBottom = borderWidthBottom,
+    borderWidthLeft = borderWidthLeft,
+    borderWidthRight = borderWidthRight,
+    borderColourTop = borderColourTop?.let { resourceMap.getColour(it) },
+    borderColourBottom = borderColourBottom?.let { resourceMap.getColour(it) },
+    borderColourLeft = borderColourLeft?.let { resourceMap.getColour(it) },
+    borderColourRight = borderColourRight?.let { resourceMap.getColour(it) },
     splitLate = splitLate,
     splitRows = splitRows
 )

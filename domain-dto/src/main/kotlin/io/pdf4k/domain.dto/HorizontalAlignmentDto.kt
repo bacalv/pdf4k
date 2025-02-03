@@ -17,3 +17,11 @@ fun HorizontalAlignment.toDto() = when (this) {
     HorizontalAlignment.Justified -> HorizontalAlignmentDto.Justified
     HorizontalAlignment.JustifiedAll -> HorizontalAlignmentDto.JustifiedAll
 }
+
+fun HorizontalAlignmentDto.toDomain() = when (this) {
+    HorizontalAlignmentDto.Left -> HorizontalAlignment.Left
+    HorizontalAlignmentDto.Center -> HorizontalAlignment.Center
+    HorizontalAlignmentDto.Right -> HorizontalAlignment.Right
+    HorizontalAlignmentDto.Justified -> HorizontalAlignment.Justified
+    HorizontalAlignmentDto.JustifiedAll -> HorizontalAlignment.JustifiedAll
+}

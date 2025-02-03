@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes.Type
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import io.pdf4k.domain.ResourceLocation
 import io.pdf4k.domain.dto.ResourceLocationDto.*
+import java.net.URI
 
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
@@ -26,4 +27,10 @@ fun ResourceLocation.toDto() = when (this) {
     is ResourceLocation.Local -> Local(name)
     is ResourceLocation.Remote.Custom -> Custom(providerName, name)
     is ResourceLocation.Remote.Uri -> Uri(uri.toString())
+}
+
+fun ResourceLocationDto.toDomain() = when (this) {
+    is Custom -> ResourceLocation.Remote.Custom(providerName, name)
+    is Local -> ResourceLocation.Local(name)
+    is Uri -> ResourceLocation.Remote.Uri(URI(uri))
 }

@@ -8,6 +8,7 @@ dependencies {
     implementation(libs.openPdf)
     implementation(libs.qrCode)
     implementation(libs.bouncyCastleBcmail)
+    testImplementation(project(":domain-dto"))
     testImplementation(platform(libs.http4kBom))
     testImplementation(libs.http4kCore)
     testImplementation(libs.http4kServerUndertow)

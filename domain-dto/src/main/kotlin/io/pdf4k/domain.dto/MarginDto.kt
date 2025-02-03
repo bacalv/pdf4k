@@ -5,3 +5,4 @@ import io.pdf4k.domain.Margin
 data class MarginDto(val top: Float, val bottom: Float, val left: Float, val right: Float)
 
 fun Margin.toDto() = MarginDto(top, bottom, left, right)
+fun MarginDto.toDomain() = Margin(top, bottom, left, right)

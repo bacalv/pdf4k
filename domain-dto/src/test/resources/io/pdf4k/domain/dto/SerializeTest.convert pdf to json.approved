@@ -3,11 +3,7 @@
     "colours" : [ "0000ffff", "ff0000ff", "ffffffff", "313d5aff", "000000ff", "cbc5eaff", "eaeaeaff" ],
     "fonts" : [ {
       "type" : "resource",
-      "resourceLocation" : {
-        "type" : "custom",
-        "providerName" : "custom",
-        "name" : "ShadeBlue-2OozX.ttf"
-      },
+      "ref" : 1,
       "name" : "Shade Blue",
       "type" : "ttf"
     } ],
@@ -144,6 +140,10 @@
       "type" : "local",
       "name" : "blank-a4-portrait"
     }, {
+      "type" : "custom",
+      "providerName" : "custom",
+      "name" : "ShadeBlue-2OozX.ttf"
+    }, {
       "type" : "local",
       "name" : "musicians/hendrix.png"
     }, {
@@ -166,25 +166,25 @@
   "pages" : [ {
     "stationary" : [ 0 ],
     "content" : {
-      "type" : "content",
+      "type" : "c",
       "children" : [ {
-        "type" : "style",
+        "type" : "s",
         "ref" : 0,
         "children" : [ {
-          "type" : "paragraph",
+          "type" : "p",
           "children" : [ {
-            "type" : "phrase",
+            "type" : "ph",
             "children" : [ {
-              "type" : "chunk",
+              "type" : "ch",
               "text" : "Here is a paragraph with an empty style "
             } ]
           }, {
-            "type" : "style",
+            "type" : "s",
             "ref" : 1,
             "children" : [ {
-              "type" : "phrase",
+              "type" : "ph",
               "children" : [ {
-                "type" : "link",
+                "type" : "l",
                 "target" : "#link",
                 "text" : "Link"
               } ]
@@ -197,16 +197,16 @@
   }, {
     "stationary" : [ 0 ],
     "content" : {
-      "type" : "content",
+      "type" : "c",
       "children" : [ {
-        "type" : "paragraph",
+        "type" : "p",
         "children" : [ {
-          "type" : "phrase",
+          "type" : "ph",
           "children" : [ {
             "type" : "a",
             "name" : "link",
             "children" : [ {
-              "type" : "chunk",
+              "type" : "ch",
               "text" : "Here's an anchor"
             } ]
           } ]
@@ -218,57 +218,57 @@
     "stationary" : [ 0 ],
     "style" : 2,
     "content" : {
-      "type" : "content",
+      "type" : "c",
       "children" : [ {
-        "type" : "style",
+        "type" : "s",
         "ref" : 3,
         "children" : [ {
-          "type" : "table",
+          "type" : "t",
           "columns" : 2,
           "weights" : [ 2.0, 3.0 ],
           "headerRows" : 1,
           "extend" : false,
           "children" : [ {
-            "type" : "style",
+            "type" : "s",
             "ref" : 4,
             "children" : [ {
-              "type" : "text-cell",
+              "type" : "tx",
               "phrase" : {
-                "type" : "phrase",
+                "type" : "ph",
                 "children" : [ {
-                  "type" : "chunk",
+                  "type" : "ch",
                   "text" : "Musician"
                 } ]
               }
             }, {
-              "type" : "text-cell",
+              "type" : "tx",
               "phrase" : {
-                "type" : "phrase",
+                "type" : "ph",
                 "children" : [ {
-                  "type" : "chunk",
+                  "type" : "ch",
                   "text" : "Details"
                 } ]
               }
             } ]
           }, {
-            "type" : "style",
+            "type" : "s",
             "ref" : 5,
             "children" : [ {
-              "type" : "style",
+              "type" : "s",
               "ref" : 6,
               "children" : [ {
-                "type" : "image-cell",
+                "type" : "ti",
                 "colSpan" : 1,
                 "rowSpan" : 1,
                 "image" : {
-                  "type" : "image",
-                  "ref" : 1,
+                  "type" : "im",
+                  "ref" : 2,
                   "width" : 200.0,
                   "height" : 200.0
                 }
               } ]
             }, {
-              "type" : "table-cell",
+              "type" : "tt",
               "margin" : {
                 "top" : 0.0,
                 "bottom" : 0.0,
@@ -276,12 +276,12 @@
                 "right" : 0.0
               },
               "table" : {
-                "type" : "table",
+                "type" : "t",
                 "columns" : 1,
                 "widthPercentage" : 100.0,
                 "style" : 7,
                 "children" : [ {
-                  "type" : "table-cell",
+                  "type" : "tt",
                   "margin" : {
                     "top" : 0.0,
                     "bottom" : 0.0,
@@ -289,27 +289,27 @@
                     "right" : 0.0
                   },
                   "table" : {
-                    "type" : "table",
+                    "type" : "t",
                     "columns" : 2,
                     "widthPercentage" : 100.0,
                     "children" : [ {
-                      "type" : "style",
+                      "type" : "s",
                       "ref" : 8,
                       "children" : [ {
-                        "type" : "text-cell",
+                        "type" : "tx",
                         "phrase" : {
-                          "type" : "phrase",
+                          "type" : "ph",
                           "children" : [ {
-                            "type" : "chunk",
+                            "type" : "ch",
                             "text" : "Jimi Hendrix"
                           } ]
                         }
                       } ]
                     }, {
-                      "type" : "style",
+                      "type" : "s",
                       "ref" : 9,
                       "children" : [ {
-                        "type" : "qr-cell",
+                        "type" : "tq",
                         "colSpan" : 1,
                         "rowSpan" : 1,
                         "qrCode" : {
@@ -321,7 +321,7 @@
                             "background" : 5,
                             "size" : 50,
                             "logo" : {
-                              "ref" : 2,
+                              "ref" : 3,
                               "width" : 300,
                               "height" : 300,
                               "clearLogoArea" : true
@@ -332,20 +332,20 @@
                     } ]
                   }
                 }, {
-                  "type" : "style",
+                  "type" : "s",
                   "ref" : 10,
                   "children" : [ {
-                    "type" : "text-cell",
+                    "type" : "tx",
                     "phrase" : {
-                      "type" : "phrase",
+                      "type" : "ph",
                       "children" : [ {
-                        "type" : "chunk",
+                        "type" : "ch",
                         "text" : "Born in Seattle, Washington, Hendrix began playing guitar at age 15. In 1961, he enlisted in the US Army, but was discharged the following year. Soon afterward, he moved to Clarksville, then Nashville, Tennessee, and began playing gigs on the chitlin' circuit, earning a place in the Isley Brothers' backing band and later with Little Richard, with whom he continued to work through mid-1965. He then played with Curtis Knight and the Squires before moving to England in late 1966 after bassist Chas Chandler of the Animals became his manager. Within months, Hendrix had earned three UK top ten hits with his band"
                       } ]
                     }
                   } ]
                 }, {
-                  "type" : "table-cell",
+                  "type" : "tt",
                   "margin" : {
                     "top" : 0.0,
                     "bottom" : 0.0,
@@ -353,11 +353,11 @@
                     "right" : 24.0
                   },
                   "table" : {
-                    "type" : "table",
+                    "type" : "t",
                     "columns" : 1,
                     "widthPercentage" : 100.0,
                     "children" : [ {
-                      "type" : "table-cell",
+                      "type" : "tt",
                       "margin" : {
                         "top" : 0.0,
                         "bottom" : 0.0,
@@ -365,52 +365,52 @@
                         "right" : 0.0
                       },
                       "table" : {
-                        "type" : "table",
+                        "type" : "t",
                         "columns" : 2,
                         "widthPercentage" : 100.0,
                         "weights" : [ 1.0, 3.0 ],
                         "style" : 11,
                         "children" : [ {
-                          "type" : "style",
+                          "type" : "s",
                           "ref" : 12,
                           "children" : [ {
-                            "type" : "text-cell",
+                            "type" : "tx",
                             "phrase" : {
-                              "type" : "phrase",
+                              "type" : "ph",
                               "children" : [ {
-                                "type" : "chunk",
+                                "type" : "ch",
                                 "text" : "DOB"
                               } ]
                             }
                           } ]
                         }, {
-                          "type" : "text-cell",
+                          "type" : "tx",
                           "phrase" : {
-                            "type" : "phrase",
+                            "type" : "ph",
                             "children" : [ {
-                              "type" : "chunk",
+                              "type" : "ch",
                               "text" : "1942-10-27"
                             } ]
                           }
                         }, {
-                          "type" : "style",
+                          "type" : "s",
                           "ref" : 13,
                           "children" : [ {
-                            "type" : "text-cell",
+                            "type" : "tx",
                             "phrase" : {
-                              "type" : "phrase",
+                              "type" : "ph",
                               "children" : [ {
-                                "type" : "chunk",
+                                "type" : "ch",
                                 "text" : "Address"
                               } ]
                             }
                           } ]
                         }, {
-                          "type" : "text-cell",
+                          "type" : "tx",
                           "phrase" : {
-                            "type" : "phrase",
+                            "type" : "ph",
                             "children" : [ {
-                              "type" : "chunk",
+                              "type" : "ch",
                               "text" : "25 Brook Street, W1K 4HB"
                             } ]
                           }
@@ -419,11 +419,11 @@
                     } ]
                   }
                 }, {
-                  "type" : "text-cell",
+                  "type" : "tx",
                   "phrase" : {
-                    "type" : "phrase",
+                    "type" : "ph",
                     "children" : [ {
-                      "type" : "chunk",
+                      "type" : "ch",
                       "text" : " "
                     } ]
                   }
@@ -431,24 +431,24 @@
               }
             } ]
           }, {
-            "type" : "style",
+            "type" : "s",
             "ref" : 14,
             "children" : [ {
-              "type" : "style",
+              "type" : "s",
               "ref" : 6,
               "children" : [ {
-                "type" : "image-cell",
+                "type" : "ti",
                 "colSpan" : 1,
                 "rowSpan" : 1,
                 "image" : {
-                  "type" : "image",
-                  "ref" : 3,
+                  "type" : "im",
+                  "ref" : 4,
                   "width" : 200.0,
                   "height" : 200.0
                 }
               } ]
             }, {
-              "type" : "table-cell",
+              "type" : "tt",
               "margin" : {
                 "top" : 0.0,
                 "bottom" : 0.0,
@@ -456,12 +456,12 @@
                 "right" : 0.0
               },
               "table" : {
-                "type" : "table",
+                "type" : "t",
                 "columns" : 1,
                 "widthPercentage" : 100.0,
                 "style" : 7,
                 "children" : [ {
-                  "type" : "table-cell",
+                  "type" : "tt",
                   "margin" : {
                     "top" : 0.0,
                     "bottom" : 0.0,
@@ -469,27 +469,27 @@
                     "right" : 0.0
                   },
                   "table" : {
-                    "type" : "table",
+                    "type" : "t",
                     "columns" : 2,
                     "widthPercentage" : 100.0,
                     "children" : [ {
-                      "type" : "style",
+                      "type" : "s",
                       "ref" : 8,
                       "children" : [ {
-                        "type" : "text-cell",
+                        "type" : "tx",
                         "phrase" : {
-                          "type" : "phrase",
+                          "type" : "ph",
                           "children" : [ {
-                            "type" : "chunk",
+                            "type" : "ch",
                             "text" : "David Gilmour"
                           } ]
                         }
                       } ]
                     }, {
-                      "type" : "style",
+                      "type" : "s",
                       "ref" : 9,
                       "children" : [ {
-                        "type" : "qr-cell",
+                        "type" : "tq",
                         "colSpan" : 1,
                         "rowSpan" : 1,
                         "qrCode" : {
@@ -501,7 +501,7 @@
                             "background" : 6,
                             "size" : 50,
                             "logo" : {
-                              "ref" : 2,
+                              "ref" : 3,
                               "width" : 300,
                               "height" : 300,
                               "clearLogoArea" : true
@@ -512,20 +512,20 @@
                     } ]
                   }
                 }, {
-                  "type" : "style",
+                  "type" : "s",
                   "ref" : 10,
                   "children" : [ {
-                    "type" : "text-cell",
+                    "type" : "tx",
                     "phrase" : {
-                      "type" : "phrase",
+                      "type" : "ph",
                       "children" : [ {
-                        "type" : "chunk",
+                        "type" : "ch",
                         "text" : "As a member of Pink Floyd, Gilmour was inducted into the US Rock and Roll Hall of Fame in 1996, and the UK Music Hall of Fame in 2005. In 2003, Gilmour was made a Commander of the Order of the British Empire (CBE). He received the award for Outstanding Contribution at the 2008 Q Awards.[4] In 2023, Rolling Stone named him the 28th-greatest guitarist."
                       } ]
                     }
                   } ]
                 }, {
-                  "type" : "table-cell",
+                  "type" : "tt",
                   "margin" : {
                     "top" : 0.0,
                     "bottom" : 0.0,
@@ -533,11 +533,11 @@
                     "right" : 24.0
                   },
                   "table" : {
-                    "type" : "table",
+                    "type" : "t",
                     "columns" : 1,
                     "widthPercentage" : 100.0,
                     "children" : [ {
-                      "type" : "table-cell",
+                      "type" : "tt",
                       "margin" : {
                         "top" : 0.0,
                         "bottom" : 0.0,
@@ -545,52 +545,52 @@
                         "right" : 0.0
                       },
                       "table" : {
-                        "type" : "table",
+                        "type" : "t",
                         "columns" : 2,
                         "widthPercentage" : 100.0,
                         "weights" : [ 1.0, 3.0 ],
                         "style" : 11,
                         "children" : [ {
-                          "type" : "style",
+                          "type" : "s",
                           "ref" : 12,
                           "children" : [ {
-                            "type" : "text-cell",
+                            "type" : "tx",
                             "phrase" : {
-                              "type" : "phrase",
+                              "type" : "ph",
                               "children" : [ {
-                                "type" : "chunk",
+                                "type" : "ch",
                                 "text" : "DOB"
                               } ]
                             }
                           } ]
                         }, {
-                          "type" : "text-cell",
+                          "type" : "tx",
                           "phrase" : {
-                            "type" : "phrase",
+                            "type" : "ph",
                             "children" : [ {
-                              "type" : "chunk",
+                              "type" : "ch",
                               "text" : "1946-03-06"
                             } ]
                           }
                         }, {
-                          "type" : "style",
+                          "type" : "s",
                           "ref" : 13,
                           "children" : [ {
-                            "type" : "text-cell",
+                            "type" : "tx",
                             "phrase" : {
-                              "type" : "phrase",
+                              "type" : "ph",
                               "children" : [ {
-                                "type" : "chunk",
+                                "type" : "ch",
                                 "text" : "Address"
                               } ]
                             }
                           } ]
                         }, {
-                          "type" : "text-cell",
+                          "type" : "tx",
                           "phrase" : {
-                            "type" : "phrase",
+                            "type" : "ph",
                             "children" : [ {
-                              "type" : "chunk",
+                              "type" : "ch",
                               "text" : "1 Globe House, N8 8PN"
                             } ]
                           }
@@ -599,11 +599,11 @@
                     } ]
                   }
                 }, {
-                  "type" : "text-cell",
+                  "type" : "tx",
                   "phrase" : {
-                    "type" : "phrase",
+                    "type" : "ph",
                     "children" : [ {
-                      "type" : "chunk",
+                      "type" : "ch",
                       "text" : " "
                     } ]
                   }
@@ -611,24 +611,24 @@
               }
             } ]
           }, {
-            "type" : "style",
+            "type" : "s",
             "ref" : 5,
             "children" : [ {
-              "type" : "style",
+              "type" : "s",
               "ref" : 6,
               "children" : [ {
-                "type" : "image-cell",
+                "type" : "ti",
                 "colSpan" : 1,
                 "rowSpan" : 1,
                 "image" : {
-                  "type" : "image",
-                  "ref" : 4,
+                  "type" : "im",
+                  "ref" : 5,
                   "width" : 200.0,
                   "height" : 200.0
                 }
               } ]
             }, {
-              "type" : "table-cell",
+              "type" : "tt",
               "margin" : {
                 "top" : 0.0,
                 "bottom" : 0.0,
@@ -636,12 +636,12 @@
                 "right" : 0.0
               },
               "table" : {
-                "type" : "table",
+                "type" : "t",
                 "columns" : 1,
                 "widthPercentage" : 100.0,
                 "style" : 7,
                 "children" : [ {
-                  "type" : "table-cell",
+                  "type" : "tt",
                   "margin" : {
                     "top" : 0.0,
                     "bottom" : 0.0,
@@ -649,27 +649,27 @@
                     "right" : 0.0
                   },
                   "table" : {
-                    "type" : "table",
+                    "type" : "t",
                     "columns" : 2,
                     "widthPercentage" : 100.0,
                     "children" : [ {
-                      "type" : "style",
+                      "type" : "s",
                       "ref" : 8,
                       "children" : [ {
-                        "type" : "text-cell",
+                        "type" : "tx",
                         "phrase" : {
-                          "type" : "phrase",
+                          "type" : "ph",
                           "children" : [ {
-                            "type" : "chunk",
+                            "type" : "ch",
                             "text" : "Rory Gallagher"
                           } ]
                         }
                       } ]
                     }, {
-                      "type" : "style",
+                      "type" : "s",
                       "ref" : 9,
                       "children" : [ {
-                        "type" : "qr-cell",
+                        "type" : "tq",
                         "colSpan" : 1,
                         "rowSpan" : 1,
                         "qrCode" : {
@@ -681,7 +681,7 @@
                             "background" : 5,
                             "size" : 50,
                             "logo" : {
-                              "ref" : 2,
+                              "ref" : 3,
                               "width" : 300,
                               "height" : 300,
                               "clearLogoArea" : true
@@ -692,20 +692,20 @@
                     } ]
                   }
                 }, {
-                  "type" : "style",
+                  "type" : "s",
                   "ref" : 10,
                   "children" : [ {
-                    "type" : "text-cell",
+                    "type" : "tx",
                     "phrase" : {
-                      "type" : "phrase",
+                      "type" : "ph",
                       "children" : [ {
-                        "type" : "chunk",
+                        "type" : "ch",
                         "text" : "In 1966, Gallagher formed the blues rock power trio Taste, which experienced moderate commercial success and popularity in the United Kingdom. After the dissolution of Taste, Gallagher pursued a solo career, releasing music throughout the 1970s and 1980s and selling more than 30 million records worldwide."
                       } ]
                     }
                   } ]
                 }, {
-                  "type" : "table-cell",
+                  "type" : "tt",
                   "margin" : {
                     "top" : 0.0,
                     "bottom" : 0.0,
@@ -713,11 +713,11 @@
                     "right" : 24.0
                   },
                   "table" : {
-                    "type" : "table",
+                    "type" : "t",
                     "columns" : 1,
                     "widthPercentage" : 100.0,
                     "children" : [ {
-                      "type" : "table-cell",
+                      "type" : "tt",
                       "margin" : {
                         "top" : 0.0,
                         "bottom" : 0.0,
@@ -725,52 +725,52 @@
                         "right" : 0.0
                       },
                       "table" : {
-                        "type" : "table",
+                        "type" : "t",
                         "columns" : 2,
                         "widthPercentage" : 100.0,
                         "weights" : [ 1.0, 3.0 ],
                         "style" : 11,
                         "children" : [ {
-                          "type" : "style",
+                          "type" : "s",
                           "ref" : 12,
                           "children" : [ {
-                            "type" : "text-cell",
+                            "type" : "tx",
                             "phrase" : {
-                              "type" : "phrase",
+                              "type" : "ph",
                               "children" : [ {
-                                "type" : "chunk",
+                                "type" : "ch",
                                 "text" : "DOB"
                               } ]
                             }
                           } ]
                         }, {
-                          "type" : "text-cell",
+                          "type" : "tx",
                           "phrase" : {
-                            "type" : "phrase",
+                            "type" : "ph",
                             "children" : [ {
-                              "type" : "chunk",
+                              "type" : "ch",
                               "text" : "1948-03-02"
                             } ]
                           }
                         }, {
-                          "type" : "style",
+                          "type" : "s",
                           "ref" : 13,
                           "children" : [ {
-                            "type" : "text-cell",
+                            "type" : "tx",
                             "phrase" : {
-                              "type" : "phrase",
+                              "type" : "ph",
                               "children" : [ {
-                                "type" : "chunk",
+                                "type" : "ch",
                                 "text" : "Address"
                               } ]
                             }
                           } ]
                         }, {
-                          "type" : "text-cell",
+                          "type" : "tx",
                           "phrase" : {
-                            "type" : "phrase",
+                            "type" : "ph",
                             "children" : [ {
-                              "type" : "chunk",
+                              "type" : "ch",
                               "text" : "Ballyshannon, County Donegal"
                             } ]
                           }
@@ -779,11 +779,11 @@
                     } ]
                   }
                 }, {
-                  "type" : "text-cell",
+                  "type" : "tx",
                   "phrase" : {
-                    "type" : "phrase",
+                    "type" : "ph",
                     "children" : [ {
-                      "type" : "chunk",
+                      "type" : "ch",
                       "text" : " "
                     } ]
                   }
@@ -791,24 +791,24 @@
               }
             } ]
           }, {
-            "type" : "style",
+            "type" : "s",
             "ref" : 14,
             "children" : [ {
-              "type" : "style",
+              "type" : "s",
               "ref" : 6,
               "children" : [ {
-                "type" : "image-cell",
+                "type" : "ti",
                 "colSpan" : 1,
                 "rowSpan" : 1,
                 "image" : {
-                  "type" : "image",
-                  "ref" : 5,
+                  "type" : "im",
+                  "ref" : 6,
                   "width" : 200.0,
                   "height" : 200.0
                 }
               } ]
             }, {
-              "type" : "table-cell",
+              "type" : "tt",
               "margin" : {
                 "top" : 0.0,
                 "bottom" : 0.0,
@@ -816,12 +816,12 @@
                 "right" : 0.0
               },
               "table" : {
-                "type" : "table",
+                "type" : "t",
                 "columns" : 1,
                 "widthPercentage" : 100.0,
                 "style" : 7,
                 "children" : [ {
-                  "type" : "table-cell",
+                  "type" : "tt",
                   "margin" : {
                     "top" : 0.0,
                     "bottom" : 0.0,
@@ -829,27 +829,27 @@
                     "right" : 0.0
                   },
                   "table" : {
-                    "type" : "table",
+                    "type" : "t",
                     "columns" : 2,
                     "widthPercentage" : 100.0,
                     "children" : [ {
-                      "type" : "style",
+                      "type" : "s",
                       "ref" : 8,
                       "children" : [ {
-                        "type" : "text-cell",
+                        "type" : "tx",
                         "phrase" : {
-                          "type" : "phrase",
+                          "type" : "ph",
                           "children" : [ {
-                            "type" : "chunk",
+                            "type" : "ch",
                             "text" : "Frank Zappa"
                           } ]
                         }
                       } ]
                     }, {
-                      "type" : "style",
+                      "type" : "s",
                       "ref" : 9,
                       "children" : [ {
-                        "type" : "qr-cell",
+                        "type" : "tq",
                         "colSpan" : 1,
                         "rowSpan" : 1,
                         "qrCode" : {
@@ -861,7 +861,7 @@
                             "background" : 6,
                             "size" : 50,
                             "logo" : {
-                              "ref" : 2,
+                              "ref" : 3,
                               "width" : 300,
                               "height" : 300,
                               "clearLogoArea" : true
@@ -872,20 +872,20 @@
                     } ]
                   }
                 }, {
-                  "type" : "style",
+                  "type" : "s",
                   "ref" : 10,
                   "children" : [ {
-                    "type" : "text-cell",
+                    "type" : "tx",
                     "phrase" : {
-                      "type" : "phrase",
+                      "type" : "ph",
                       "children" : [ {
-                        "type" : "chunk",
+                        "type" : "ch",
                         "text" : "As a mostly self-taught composer and performer, Zappa had diverse musical influences that led him  to create music that was sometimes difficult to categorize. While in his teens, he acquired a taste  for 20th-century classical modernism, African-American rhythm and blues, and doo-wop music.[7] He  began writing classical music in high school, while simultaneously playing drums in rhythm and  blues bands, later switching to electric guitar. His debut studio album with the Mothers of  Invention, Freak Out! (1966), combined satirical but seemingly conventional rock and roll songs  with extended sound collages. He continued this eclectic and experimental approach throughout his career."
                       } ]
                     }
                   } ]
                 }, {
-                  "type" : "table-cell",
+                  "type" : "tt",
                   "margin" : {
                     "top" : 0.0,
                     "bottom" : 0.0,
@@ -893,11 +893,11 @@
                     "right" : 24.0
                   },
                   "table" : {
-                    "type" : "table",
+                    "type" : "t",
                     "columns" : 1,
                     "widthPercentage" : 100.0,
                     "children" : [ {
-                      "type" : "table-cell",
+                      "type" : "tt",
                       "margin" : {
                         "top" : 0.0,
                         "bottom" : 0.0,
@@ -905,52 +905,52 @@
                         "right" : 0.0
                       },
                       "table" : {
-                        "type" : "table",
+                        "type" : "t",
                         "columns" : 2,
                         "widthPercentage" : 100.0,
                         "weights" : [ 1.0, 3.0 ],
                         "style" : 11,
                         "children" : [ {
-                          "type" : "style",
+                          "type" : "s",
                           "ref" : 12,
                           "children" : [ {
-                            "type" : "text-cell",
+                            "type" : "tx",
                             "phrase" : {
-                              "type" : "phrase",
+                              "type" : "ph",
                               "children" : [ {
-                                "type" : "chunk",
+                                "type" : "ch",
                                 "text" : "DOB"
                               } ]
                             }
                           } ]
                         }, {
-                          "type" : "text-cell",
+                          "type" : "tx",
                           "phrase" : {
-                            "type" : "phrase",
+                            "type" : "ph",
                             "children" : [ {
-                              "type" : "chunk",
+                              "type" : "ch",
                               "text" : "1940-12-21"
                             } ]
                           }
                         }, {
-                          "type" : "style",
+                          "type" : "s",
                           "ref" : 13,
                           "children" : [ {
-                            "type" : "text-cell",
+                            "type" : "tx",
                             "phrase" : {
-                              "type" : "phrase",
+                              "type" : "ph",
                               "children" : [ {
-                                "type" : "chunk",
+                                "type" : "ch",
                                 "text" : "Address"
                               } ]
                             }
                           } ]
                         }, {
-                          "type" : "text-cell",
+                          "type" : "tx",
                           "phrase" : {
-                            "type" : "phrase",
+                            "type" : "ph",
                             "children" : [ {
-                              "type" : "chunk",
+                              "type" : "ch",
                               "text" : "Baltimore, Maryland, U.S."
                             } ]
                           }
@@ -959,11 +959,11 @@
                     } ]
                   }
                 }, {
-                  "type" : "text-cell",
+                  "type" : "tx",
                   "phrase" : {
-                    "type" : "phrase",
+                    "type" : "ph",
                     "children" : [ {
-                      "type" : "chunk",
+                      "type" : "ch",
                       "text" : " "
                     } ]
                   }
@@ -971,24 +971,24 @@
               }
             } ]
           }, {
-            "type" : "style",
+            "type" : "s",
             "ref" : 5,
             "children" : [ {
-              "type" : "style",
+              "type" : "s",
               "ref" : 6,
               "children" : [ {
-                "type" : "image-cell",
+                "type" : "ti",
                 "colSpan" : 1,
                 "rowSpan" : 1,
                 "image" : {
-                  "type" : "image",
-                  "ref" : 6,
+                  "type" : "im",
+                  "ref" : 7,
                   "width" : 200.0,
                   "height" : 200.0
                 }
               } ]
             }, {
-              "type" : "table-cell",
+              "type" : "tt",
               "margin" : {
                 "top" : 0.0,
                 "bottom" : 0.0,
@@ -996,12 +996,12 @@
                 "right" : 0.0
               },
               "table" : {
-                "type" : "table",
+                "type" : "t",
                 "columns" : 1,
                 "widthPercentage" : 100.0,
                 "style" : 7,
                 "children" : [ {
-                  "type" : "table-cell",
+                  "type" : "tt",
                   "margin" : {
                     "top" : 0.0,
                     "bottom" : 0.0,
@@ -1009,27 +1009,27 @@
                     "right" : 0.0
                   },
                   "table" : {
-                    "type" : "table",
+                    "type" : "t",
                     "columns" : 2,
                     "widthPercentage" : 100.0,
                     "children" : [ {
-                      "type" : "style",
+                      "type" : "s",
                       "ref" : 8,
                       "children" : [ {
-                        "type" : "text-cell",
+                        "type" : "tx",
                         "phrase" : {
-                          "type" : "phrase",
+                          "type" : "ph",
                           "children" : [ {
-                            "type" : "chunk",
+                            "type" : "ch",
                             "text" : "Debbie Harry"
                           } ]
                         }
                       } ]
                     }, {
-                      "type" : "style",
+                      "type" : "s",
                       "ref" : 9,
                       "children" : [ {
-                        "type" : "qr-cell",
+                        "type" : "tq",
                         "colSpan" : 1,
                         "rowSpan" : 1,
                         "qrCode" : {
@@ -1041,7 +1041,7 @@
                             "background" : 5,
                             "size" : 50,
                             "logo" : {
-                              "ref" : 2,
+                              "ref" : 3,
                               "width" : 300,
                               "height" : 300,
                               "clearLogoArea" : true
@@ -1052,20 +1052,20 @@
                     } ]
                   }
                 }, {
-                  "type" : "style",
+                  "type" : "s",
                   "ref" : 10,
                   "children" : [ {
-                    "type" : "text-cell",
+                    "type" : "tx",
                     "phrase" : {
-                      "type" : "phrase",
+                      "type" : "ph",
                       "children" : [ {
-                        "type" : "chunk",
+                        "type" : "ch",
                         "text" : "Deborah Ann Harry (born Angela Trimble; July 1, 1945) is an American singer, songwriter and actress best known as the lead vocalist of the band Blondie. Four of her songs with the band reached  No. 1 on the US charts between 1979 and 1981.  Born in Miami, Florida, Harry was adopted as an  infant and raised in Hawthorne, New Jersey. After college she worked various jobs—as a dancer,  a Playboy Bunny, and a secretary (including at the BBC in New York)—before her breakthrough in  the music industry"
                       } ]
                     }
                   } ]
                 }, {
-                  "type" : "table-cell",
+                  "type" : "tt",
                   "margin" : {
                     "top" : 0.0,
                     "bottom" : 0.0,
@@ -1073,11 +1073,11 @@
                     "right" : 24.0
                   },
                   "table" : {
-                    "type" : "table",
+                    "type" : "t",
                     "columns" : 1,
                     "widthPercentage" : 100.0,
                     "children" : [ {
-                      "type" : "table-cell",
+                      "type" : "tt",
                       "margin" : {
                         "top" : 0.0,
                         "bottom" : 0.0,
@@ -1085,52 +1085,52 @@
                         "right" : 0.0
                       },
                       "table" : {
-                        "type" : "table",
+                        "type" : "t",
                         "columns" : 2,
                         "widthPercentage" : 100.0,
                         "weights" : [ 1.0, 3.0 ],
                         "style" : 11,
                         "children" : [ {
-                          "type" : "style",
+                          "type" : "s",
                           "ref" : 12,
                           "children" : [ {
-                            "type" : "text-cell",
+                            "type" : "tx",
                             "phrase" : {
-                              "type" : "phrase",
+                              "type" : "ph",
                               "children" : [ {
-                                "type" : "chunk",
+                                "type" : "ch",
                                 "text" : "DOB"
                               } ]
                             }
                           } ]
                         }, {
-                          "type" : "text-cell",
+                          "type" : "tx",
                           "phrase" : {
-                            "type" : "phrase",
+                            "type" : "ph",
                             "children" : [ {
-                              "type" : "chunk",
+                              "type" : "ch",
                               "text" : "1946-06-01"
                             } ]
                           }
                         }, {
-                          "type" : "style",
+                          "type" : "s",
                           "ref" : 13,
                           "children" : [ {
-                            "type" : "text-cell",
+                            "type" : "tx",
                             "phrase" : {
-                              "type" : "phrase",
+                              "type" : "ph",
                               "children" : [ {
-                                "type" : "chunk",
+                                "type" : "ch",
                                 "text" : "Address"
                               } ]
                             }
                           } ]
                         }, {
-                          "type" : "text-cell",
+                          "type" : "tx",
                           "phrase" : {
-                            "type" : "phrase",
+                            "type" : "ph",
                             "children" : [ {
-                              "type" : "chunk",
+                              "type" : "ch",
                               "text" : "Miami, Florida, U.S.."
                             } ]
                           }
@@ -1139,11 +1139,11 @@
                     } ]
                   }
                 }, {
-                  "type" : "text-cell",
+                  "type" : "tx",
                   "phrase" : {
-                    "type" : "phrase",
+                    "type" : "ph",
                     "children" : [ {
-                      "type" : "chunk",
+                      "type" : "ch",
                       "text" : " "
                     } ]
                   }
@@ -1169,9 +1169,7 @@
     }
   },
   "signature" : {
-    "keyName" : {
-      "name" : "key-name"
-    },
+    "keyName" : "key-name",
     "reason" : "Test signing a PDF",
     "location" : "Bedford Taxi",
     "contact" : "01234567890",

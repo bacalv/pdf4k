@@ -13,3 +13,4 @@ data class PdfMetadataDto(
 )
 
 fun PdfMetadata.toDto() = PdfMetadataDto(title, author, subject, keywords, creator, producer, customProperties)
+fun PdfMetadataDto.toDomain() = PdfMetadata(title, author, subject, keywords, creator, producer, customProperties)

@@ -11,11 +11,20 @@ data class StationaryDto(
     val contentFlow: List<String> = emptyList()
 )
 
-fun Stationary.toDto(resourceMapBuilder: ResourceMap.Builder) = StationaryDto(
+fun Stationary.toDto(resourceMapBuilder: ResourceMapDto.Builder) = StationaryDto(
     template = template.toDto().let(resourceMapBuilder::resourceRef),
     templatePage = templatePage,
     width = width,
     height = height,
     blocks = blocks.map { it.key to it.value.toDto() }.toMap(),
+    contentFlow = contentFlow
+)
+
+fun StationaryDto.toDomain(resourceMap: ResourceMap) = Stationary(
+    template = resourceMap.getResourceLocation(template),
+    templatePage = templatePage,
+    width = width,
+    height = height,
+    blocks = blocks.map { it.key to it.value.toDomain() }.toMap(),
     contentFlow = contentFlow
 )

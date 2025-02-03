@@ -13,3 +13,9 @@ fun VerticalAlignment.toDto() = when (this) {
     VerticalAlignment.Middle -> VerticalAlignmentDto.Middle
     VerticalAlignment.Bottom -> VerticalAlignmentDto.Bottom
 }
+
+fun VerticalAlignmentDto.toDomain() = when (this) {
+    VerticalAlignmentDto.Top -> VerticalAlignment.Top
+    VerticalAlignmentDto.Middle -> VerticalAlignment.Middle
+    VerticalAlignmentDto.Bottom -> VerticalAlignment.Bottom
+}

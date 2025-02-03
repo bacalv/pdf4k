@@ -12,21 +12,21 @@ import io.pdf4k.domain.dto.ComponentDto.*
     property = "type"
 )
 @JsonSubTypes(
-    Type(value = Style::class, name = "style"),
+    Type(value = Style::class, name = "s"),
     Type(value = Anchor::class, name = "a"),
-    Type(value = Content::class, name = "content"),
-    Type(value = Paragraph::class, name = "paragraph"),
-    Type(value = Phrase::class, name = "phrase"),
-    Type(value = Chunk::class, name = "chunk"),
-    Type(value = Image::class, name = "image"),
+    Type(value = Content::class, name = "c"),
+    Type(value = Paragraph::class, name = "p"),
+    Type(value = Phrase::class, name = "ph"),
+    Type(value = Chunk::class, name = "ch"),
+    Type(value = Image::class, name = "im"),
     Type(value = QrCode::class, name = "qr"),
-    Type(value = Link::class, name = "link"),
-    Type(value = PageNumber::class, name = "page-number"),
-    Type(value = Table::class, name = "table"),
-    Type(value = Cell.Text::class, name = "text-cell"),
-    Type(value = Cell.Table::class, name = "table-cell"),
-    Type(value = Cell.Image::class, name = "image-cell"),
-    Type(value = Cell.QrCode::class, name = "qr-cell"),
+    Type(value = Link::class, name = "l"),
+    Type(value = PageNumber::class, name = "pg"),
+    Type(value = Table::class, name = "t"),
+    Type(value = Cell.Text::class, name = "tx"),
+    Type(value = Cell.Table::class, name = "tt"),
+    Type(value = Cell.Image::class, name = "ti"),
+    Type(value = Cell.QrCode::class, name = "tq"),
 )
 sealed class ComponentDto {
     data class Style(val ref: StyleRef, val children: List<ComponentDto>) : ComponentDto()
@@ -79,9 +79,9 @@ sealed class ComponentDto {
     }
 }
 
-fun List<Component>.toDto(resourceMapBuilder: ResourceMap.Builder) = map { it.toDto(resourceMapBuilder) }
+fun List<Component>.toDto(resourceMapBuilder: ResourceMapDto.Builder) = map { it.toDto(resourceMapBuilder) }
 
-fun Component.toDto(resourceMapBuilder: ResourceMap.Builder): ComponentDto = when (this) {
+fun Component.toDto(resourceMapBuilder: ResourceMapDto.Builder): ComponentDto = when (this) {
     is Component.Anchor -> Anchor(name, children.toDto(resourceMapBuilder))
     is Component.Cell.Image -> Cell.Image(colSpan, rowSpan, image.toDto(resourceMapBuilder) as Image)
     is Component.Cell.QrCode -> Cell.QrCode(colSpan, rowSpan, qrCode.toDto(resourceMapBuilder) as QrCode)
@@ -103,5 +103,39 @@ fun Component.toDto(resourceMapBuilder: ResourceMap.Builder): ComponentDto = whe
     is Component.Table -> Table(
         columns, widthPercentage, weights, headerRows, extend, style?.toDto(resourceMapBuilder)
             ?.let(resourceMapBuilder::styleRef), children.toDto(resourceMapBuilder)
+    )
+}
+
+fun List<ComponentDto>.toDomain(resourceMap: ResourceMap) = map { it.toDomain(resourceMap) }
+
+fun ComponentDto.toDomain(resourceMap: ResourceMap): Component = when (this) {
+    is Anchor -> Component.Anchor(name, children.toDomain(resourceMap))
+    is Cell.Image -> Component.Cell.Image(colSpan, rowSpan, image.toDomain(resourceMap) as Component.Image)
+    is Cell.QrCode -> Component.Cell.QrCode(colSpan, rowSpan, qrCode.toDomain(resourceMap) as Component.QrCode)
+    is Cell.Table -> Component.Cell.Table(
+        colSpan,
+        rowSpan,
+        margin.toDomain(),
+        table.toDomain(resourceMap) as Component.Table
+    )
+
+    is Cell.Text -> Component.Cell.Text(rowSpan, colSpan, phrase.toDomain(resourceMap) as Component.Phrase)
+    is Chunk -> Component.Chunk(text)
+    is Content -> Component.Content(children.toDomain(resourceMap))
+    is Image -> Component.Image(resourceMap.getResourceLocation(ref), width, height, rotation)
+    is Link -> Component.Link(target, text)
+    is PageNumber -> Component.PageNumber
+    is Paragraph -> Component.Paragraph(children.toDomain(resourceMap))
+    is Phrase -> Component.Phrase(children.toDomain(resourceMap))
+    is QrCode -> Component.QrCode(link, style.toDomain(resourceMap))
+    is Style -> Component.Style(resourceMap.getStyle(ref), children.toDomain(resourceMap))
+    is Table -> Component.Table(
+        columns,
+        widthPercentage,
+        weights,
+        headerRows,
+        extend,
+        style?.let { resourceMap.getStyle(it) },
+        children.toDomain(resourceMap)
     )
 }

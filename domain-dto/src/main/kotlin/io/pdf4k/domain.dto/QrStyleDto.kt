@@ -15,7 +15,7 @@ data class QrStyleDto(val shape: Shape, val colour: ColourRef, val background: C
     }
 }
 
-fun QrStyle.toDto(resourceMapBuilder: ResourceMap.Builder) = QrStyleDto(
+fun QrStyle.toDto(resourceMapBuilder: ResourceMapDto.Builder) = QrStyleDto(
     shape = shape.toDto(),
     colour = colour.toDto().let(resourceMapBuilder::colourRef),
     background = background?.toDto()?.let(resourceMapBuilder::colourRef),
@@ -27,4 +27,18 @@ fun QrStyle.Companion.Shape.toDto() = when (this) {
     QrStyle.Companion.Shape.Square -> QrStyleDto.Companion.Shape.Square
     QrStyle.Companion.Shape.Circle -> QrStyleDto.Companion.Shape.Circle
     QrStyle.Companion.Shape.RoundedSquare -> QrStyleDto.Companion.Shape.RoundedSquare
+}
+
+fun QrStyleDto.toDomain(resourceMap: ResourceMap): QrStyle = QrStyle(
+    shape = shape.toDomain(),
+    colour = resourceMap.getColour(colour),
+    background = background?.let { resourceMap.getColour(it) },
+    size = size,
+    logo = logo?.run { QrStyle.Companion.Logo(resourceMap.getResourceLocation(ref), width, height, clearLogoArea) }
+)
+
+fun QrStyleDto.Companion.Shape.toDomain() = when (this) {
+    QrStyleDto.Companion.Shape.Square -> QrStyle.Companion.Shape.Square
+    QrStyleDto.Companion.Shape.Circle -> QrStyle.Companion.Shape.Circle
+    QrStyleDto.Companion.Shape.RoundedSquare -> QrStyle.Companion.Shape.RoundedSquare
 }
