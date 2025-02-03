@@ -15,4 +15,4 @@ data class SignatureDto(
 )
 
 fun Signature.toDto() = SignatureDto(keyName.name, reason, location, contact, signDate.toInstant())
-fun SignatureDto.toDomain() = Signature(KeyName(keyName), reason, location, contact, ZonedDateTime.ofInstant(signDateUtc, ZoneId.systemDefault()));
+fun SignatureDto.toDomain() = Signature(KeyName(keyName), reason, location, contact, ZonedDateTime.ofInstant(signDateUtc, ZoneId.systemDefault()))
