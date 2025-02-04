@@ -46,10 +46,18 @@ class PdfApproverExtension : ParameterResolver, BeforeTestExecutionCallback, Aft
             serializer: Serializer<T>,
             checker: Checker<T>
         ) {
-            val actual = IO.readResource(actualFor(testName), serializer) as ByteArray? ?: fail("Actual was null")
+            val actual = IO.readResource(actualFor(testName), serializer) as ByteArray?
             val approved =
-                IO.readResource(approvedFor(testName), serializer) as ByteArray? ?: fail("No approved file found")
-            PdfAssert.assertEquals(approved, actual, password)
+                IO.readResource(approvedFor(testName), serializer) as ByteArray?
+            if (actual == null && approved != null) {
+                fail<Unit>("Actual was null")
+            }
+            if (actual != null && approved == null) {
+                fail<Unit>("No approved file found")
+            }
+            if ( actual != null && approved != null) {
+                PdfAssert.assertEquals(approved, actual, password)
+            }
         }
     }
 

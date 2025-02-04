@@ -14,7 +14,7 @@ abstract class AbstractPdfRendererTest {
     companion object {
         fun Pdf.approve(approver: PdfApprover) = approver.assertApproved(ByteArrayOutputStream().also { stream ->
             stream.use {
-                runCatching { renderer.render(this.toDto().toDomain(), it) }.getOrThrow().getOrElse { fail(PdfErrorException(it)) }
+                runCatching { renderer.render(this.toDto().toDomain().first, it) }.getOrThrow().getOrElse { fail(PdfErrorException(it)) }
             }
         }.toByteArray())
     }

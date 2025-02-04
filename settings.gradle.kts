@@ -10,4 +10,4 @@ plugins {
 }
 
 rootProject.name = "pdf4k"
-include("testing", "domain", "domain-dto", "dsl", "renderer")
+include("testing", "domain", "domain-dto", "dsl", "renderer", "client", "server")

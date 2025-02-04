@@ -18,11 +18,12 @@ class ResourceLocator(
     private val rootDir: String,
     private val uriResourceLoader: UriResourceLoader,
     private val customProviders: Map<String, CustomResourceProvider>,
+    private val localLoader: (String, String) -> InputStream?,
     private val nameMapper: (String) -> String = { it },
     private val notFound: (ResourceLocation) -> PdfError
 ) {
     fun load(location: ResourceLocation): PdfOutcome<InputStream> = when (location) {
-        is Local -> this::class.java.getResourceAsStream("/$rootDir/${nameMapper(location.name)}")?.asSuccess()
+        is Local -> localLoader(rootDir, nameMapper(location.name))?.asSuccess()
         is Remote -> when (location) {
             is Uri -> uriResourceLoader.load(location.uri)
             is Custom -> loadFromCustomProvider(location)

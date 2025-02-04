@@ -13,8 +13,13 @@ qrCodeVersion = "4.2.0"
 
 [libraries]
 bouncyCastleBcmail = { module = "org.bouncycastle:bcmail-jdk18on", version.ref="bouncyCastleBcmailVersion" }
+http4kApiOpenApi = { module = "org.http4k:http4k-api-openapi", version.ref="http4kVersion" }
 http4kBom = { module = "org.http4k:http4k-bom", version.ref="http4kVersion" }
+http4kClientOkHttp = { module = "org.http4k:http4k-client-okhttp", version.ref="http4kVersion" }
 http4kCore = { module = "org.http4k:http4k-core", version.ref="http4kVersion" }
+http4kContract = { module = "org.http4k:http4k-contract", version.ref="http4kVersion" }
+http4kFormatJackson = { module = "org.http4k:http4k-format-jackson", version.ref="http4kVersion" }
+http4kMultipart = { module = "org.http4k:http4k-multipart", version.ref="http4kVersion" }
 http4kServerUndertow = { module = "org.http4k:http4k-server-undertow", version.ref="http4kVersion" }
 jacksonAnnotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref="jacksonVersion"}
 jacksonCore = { module = "com.fasterxml.jackson.core:jackson-core", version.ref="jacksonVersion"}

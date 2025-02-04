@@ -21,7 +21,7 @@ fun Pdf.toDto(): PdfDto {
     return PdfDto(resourceMapBuilder.build(), style, pages, metadata, signature, permissions)
 }
 
-fun PdfDto.toDomain(): Pdf {
+fun PdfDto.toDomain(): Pair<Pdf, ResourceMap> {
     val resourceMap = ResourceMap(resourceMap)
     val pdf = Pdf(
         style = style?.let{ resourceMap.getStyle(it) },
@@ -30,5 +30,5 @@ fun PdfDto.toDomain(): Pdf {
         signature = signature?.toDomain(),
         permissions = permissions?.toDomain()
     )
-    return pdf
+    return pdf to resourceMap
 }
