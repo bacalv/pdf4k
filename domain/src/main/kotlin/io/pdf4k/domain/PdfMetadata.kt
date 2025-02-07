@@ -8,4 +8,8 @@ data class PdfMetadata(
     val creator: String?,
     val producer: String?,
     val customProperties: Map<String, String> = emptyMap()
-)
+) {
+    companion object {
+        val empty = PdfMetadata(null, null, null, null, null, null, emptyMap())
+    }
+}

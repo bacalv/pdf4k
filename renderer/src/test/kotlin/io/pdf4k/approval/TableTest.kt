@@ -4,8 +4,10 @@ import io.pdf4k.domain.Font.Style.Bold
 import io.pdf4k.domain.Font.Style.Plain
 import io.pdf4k.domain.HorizontalAlignment
 import io.pdf4k.domain.HorizontalAlignment.*
+import io.pdf4k.domain.Leading
 import io.pdf4k.domain.Stationary
 import io.pdf4k.domain.StyleAttributes.Companion.border
+import io.pdf4k.domain.StyleAttributes.Companion.padding
 import io.pdf4k.domain.StyleAttributes.Companion.style
 import io.pdf4k.domain.VerticalAlignment
 import io.pdf4k.domain.VerticalAlignment.*
@@ -238,6 +240,36 @@ class TableTest : AbstractPdfRendererTest() {
                         style(cellBackground = RED, colour = WHITE) {
                             table(1, extend = extend) {
                                 textCell("extend=$extend")
+                            }
+                        }
+                    }
+                }
+            }
+        }.approve(approver)
+    }
+
+    @Test
+    fun `renders different padding`(approver: PdfApprover) {
+        val justifiedAll = style(align = JustifiedAll)
+        content {
+            style(leading = Leading.multiplier(1.5f)) {
+                paragraph(style(fontStyle = Bold)) {
+                    +"Default\n\n"
+                }
+                table(style = justifiedAll) {
+                    textCell {
+                        +"The quick brown fox jumped over the lazy hen."
+                    }
+                }
+
+                (0..10).forEach { n ->
+                    paragraph(style(fontStyle = Bold)) {
+                        +"\n\nPadding: $n\n\n"
+                    }
+                    table(1, widthPercentage = 70f, style = justifiedAll + padding(n.toFloat())) {
+                        listOf(null, 12f, 16f, 20f, 24f).forEach { f ->
+                            textCell(style = style(size = f)) {
+                                +"The quick brown fox jumped over the lazy hen ($f)."
                             }
                         }
                     }

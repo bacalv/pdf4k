@@ -3,6 +3,7 @@ package io.pdf4k.server.service.rendering
 import io.pdf4k.domain.Pdf
 import io.pdf4k.domain.dto.ResourceMap
 import io.pdf4k.provider.FontProviderFactory
+import io.pdf4k.provider.ResourceLocator
 import io.pdf4k.provider.ResourceLocators
 import io.pdf4k.provider.TempFileFactory.Companion.defaultTempFileFactory
 import io.pdf4k.provider.TempStreamFactory
@@ -26,12 +27,14 @@ class RenderingService(
         val outputStream = ByteArrayOutputStream()
         val fontProviderFactory = FontProviderFactory(defaultTempFileFactory)
         val resourceLocators = ResourceLocators(defaultResourceLoader, emptyMap(), fontProviderFactory, { it }) { type, name ->
+            val extension = if (type == "stationary") ".pdf" else ""
             when (type) {
-                "stationary" -> stationaryPack.pageTemplates[name]!!.value
-                "fonts" -> stationaryPack.fonts[name]!!.value
-                "images" -> stationaryPack.images[name]!!.value
+                "stationary" -> stationaryPack.pageTemplates[name]?.value
+                "fonts" -> stationaryPack.fonts[name]?.value
+                "images" -> stationaryPack.images[name]?.value
                 else -> println(type).let { TODO() }
-            }.let { multipartFileStore.get(it) }
+            }?.let { multipartFileStore.get(it) }
+                ?: ResourceLocator::class.java.getResourceAsStream("/$type/$name$extension")
         }
         val pdfRenderer = PdfRenderer(resourceLocators, tempStreamFactory, documentAssembler)
         pdfRenderer.render(pdf, outputStream).onFailure {

@@ -75,10 +75,6 @@
     }, {
       "size" : 10.0,
       "cellBackground" : 2,
-      "paddingTop" : 0.0,
-      "paddingBottom" : 5.0,
-      "paddingLeft" : 4.0,
-      "paddingRight" : 4.0,
       "borderWidthTop" : 1.0,
       "borderWidthBottom" : 1.0,
       "borderWidthLeft" : 1.0,
@@ -92,10 +88,6 @@
       "size" : 10.0,
       "colour" : 2,
       "cellBackground" : 3,
-      "paddingTop" : 0.0,
-      "paddingBottom" : 5.0,
-      "paddingLeft" : 4.0,
-      "paddingRight" : 4.0,
       "borderColourBottom" : 2
     }, {
       "fontStyle" : "Bold",

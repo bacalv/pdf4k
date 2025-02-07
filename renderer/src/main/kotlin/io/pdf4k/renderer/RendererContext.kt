@@ -6,7 +6,6 @@ import com.lowagie.text.Image
 import com.lowagie.text.pdf.ColumnText
 import com.lowagie.text.pdf.PdfWriter
 import io.pdf4k.domain.*
-import io.pdf4k.domain.StyleAttributes.Companion.DEFAULT_STYLE
 import io.pdf4k.provider.ResourceLocators
 import io.pdf4k.renderer.ComponentRenderer.render
 import io.pdf4k.renderer.PdfError.Companion.PdfErrorException
@@ -26,7 +25,7 @@ class RendererContext(
     val stationaryByPage = mutableListOf<Pair<LoadedStationary, Int>>()
 
     init {
-        styleStack.push(DEFAULT_STYLE)
+        styleStack.push(StyleAttributes())
     }
 
     fun peekStyle(): StyleAttributes = styleStack.peek()

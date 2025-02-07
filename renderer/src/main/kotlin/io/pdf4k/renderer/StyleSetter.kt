@@ -34,12 +34,14 @@ object StyleSetter {
                 VerticalAlignment.Bottom -> ALIGN_BOTTOM
             }
 
+            isUseAscender = true
+            isUseDescender = true
             (style.leading ?: DEFAULT_LEADING).let { setLeading(it.fixed, it.multiplier) }
             style.cellBackground?.let { backgroundColor = it }
-            style.paddingLeft?.let { paddingLeft = it }
-            style.paddingRight?.let { paddingRight = it }
-            style.paddingTop?.let { paddingTop = it }
-            style.paddingBottom?.let { paddingBottom = it }
+            (style.paddingLeft ?: 4f).let { paddingLeft = it }
+            (style.paddingRight ?: 4f).let { paddingRight = it }
+            (style.paddingTop ?: 4f).let { paddingTop = it }
+            (style.paddingBottom ?: 4f).let { paddingBottom = it }
             style.borderColourTop?.let { borderColorTop = it }
             style.borderColourBottom?.let { borderColorBottom = it }
             style.borderColourLeft?.let { borderColorLeft = it }
@@ -58,6 +60,8 @@ object StyleSetter {
             isSplitLate = style.splitLate ?: false
             isSplitRows = style.splitRows ?: true
             addCell(PdfPCell().also { cell ->
+                cell.isUseAscender = true
+                cell.isUseDescender = true
                 cell.paddingLeft = 0f
                 cell.paddingRight = 0f
                 cell.paddingTop = 0f
@@ -81,6 +85,8 @@ object StyleSetter {
         defaultCell.borderWidthBottom = 0f
         defaultCell.borderWidthLeft = 0f
         defaultCell.borderWidthRight = 0f
+        defaultCell.isUseAscender = true
+        defaultCell.isUseDescender = true
         context.peekStyle().let { style ->
             isSplitLate = style.splitLate ?: false
             isSplitRows = style.splitRows ?: true
@@ -88,7 +94,7 @@ object StyleSetter {
         component.weights?.let { setWidths(it.toFloatArray()) }
     }
 
-    fun setHorizontalAlignment(cell: PdfPCell, align: HorizontalAlignment?) {
+    private fun setHorizontalAlignment(cell: PdfPCell, align: HorizontalAlignment?) {
         cell.horizontalAlignment = when (align ?: HorizontalAlignment.Left) {
             HorizontalAlignment.Left -> ALIGN_LEFT
             HorizontalAlignment.Center -> ALIGN_CENTER

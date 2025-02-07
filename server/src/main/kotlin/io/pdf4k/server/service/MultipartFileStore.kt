@@ -21,6 +21,7 @@ interface MultipartFileStore {
                 val tempFile = Path.of(tempDir.toString(),"$id.dat")
                 FileOutputStream(tempFile.toFile()).use {
                     file.file.content.copyTo(it)
+                    file.file.content.close()
                 }
                 return id.toString()
             }

@@ -16,7 +16,7 @@ import org.http4k.core.with
 
 object RealmRoutes {
     fun routes(services: Pdf4kServices) = listOf(
-        "/" / realmPathLens meta {
+        "/realms" / realmPathLens meta {
             summary = "Creates a new realm."
             returning(OK)
         } bindContract PUT to { realmName ->
@@ -27,7 +27,7 @@ object RealmRoutes {
             }
         },
 
-        "/" meta {
+        "/realms" meta {
             summary = "List realms."
             returning(OK, realmListLens to exampleRealmList)
         } bindContract GET to { _: Request ->

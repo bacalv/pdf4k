@@ -13,8 +13,9 @@ import org.http4k.core.Status.Companion.OK
 
 object RenderRoutes {
     fun routes(services: Pdf4kServices) = listOf(
-        "/" / realmPathLens / stationaryPackPathLens / "render" meta {
+        "/realms" / realmPathLens / stationaryPackPathLens / "render" meta {
             summary = "Renders a PDF."
+            receiving(pdfRequestLens)
             returning(OK)
         } bindContract POST to { realmName, stationaryPackName, _ ->
             { request ->
@@ -22,6 +23,6 @@ object RenderRoutes {
                 val inputStream = services.renderingService.render(realmName, stationaryPackName, pdf, resourceMap)
                 Response(OK).body(inputStream, null)
             }
-        },
+        }
     )
 }

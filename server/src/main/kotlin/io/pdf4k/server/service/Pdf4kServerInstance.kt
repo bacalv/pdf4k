@@ -21,13 +21,13 @@ class Pdf4kServerInstance(
     fun start() {
         val handler = contract {
             renderer = OpenApi3(ApiInfo("PDF4k Server", "v0.0.1", "PDF4k Server API"), Jackson)
-            descriptionPath = "/openapi.json"
+            descriptionPath = "/api/openapi.json"
             routes += this@Pdf4kServerInstance.routes
         }
         val routes = routes(
             handler,
             swaggerUiLite {
-                url = "/openapi.json"
+                url = "/api/openapi.json"
                 pageTitle = "PDF4k Server API"
                 persistAuthorization = true
             }

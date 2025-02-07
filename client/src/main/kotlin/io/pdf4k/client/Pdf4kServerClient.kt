@@ -16,17 +16,17 @@ import org.http4k.lens.MultipartFormFile
 import java.io.InputStream
 
 class Pdf4kServerClient(private val handler: HttpHandler) {
-    fun createRealm(realmName: String) = handler(Request(PUT, "/$realmName"))
+    fun createRealm(realmName: String) = handler(Request(PUT, "/realms/$realmName"))
 
-    fun listRealms() = handler(Request(GET, "/"))
+    fun listRealms() = handler(Request(GET, "/realms/"))
 
     fun createStationaryPack(realmName: String, stationaryPackName: String) =
-        handler(Request(PUT, "/$realmName/$stationaryPackName"))
+        handler(Request(PUT, "/realms/$realmName/$stationaryPackName"))
 
     fun findStationaryPack(realmName: String, stationaryPackName: String) =
-        handler(Request(GET, "/$realmName/$stationaryPackName"))
+        handler(Request(GET, "/realms/$realmName/$stationaryPackName"))
 
-    fun listsStationaryPacksForRealm(realmName: String) = handler(Request(GET, "/$realmName"))
+    fun listsStationaryPacksForRealm(realmName: String) = handler(Request(GET, "/realms/$realmName"))
 
     fun uploadPageTemplate(
         realmName: String,
@@ -42,7 +42,7 @@ class Pdf4kServerClient(private val handler: HttpHandler) {
                 inputStream
             )
         )
-        return handler(Request(POST, "/$realmName/$stationaryPackName/page-template")
+        return handler(Request(POST, "/realms/$realmName/$stationaryPackName/page-template")
             .with(fileFormBodyLens of multipartForm))
     }
 
@@ -60,7 +60,7 @@ class Pdf4kServerClient(private val handler: HttpHandler) {
                 inputStream
             )
         )
-        return handler(Request(POST, "/$realmName/$stationaryPackName/font")
+        return handler(Request(POST, "/realms/$realmName/$stationaryPackName/font")
             .with(fileFormBodyLens of multipartForm))
     }
 
@@ -78,12 +78,12 @@ class Pdf4kServerClient(private val handler: HttpHandler) {
                 inputStream
             )
         )
-        return handler(Request(POST, "/$realmName/$stationaryPackName/image")
+        return handler(Request(POST, "/realms/$realmName/$stationaryPackName/image")
             .with(fileFormBodyLens of multipartForm))
     }
 
     fun rendersAPdfImmediately(realmName: String, stationaryPackName: String, block: PdfBuilder.() -> Unit): Response {
         val request = PdfRequest(pdf { block() }.toDto())
-        return handler(Request(POST, "/$realmName/$stationaryPackName/render").with(pdfRequestLens of request))
+        return handler(Request(POST, "/realms/$realmName/$stationaryPackName/render").with(pdfRequestLens of request))
     }
 }

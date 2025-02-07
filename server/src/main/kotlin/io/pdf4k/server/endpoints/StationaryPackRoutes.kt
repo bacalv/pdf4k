@@ -22,7 +22,7 @@ import org.http4k.filter.ServerFilters
 
 object StationaryPackRoutes {
     fun routes(services: Pdf4kServices) = listOf(
-        "/" / realmPathLens / stationaryPackPathLens meta {
+        "/realms" / realmPathLens / stationaryPackPathLens meta {
             summary = "Creates a stationary pack."
         } bindContract PUT to { realmName, stationaryPackName ->
             {
@@ -31,7 +31,7 @@ object StationaryPackRoutes {
             }
         },
 
-        "/" / realmPathLens / stationaryPackPathLens meta {
+        "/realms" / realmPathLens / stationaryPackPathLens meta {
             summary = "Find a stationary pack."
         } bindContract GET to { realmName, stationaryPackName ->
             {
@@ -47,7 +47,7 @@ object StationaryPackRoutes {
             }
         },
 
-        "/" / realmPathLens meta {
+        "/realms" / realmPathLens meta {
             summary = "List stationary packs."
         } bindContract GET to { realmName ->
             {
@@ -56,7 +56,7 @@ object StationaryPackRoutes {
             }
         },
 
-        "/" / realmPathLens / stationaryPackPathLens / "page-template" meta {
+        "/realms" / realmPathLens / stationaryPackPathLens / "page-template" meta {
             summary = "Upload a page template."
             preFlightExtraction = PreFlightExtraction.IgnoreBody
         } bindContract POST to { realmName, stationaryPackName, _ ->
@@ -71,7 +71,7 @@ object StationaryPackRoutes {
             }
         },
 
-        "/" / realmPathLens / stationaryPackPathLens / "font" meta {
+        "/realms" / realmPathLens / stationaryPackPathLens / "font" meta {
             summary = "Upload a font."
             preFlightExtraction = PreFlightExtraction.IgnoreBody
         } bindContract POST to { realmName, stationaryPackName, _ ->
@@ -86,7 +86,7 @@ object StationaryPackRoutes {
             }
         },
 
-        "/" / realmPathLens / stationaryPackPathLens / "image" meta {
+        "/realms" / realmPathLens / stationaryPackPathLens / "image" meta {
             summary = "Upload an image."
             preFlightExtraction = PreFlightExtraction.IgnoreBody
         } bindContract POST to { realmName, stationaryPackName, _ ->

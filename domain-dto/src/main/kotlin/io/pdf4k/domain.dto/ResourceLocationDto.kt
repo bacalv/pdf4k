@@ -17,10 +17,10 @@ import java.net.URI
     Type(value = Uri::class, name = "uri"),
     Type(value = Custom::class, name = "custom")
 )
-sealed interface ResourceLocationDto {
-    data class Local(val name: String) : ResourceLocationDto
-    data class Uri(val uri: String) : ResourceLocationDto
-    data class Custom(val providerName: String, val name: String) : ResourceLocationDto
+sealed class ResourceLocationDto {
+    data class Local(val name: String) : ResourceLocationDto()
+    data class Uri(val uri: String) : ResourceLocationDto()
+    data class Custom(val providerName: String, val name: String) : ResourceLocationDto()
 }
 
 fun ResourceLocation.toDto() = when (this) {

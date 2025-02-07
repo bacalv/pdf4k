@@ -3,7 +3,6 @@ package io.pdf4k.util
 import java.net.URI
 import java.nio.file.FileSystems
 import java.nio.file.Files
-import java.nio.file.NoSuchFileException
 import java.nio.file.Path
 import kotlin.io.path.extension
 
@@ -20,7 +19,7 @@ object BasicClasspathScanner {
                         FileSystems.newFileSystem(URI.create("jar:file:$classpathEntry"), emptyMap<String, String>())
                     Files.walk(fileSystem.getPath(baseFolder)).filter { it.extension in extensions }.toList()
                 }
-            } catch (e: NoSuchFileException) {
+            } catch (e: Exception) {
                 emptyList()
             }
         }.flatten()

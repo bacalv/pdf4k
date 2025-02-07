@@ -32,12 +32,6 @@ data class StyleAttributes(
 ) {
     companion object {
         val DEFAULT_LEADING = leading(0f, 1.2f)
-        val DEFAULT_STYLE = StyleAttributes(
-            paddingTop = 0f,
-            paddingBottom = 5f,
-            paddingLeft = 4f,
-            paddingRight = 4f
-        )
 
         fun style(
             font: Font? = null,
@@ -105,6 +99,8 @@ data class StyleAttributes(
         )
 
         val noBorder = border(0f)
+
+        fun padding(n: Float) = style(paddingTop = n, paddingBottom = n, paddingLeft = n, paddingRight = n)
     }
 
     operator fun plus(other: StyleAttributes) = StyleAttributes(
@@ -119,10 +115,10 @@ data class StyleAttributes(
         other.align ?: align,
         other.valign ?: valign,
         other.cellBackground ?: cellBackground,
-        other.paddingTop ?: paddingTop ?: DEFAULT_STYLE.paddingTop,
-        other.paddingBottom ?: paddingBottom ?: DEFAULT_STYLE.paddingBottom,
-        other.paddingLeft ?: paddingLeft ?: DEFAULT_STYLE.paddingLeft,
-        other.paddingRight ?: paddingRight ?: DEFAULT_STYLE.paddingRight,
+        other.paddingTop ?: paddingTop,
+        other.paddingBottom ?: paddingBottom,
+        other.paddingLeft ?: paddingLeft,
+        other.paddingRight ?: paddingRight,
         other.borderWidthTop ?: borderWidthTop,
         other.borderWidthBottom ?: borderWidthBottom,
         other.borderWidthLeft ?: borderWidthLeft,
