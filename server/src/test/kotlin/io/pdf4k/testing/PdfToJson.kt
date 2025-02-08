@@ -6,8 +6,6 @@ import io.pdf4k.domain.StyleAttributes.Companion.style
 import io.pdf4k.domain.dto.toDto
 import io.pdf4k.json.domainDtoObjectMapper
 import io.pdf4k.server.endpoints.request.PdfRequest
-import java.time.ZoneId
-import java.time.ZonedDateTime
 
 fun main() {
     val examplePage = Page(
@@ -15,7 +13,7 @@ fun main() {
         style = null,
         content = Content(listOf(
             Paragraph(listOf(
-                Phrase(listOf(Chunk("Hello World!")))
+                Phrase(listOf(Chunk("POO OFF! THAT'S WHY")))
             ))
         )),
         blockContent = emptyMap()
@@ -25,14 +23,15 @@ fun main() {
             style(size = 16f),
             listOf(examplePage),
             PdfMetadata.empty,
-            Signature(
-                KeyName("KEY"),
-                "reason",
-                "location",
-                "contact",
-                ZonedDateTime.now(ZoneId.systemDefault())
-            ),
-            PdfPermissions("user", "owner", emptySet())
+//            Signature(
+//                KeyName("KEY"),
+//                "reason",
+//                "location",
+//                "contact",
+//                ZonedDateTime.now(ZoneId.systemDefault())
+//            ),
+            signature = null,
+            permissions = PdfPermissions("user", "owner", emptySet())
         ).toDto()
     )
     println(domainDtoObjectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(examplePdfRequest))

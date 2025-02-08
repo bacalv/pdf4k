@@ -10,16 +10,20 @@ object BasicClasspathScanner {
     fun findResources(baseFolder: String, extensions: Set<String>) = System.getProperty("java.class.path")
         .split(":")
         .map { classpathEntry ->
+            println("SCAN $classpathEntry")
             try {
                 if (Files.isDirectory(Path.of(classpathEntry))) {
                     Files.walk(Path.of(classpathEntry, baseFolder)).filter { it.extension in extensions }
                         .toList()
                 } else {
-                    val fileSystem =
-                        FileSystems.newFileSystem(URI.create("jar:file:$classpathEntry"), emptyMap<String, String>())
-                    Files.walk(fileSystem.getPath(baseFolder)).filter { it.extension in extensions }.toList()
+                    FileSystems.newFileSystem(URI.create("jar:file:$classpathEntry"), emptyMap<String, String>())
+                        .use { fileSystem ->
+                            Files.walk(fileSystem.getPath(baseFolder)).filter { it.extension in extensions }.toList()
+                        }
                 }
             } catch (e: Exception) {
+                println("EXCEPTION:: ${e.message}")
+                e.printStackTrace()
                 emptyList()
             }
         }.flatten()

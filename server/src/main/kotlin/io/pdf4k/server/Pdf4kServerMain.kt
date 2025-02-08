@@ -15,8 +15,11 @@ import io.pdf4k.server.service.rendering.RenderingService
 import org.http4k.server.Undertow
 import org.http4k.server.asServer
 
-fun main() {
-    loadConfig().pdf4kServer().start()
+object Pdf4kServerMain {
+    @JvmStatic
+    fun main(args: Array<String>) {
+        loadConfig().pdf4kServer().start()
+    }
 }
 
 fun Pdf4kServerConfiguration.pdf4kServer(): Pdf4kServerInstance {

@@ -20,3 +20,7 @@ dependencies {
     testImplementation(testFixtures(project(":domain")))
     testImplementation(libs.http4kClientOkHttp)
 }
+
+application {
+    mainClass.set("io.pdf4k.server.Pdf4kServerMain")
+}

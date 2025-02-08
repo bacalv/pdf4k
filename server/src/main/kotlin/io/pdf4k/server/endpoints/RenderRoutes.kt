@@ -21,7 +21,9 @@ object RenderRoutes {
             { request ->
                 val (pdf, resourceMap) = pdfRequestLens(request).pdf.toDomain()
                 val inputStream = services.renderingService.render(realmName, stationaryPackName, pdf, resourceMap)
-                Response(OK).body(inputStream, null)
+                Response(OK)
+                    .header("Content-Type", "application/pdf")
+                    .body(inputStream, null)
             }
         }
     )

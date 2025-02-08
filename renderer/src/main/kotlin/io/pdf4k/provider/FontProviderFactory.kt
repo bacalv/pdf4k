@@ -28,6 +28,7 @@ class FontProviderFactory(private val tempFileFactory: TempFileFactory) {
 
     init {
         BasicClasspathScanner.findResources(FONT_RESOURCE, setOf("ttf")).forEach {
+            println("REGISTERING FONT $it")
             factory.register(it.toUri().toString())
         }
     }
