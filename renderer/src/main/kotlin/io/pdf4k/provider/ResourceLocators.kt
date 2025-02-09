@@ -1,17 +1,18 @@
 package io.pdf4k.provider
 
 import io.pdf4k.domain.PdfError.*
+import io.pdf4k.domain.ResourceType
+import io.pdf4k.domain.ResourceType.*
 import java.io.InputStream
 
 class ResourceLocators(
     uriResourceLoader: UriResourceLoader,
     customProviders: Map<String, CustomResourceProvider>,
     fontProviderFactory: FontProviderFactory,
-    stationaryResourceLocatorNameMapper: (String) -> String = { "$it.pdf" },
-    localLoader: (String, String) -> InputStream? = { rootDir, it -> ResourceLocator::class.java.getResourceAsStream("/$rootDir/$it") }
+    loadResource: (ResourceType, String) -> InputStream? = { type, name -> ResourceLocator::class.java.getResourceAsStream("/${type.directory}/$name${type.suffix}") }
 ) {
-    val imageResourceLocator = ResourceLocator("images", uriResourceLoader, customProviders, localLoader, { it }, ::ImageNotFound)
-    val stationaryResourceLocator = ResourceLocator("stationary", uriResourceLoader, customProviders, localLoader, stationaryResourceLocatorNameMapper, ::PageTemplateNotFound)
-    private val fontResourceLocator = ResourceLocator("fonts", uriResourceLoader, customProviders, localLoader, { it }, ::FontNotFound)
+    val imageResourceLocator = ResourceLocator(Image, uriResourceLoader, customProviders, loadResource, ::ImageNotFound)
+    val stationaryResourceLocator = ResourceLocator(PageTemplate, uriResourceLoader, customProviders, loadResource, ::PageTemplateNotFound)
+    private val fontResourceLocator = ResourceLocator(Font, uriResourceLoader, customProviders, loadResource, ::FontNotFound)
     val fontProvider = fontProviderFactory.newFontProvider(fontResourceLocator)
 }

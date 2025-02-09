@@ -7,18 +7,18 @@ import io.pdf4k.domain.ResourceLocation.Local
 import io.pdf4k.domain.ResourceLocation.Remote
 import io.pdf4k.domain.ResourceLocation.Remote.Custom
 import io.pdf4k.domain.ResourceLocation.Remote.Uri
+import io.pdf4k.domain.ResourceType
 import java.io.InputStream
 
 class ResourceLocator(
-    private val rootDir: String,
+    private val type: ResourceType,
     private val uriResourceLoader: UriResourceLoader,
     private val customProviders: Map<String, CustomResourceProvider>,
-    private val localLoader: (String, String) -> InputStream?,
-    private val nameMapper: (String) -> String = { it },
+    private val loadResource: (ResourceType, String) -> InputStream?,
     private val notFound: (ResourceLocation) -> PdfError
 ) {
     fun load(location: ResourceLocation): InputStream = when (location) {
-        is Local -> localLoader(rootDir, nameMapper(location.name))
+        is Local -> loadResource(type, location.name)
         is Remote -> when (location) {
             is Uri -> uriResourceLoader.load(location.uri)
             is Custom -> loadFromCustomProvider(location)
