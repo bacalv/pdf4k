@@ -19,7 +19,7 @@ import java.io.OutputStream
 
 object InMemoryRenderer {
     private val privateKey = AbstractPdfRendererTest::class.java.getResource("/certs/private-key.pem")
-        ?.readText()?.let(::toPrivateKey)?.getOrNull() ?: fail("Could not load default private key")
+        ?.readText()?.let(::toPrivateKey) ?: fail("Could not load default private key")
     private val certificateChain = AbstractPdfRendererTest::class.java.getResource("/certs/cert.pem")
         ?.readText()?.let(::toCertificateChain)?.toList() ?: fail("Could not load default cert chain")
 

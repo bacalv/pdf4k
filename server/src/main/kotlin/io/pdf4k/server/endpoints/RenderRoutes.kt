@@ -20,10 +20,13 @@ object RenderRoutes {
         } bindContract POST to { realmName, stationaryPackName, _ ->
             { request ->
                 val (pdf, resourceMap) = pdfRequestLens(request).pdf.toDomain()
-                val inputStream = services.renderingService.render(realmName, stationaryPackName, pdf, resourceMap)
-                Response(OK)
-                    .header("Content-Type", "application/pdf")
-                    .body(inputStream, null)
+                runCatching {
+                    services.renderingService.render(realmName, stationaryPackName, pdf, resourceMap)
+                }.map { inputStream ->
+                    Response(OK)
+                        .header("Content-Type", "application/pdf")
+                        .body(inputStream)
+                }.getOrElse { ErrorHandler(it) }
             }
         }
     )

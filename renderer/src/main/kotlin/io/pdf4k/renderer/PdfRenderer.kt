@@ -3,13 +3,11 @@ package io.pdf4k.renderer
 import com.lowagie.text.Document
 import com.lowagie.text.pdf.*
 import io.pdf4k.domain.*
-import io.pdf4k.domain.Outcome.Success
+import io.pdf4k.domain.PdfError.RenderingError
 import io.pdf4k.provider.ResourceLocators
 import io.pdf4k.provider.StationaryLoader.loadStationary
 import io.pdf4k.provider.TempStreamFactory
 import io.pdf4k.renderer.PageRenderer.render
-import io.pdf4k.renderer.PdfError.Companion.PdfErrorException
-import io.pdf4k.renderer.PdfError.RenderingError
 import java.io.OutputStream
 
 class PdfRenderer(
@@ -18,26 +16,33 @@ class PdfRenderer(
     private val documentAssembler: DocumentAssembler
 ) {
     fun render(pdf: Pdf, outputStream: OutputStream) = with(pdf) {
-        val mainDocumentStream = tempStreamFactory.createTempOutputStream()
-        val contentBlocksDocumentStream = tempStreamFactory.createTempOutputStream()
-        resourceLocators.stationaryResourceLocator.loadStationary(pages).map { loadedStationary ->
-            createContext(
-                mainDocumentStream.outputStream,
-                contentBlocksDocumentStream.outputStream,
-                loadedStationary
-            )
-        }.combine { context -> paginateDocument(context) }.map { (context, _) ->
-            contentBlocksDocumentStream.outputStream.close()
-            val contentReader = PdfReader(contentBlocksDocumentStream.read())
-            context.copyNamedDestinations(contentReader)
-            context.mainDocument.setMetadata(metadata)
-            context.mainDocument.close()
-            mainDocumentStream.outputStream.close()
-            documentAssembler.assemble(pdf, PdfReader(mainDocumentStream.read()), contentReader, outputStream, context)
-            context.loadedStationary.values.forEach { it.reader.close() }
-        }.onFailure {
-            mainDocumentStream.outputStream.close()
-            contentBlocksDocumentStream.outputStream.close()
+        tempStreamFactory.createTempOutputStream().use { mainDocumentStream ->
+            tempStreamFactory.createTempOutputStream().use { contentBlocksDocumentStream ->
+                resourceLocators.stationaryResourceLocator.loadStationary(pages).let { loadedStationary ->
+                    createContext(
+                        mainDocumentStream.outputStream,
+                        contentBlocksDocumentStream.outputStream,
+                        loadedStationary
+                    )
+                }.let { context ->
+                    paginateDocument(context)
+                    contentBlocksDocumentStream.outputStream.close()
+                    PdfReader(contentBlocksDocumentStream.read()).let { contentReader ->
+                        context.copyNamedDestinations(contentReader)
+                        context.mainDocument.setMetadata(metadata)
+                        context.mainDocument.close()
+                        mainDocumentStream.outputStream.close()
+                        documentAssembler.assemble(
+                            pdf,
+                            PdfReader(mainDocumentStream.read()),
+                            contentReader,
+                            outputStream,
+                            context
+                        )
+                        context.loadedStationary.values.forEach { it.reader.close() }
+                    }
+                }
+            }
         }
     }
 
@@ -58,7 +63,7 @@ class PdfRenderer(
         }
     }
 
-    private fun Pdf.paginateDocument(context: RendererContext): PdfOutcome<Unit> = with(context) {
+    private fun Pdf.paginateDocument(context: RendererContext) = with(context) {
         try {
             val eventListener = PageEventListener(context)
             contentBlocksDocumentWriter.pageEvent = eventListener
@@ -71,11 +76,10 @@ class PdfRenderer(
             contentBlocksDocumentWriter.pageEvent = null
             eventListener.close()
             contentBlocksDocument.close()
-            Success(Unit)
-        } catch (e: PdfErrorException) {
-            Outcome.Failure(e.error)
+        } catch (e: PdfError) {
+            throw e
         } catch (e: Exception) {
-            Outcome.Failure(RenderingError(e))
+            throw RenderingError(e)
         }
     }
 

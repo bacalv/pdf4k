@@ -8,7 +8,6 @@ import com.lowagie.text.pdf.PdfWriter
 import io.pdf4k.domain.*
 import io.pdf4k.provider.ResourceLocators
 import io.pdf4k.renderer.ComponentRenderer.render
-import io.pdf4k.renderer.PdfError.Companion.PdfErrorException
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -72,21 +71,20 @@ class RendererContext(
 
     fun getImage(resource: ResourceLocation, width: Float?, height: Float?, rotation: Float?): Image =
         resourceLocators.imageResourceLocator.load(resource)
-            .map { stream -> Image.getInstance(stream.readAllBytes()) }
-            .onSuccess { img ->
+            .let { stream -> Image.getInstance(stream.readAllBytes()) }
+            .also { img ->
                 when {
                     width != null && height != null -> img.scaleToFit(width, height)
                     width != null -> img.scaleAbsoluteWidth(width)
                     height != null -> img.scaleAbsoluteHeight(height)
                 }
                 rotation?.let { img.setRotationDegrees(it) }
-            }.getOrElse { throw PdfErrorException(it) }
+            }
 
     fun getQrCode(component: Component.QrCode) =
         QrRenderer(resourceLocators).render(component.link, component.style)
-            .map { Image.getInstance(it) }
-            .onSuccess { it.scaleToFit(component.style.size.toFloat(), component.style.size.toFloat()) }
-            .getOrElse { throw PdfErrorException(it) }
+            .let { Image.getInstance(it) }
+            .also { it.scaleToFit(component.style.size.toFloat(), component.style.size.toFloat()) }
 
     fun getBlockPageMapping() = stationaryByPage.mapIndexed { pageNumber, (_, blocksFilled) ->
         pageNumber to blocksFilled

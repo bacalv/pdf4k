@@ -1,17 +1,12 @@
 package io.pdf4k.provider
 
-import io.pdf4k.domain.Outcome.Failure
-import io.pdf4k.domain.Outcome.Success
-import io.pdf4k.domain.PdfOutcome
+import io.pdf4k.domain.PdfError
+import io.pdf4k.domain.PdfError.CustomResourceProviderNotFound
 import io.pdf4k.domain.ResourceLocation
 import io.pdf4k.domain.ResourceLocation.Local
 import io.pdf4k.domain.ResourceLocation.Remote
 import io.pdf4k.domain.ResourceLocation.Remote.Custom
 import io.pdf4k.domain.ResourceLocation.Remote.Uri
-import io.pdf4k.domain.asFailure
-import io.pdf4k.domain.asSuccess
-import io.pdf4k.renderer.PdfError
-import io.pdf4k.renderer.PdfError.CustomResourceProviderNotFound
 import java.io.InputStream
 
 class ResourceLocator(
@@ -22,18 +17,18 @@ class ResourceLocator(
     private val nameMapper: (String) -> String = { it },
     private val notFound: (ResourceLocation) -> PdfError
 ) {
-    fun load(location: ResourceLocation): PdfOutcome<InputStream> = when (location) {
-        is Local -> localLoader(rootDir, nameMapper(location.name))?.asSuccess()
+    fun load(location: ResourceLocation): InputStream = when (location) {
+        is Local -> localLoader(rootDir, nameMapper(location.name))
         is Remote -> when (location) {
             is Uri -> uriResourceLoader.load(location.uri)
             is Custom -> loadFromCustomProvider(location)
         }
-    } ?: notFound(location).asFailure()
+    } ?: throw notFound(location)
 
-    private fun loadFromCustomProvider(location: Custom): PdfOutcome<InputStream> {
+    private fun loadFromCustomProvider(location: Custom): InputStream {
         val provider = customProviders[location.providerName] ?:
-            return Failure(CustomResourceProviderNotFound(location.providerName))
+            throw CustomResourceProviderNotFound(location.providerName)
         val result = provider.load(location.name)
-        return result?.let { Success(it) } ?: Failure(notFound(location))
+        return result ?: throw notFound(location)
     }
 }

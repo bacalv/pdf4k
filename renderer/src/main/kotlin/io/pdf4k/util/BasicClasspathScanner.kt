@@ -10,7 +10,6 @@ object BasicClasspathScanner {
     fun findResources(baseFolder: String, extensions: Set<String>) = System.getProperty("java.class.path")
         .split(":")
         .map { classpathEntry ->
-            println("SCAN $classpathEntry")
             try {
                 if (Files.isDirectory(Path.of(classpathEntry))) {
                     Files.walk(Path.of(classpathEntry, baseFolder)).filter { it.extension in extensions }
@@ -22,8 +21,6 @@ object BasicClasspathScanner {
                         }
                 }
             } catch (e: Exception) {
-                println("EXCEPTION:: ${e.message}")
-                e.printStackTrace()
                 emptyList()
             }
         }.flatten()

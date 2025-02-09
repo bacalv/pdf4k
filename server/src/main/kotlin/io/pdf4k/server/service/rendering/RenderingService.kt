@@ -37,9 +37,7 @@ class RenderingService(
                 ?: ResourceLocator::class.java.getResourceAsStream("/$type/$name$extension")
         }
         val pdfRenderer = PdfRenderer(resourceLocators, tempStreamFactory, documentAssembler)
-        pdfRenderer.render(pdf, outputStream).onFailure {
-            println(it)
-        }
+        pdfRenderer.render(pdf, outputStream)
         return ByteArrayInputStream(outputStream.toByteArray())
     }
 }

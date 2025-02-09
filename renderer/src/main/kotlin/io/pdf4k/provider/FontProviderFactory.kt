@@ -7,8 +7,8 @@ import io.pdf4k.domain.Font.*
 import io.pdf4k.domain.Font.BuiltIn.*
 import io.pdf4k.domain.Font.Included.Arial
 import io.pdf4k.domain.Font.Style.*
-import io.pdf4k.renderer.PdfError.Companion.PdfErrorException
-import io.pdf4k.renderer.PdfError.FontNotFound
+import io.pdf4k.domain.PdfError.FontNotFound
+import io.pdf4k.domain.ResourceLocation.Companion.local
 import io.pdf4k.util.BasicClasspathScanner
 import java.awt.Color
 import java.io.FileOutputStream
@@ -28,7 +28,6 @@ class FontProviderFactory(private val tempFileFactory: TempFileFactory) {
 
     init {
         BasicClasspathScanner.findResources(FONT_RESOURCE, setOf("ttf")).forEach {
-            println("REGISTERING FONT $it")
             factory.register(it.toUri().toString())
         }
     }
@@ -69,8 +68,8 @@ class FontProviderFactory(private val tempFileFactory: TempFileFactory) {
                 }
 
                 is Resource -> resourceLocator.load(defaultedFont.resourceLocation)
-                    .map { inputStream ->
-                        tempFileFactory.createTempFile(suffix = ".${defaultedFont.type}").let { tempFile ->
+                    .let { inputStream ->
+                        tempFileFactory.createTempFile(suffix = ".${defaultedFont.format}").let { tempFile ->
                             inputStream.copyTo(FileOutputStream(tempFile.toFile()))
                             customFontFactory.register(tempFile.toUri().toString())
                             customFontFactory.fontWithName(
@@ -80,7 +79,7 @@ class FontProviderFactory(private val tempFileFactory: TempFileFactory) {
                                 defaultedColour
                             )
                         }
-                    }.getOrNull() ?: throw PdfErrorException(FontNotFound(defaultedFont.resourceLocation.toString()))
+                    } ?: throw FontNotFound(defaultedFont.resourceLocation)
             }
 
         }
@@ -95,7 +94,7 @@ class FontProviderFactory(private val tempFileFactory: TempFileFactory) {
         } ?: run {
             val result = getFont(name, defaultedSize, defaultedStyle, defaultedColour)
             if (result.baseFont == null) {
-                throw PdfErrorException(FontNotFound(name))
+                throw FontNotFound(local(name))
             }
             baseFontCache[name] = result.baseFont
             result
