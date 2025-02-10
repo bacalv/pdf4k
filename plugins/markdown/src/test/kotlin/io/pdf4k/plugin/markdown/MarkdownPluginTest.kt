@@ -1,0 +1,37 @@
+package io.pdf4k.plugin.markdown
+
+import io.pdf4k.dsl.PdfBuilder.Companion.content
+import io.pdf4k.testing.AbstractPdfRendererTest
+import io.pdf4k.testing.PdfApprover
+import org.junit.jupiter.api.Test
+
+class MarkdownPluginTest: AbstractPdfRendererTest() {
+    @Test
+    fun `renders markdown`(approver: PdfApprover) {
+        content {
+            markdown("""
+                # Heading 1
+                
+                ## Heading 2
+                
+                ### Heading 3
+                
+                #### Heading 4
+                
+                ##### Heading 5
+                
+                ###### Heading 6
+
+                # Bold / Italic
+                
+                This is *italic*.
+                This is **bold**.
+                This is ***bold italic***.
+                
+                # Block quotes
+                
+                > Text in a block quote
+            """.trimIndent())
+        }.approve(approver)
+    }
+}

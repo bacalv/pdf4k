@@ -17,5 +17,6 @@ include(
     "libraries:dsl",
     "libraries:renderer",
     "libraries:client",
-    "applications:server"
+    "applications:server",
+    "plugins:markdown"
 )

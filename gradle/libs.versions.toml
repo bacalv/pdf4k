@@ -1,5 +1,6 @@
 [versions]
 bouncyCastleBcmailVersion = "1.80"
+commonMarkVersion = "0.24.0"
 http4kVersion = "5.46.0.0"
 jacksonVersion = "2.18.2"
 junitJupiterVersion = "5.11.3"
@@ -13,6 +14,7 @@ qrCodeVersion = "4.2.0"
 
 [libraries]
 bouncyCastleBcmail = { module = "org.bouncycastle:bcmail-jdk18on", version.ref="bouncyCastleBcmailVersion" }
+commonMark = { module = "org.commonmark:commonmark", version.ref="commonMarkVersion" }
 http4kApiOpenApi = { module = "org.http4k:http4k-api-openapi", version.ref="http4kVersion" }
 http4kBom = { module = "org.http4k:http4k-bom", version.ref="http4kVersion" }
 http4kClientOkHttp = { module = "org.http4k:http4k-client-okhttp", version.ref="http4kVersion" }
