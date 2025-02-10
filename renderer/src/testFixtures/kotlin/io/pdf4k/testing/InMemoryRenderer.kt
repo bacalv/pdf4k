@@ -31,7 +31,7 @@ object InMemoryRenderer {
     }
     private val documentAssembler = DocumentAssembler(keyProvider)
     private val customProvider = object : CustomResourceProvider {
-        override fun load(name: String) = classpathResource("/custom/$name")
+        override fun load(name: String) = runCatching { classpathResource("/custom/$name") }.getOrNull()
     }
     private val fontProviderFactory = FontProviderFactory(defaultTempFileFactory)
     private val resourceLocators =
