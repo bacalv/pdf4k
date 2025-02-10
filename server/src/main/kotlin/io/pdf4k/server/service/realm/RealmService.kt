@@ -6,11 +6,21 @@ import io.pdf4k.server.domain.StationaryPack
 import io.pdf4k.server.domain.StationaryPackList
 
 class RealmService {
+    companion object {
+        const val DEFAULT_REALM_NAME = "root"
+        const val DEFAULT_STATIONARY_PACK_NAME = "default"
+    }
+
     data class StationaryPackKey(val realmName: String, var stationaryPackName: String)
 
     private val realms = mutableListOf<Realm>()
     private val realmStationaryPacks = mutableMapOf<Realm, MutableList<StationaryPack>>()
     private val stationaryPacks = mutableMapOf<StationaryPackKey, StationaryPack>()
+
+    init {
+        stationaryPacks[StationaryPackKey(DEFAULT_REALM_NAME, DEFAULT_STATIONARY_PACK_NAME)] =
+            StationaryPack(DEFAULT_STATIONARY_PACK_NAME)
+    }
 
     fun addRealm(realm: Realm) {
         realms += realm
@@ -18,7 +28,7 @@ class RealmService {
 
     fun listRealms(): List<Realm> = realms
 
-    fun getRealm(realmName: String) = realms.firstOrNull { it.name == realmName }
+    private fun getRealm(realmName: String) = realms.firstOrNull { it.name == realmName }
 
     fun addStationaryPack(realmName: String, stationaryPackName: String) {
         val realm = getRealm(realmName)!!

@@ -2,6 +2,7 @@ package io.pdf4k.testing
 
 import io.pdf4k.domain.KeyName
 import io.pdf4k.domain.Pdf
+import io.pdf4k.domain.ResourceLocation.Companion.classpathResource
 import io.pdf4k.provider.CustomResourceProvider
 import io.pdf4k.provider.FontProviderFactory
 import io.pdf4k.provider.KeyProvider
@@ -30,7 +31,7 @@ object InMemoryRenderer {
     }
     private val documentAssembler = DocumentAssembler(keyProvider)
     private val customProvider = object : CustomResourceProvider {
-        override fun load(name: String) = this::class.java.getResourceAsStream("/custom/$name")
+        override fun load(name: String) = classpathResource("/custom/$name")
     }
     private val fontProviderFactory = FontProviderFactory(defaultTempFileFactory)
     private val resourceLocators =

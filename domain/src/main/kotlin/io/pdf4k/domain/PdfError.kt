@@ -7,4 +7,5 @@ sealed class PdfError : RuntimeException() {
     data class FontNotFound(val resource: ResourceLocation): PdfError()
     data class ImageNotFound(val resource: ResourceLocation): PdfError()
     data class CustomResourceProviderNotFound(val providerName: String): PdfError()
+    data class ClasspathResourceNotFound(val path: String): PdfError()
 }

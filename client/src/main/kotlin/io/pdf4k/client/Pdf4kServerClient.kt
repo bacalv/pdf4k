@@ -82,7 +82,7 @@ class Pdf4kServerClient(private val handler: HttpHandler) {
             .with(fileFormBodyLens of multipartForm))
     }
 
-    fun rendersAPdfImmediately(realmName: String, stationaryPackName: String, block: PdfBuilder.() -> Unit): Response {
+    fun renderImmediate(realmName: String, stationaryPackName: String, block: PdfBuilder.() -> Unit): Response {
         val request = PdfRequest(pdf { block() }.toDto())
         return handler(Request(POST, "/realms/$realmName/$stationaryPackName/render").with(pdfRequestLens of request))
     }

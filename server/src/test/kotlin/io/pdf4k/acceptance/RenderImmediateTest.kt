@@ -31,4 +31,15 @@ class RenderImmediateTest : AbstractServerTest() {
             }
         }.approve(approver)
     }
+
+    @Test
+    fun `renders a PDF synchronously in default realm`(approver: PdfApprover): Unit = with(emptyScenario()) {
+        operator.rendersAPdfImmediately {
+            page {
+                content {
+                    +"Hello world"
+                }
+            }
+        }.approve(approver)
+    }
 }

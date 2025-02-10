@@ -7,10 +7,14 @@ import io.pdf4k.client.domain.ClientLens.stationaryPacksListLens
 import io.pdf4k.client.domain.RealmList
 import io.pdf4k.client.domain.StationaryPack
 import io.pdf4k.client.domain.StationaryPackList
+import io.pdf4k.domain.ResourceLocation.Companion.classpathResource
 import io.pdf4k.dsl.PdfBuilder
+import io.pdf4k.server.service.realm.RealmService.Companion.DEFAULT_REALM_NAME
+import io.pdf4k.server.service.realm.RealmService.Companion.DEFAULT_STATIONARY_PACK_NAME
 import org.http4k.core.Status
 import org.http4k.core.Status.Companion.OK
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.fail
 import java.io.ByteArrayOutputStream
 
 class Operator(private val client: Pdf4kServerClient) {
@@ -49,7 +53,7 @@ class Operator(private val client: Pdf4kServerClient) {
         pageTemplateName: String,
         expectedStatus: Status = OK
     ) {
-        val inputStream = this::class.java.getResourceAsStream("/stationary/$localPdfFile")!!
+        val inputStream = classpathResource("/stationary/$localPdfFile")!!
         val response = client.uploadPageTemplate(realmName, stationaryPackName, inputStream, pageTemplateName)
         assertEquals(expectedStatus, response.status)
     }
@@ -61,7 +65,7 @@ class Operator(private val client: Pdf4kServerClient) {
         fontName: String,
         expectedStatus: Status = OK
     ) {
-        val inputStream = this::class.java.getResourceAsStream("/fonts/$localFontFile")!!
+        val inputStream = classpathResource("/fonts/$localFontFile") ?: fail("Could not load font: $localFontFile")
         val response = client.uploadFont(realmName, stationaryPackName, inputStream, fontName)
         assertEquals(expectedStatus, response.status)
     }
@@ -73,13 +77,18 @@ class Operator(private val client: Pdf4kServerClient) {
         imageName: String,
         expectedStatus: Status = OK
     ) {
-        val inputStream = this::class.java.getResourceAsStream("/images/$localImageFile")!!
+        val inputStream = classpathResource("/images/$localImageFile")!!
         val response = client.uploadImage(realmName, stationaryPackName, inputStream, imageName)
         assertEquals(expectedStatus, response.status)
     }
 
-    fun rendersAPdfImmediately(realmName: String, stationaryPackName: String, expectedStatus: Status = OK, block: PdfBuilder.() -> Unit): ByteArray {
-        val response = client.rendersAPdfImmediately(realmName, stationaryPackName, block)
+    fun rendersAPdfImmediately(
+        realmName: String = DEFAULT_REALM_NAME,
+        stationaryPackName: String = DEFAULT_STATIONARY_PACK_NAME,
+        expectedStatus: Status = OK,
+        block: PdfBuilder.() -> Unit
+    ): ByteArray {
+        val response = client.renderImmediate(realmName, stationaryPackName, block)
         assertEquals(expectedStatus, response.status)
         val result = ByteArrayOutputStream()
         response.body.stream.copyTo(result)

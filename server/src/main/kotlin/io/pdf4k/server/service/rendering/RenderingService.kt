@@ -1,10 +1,10 @@
 package io.pdf4k.server.service.rendering
 
 import io.pdf4k.domain.Pdf
+import io.pdf4k.domain.ResourceLocation.Companion.classpathResource
 import io.pdf4k.domain.ResourceType.*
 import io.pdf4k.domain.dto.ResourceMap
 import io.pdf4k.provider.FontProviderFactory
-import io.pdf4k.provider.ResourceLocator
 import io.pdf4k.provider.ResourceLocators
 import io.pdf4k.provider.TempFileFactory.Companion.defaultTempFileFactory
 import io.pdf4k.provider.TempStreamFactory
@@ -25,7 +25,6 @@ class RenderingService(
 ) {
     fun render(realmName: String, stationaryPackName: String, pdf: Pdf, resourceMap: ResourceMap): InputStream {
         val stationaryPack = realmService.findStationaryPack(realmName, stationaryPackName)
-        val outputStream = ByteArrayOutputStream()
         val fontProviderFactory = FontProviderFactory(defaultTempFileFactory)
         val resourceLocators = ResourceLocators(defaultResourceLoader, emptyMap(), fontProviderFactory) { type, name ->
             when (type) {
@@ -33,9 +32,10 @@ class RenderingService(
                 Font -> stationaryPack.fonts[name]?.value
                 Image -> stationaryPack.images[name]?.value
             }?.let { multipartFileStore.get(it) }
-                ?: ResourceLocator::class.java.getResourceAsStream("/${type.directory}/$name${type.suffix}")
+                ?: classpathResource(type(name))
         }
         val pdfRenderer = PdfRenderer(resourceLocators, tempStreamFactory, documentAssembler)
+        val outputStream = ByteArrayOutputStream()
         pdfRenderer.render(pdf, outputStream)
         return ByteArrayInputStream(outputStream.toByteArray())
     }

@@ -1,5 +1,6 @@
 package io.pdf4k.testing
 
+import io.pdf4k.domain.ResourceLocation.Companion.classpathResource
 import io.pdf4k.testing.domain.randomPort
 import org.http4k.core.Request
 import org.http4k.core.Response
@@ -13,7 +14,7 @@ class RemoteServer {
     private lateinit var server: Http4kServer
 
     val handler = { request: Request ->
-        val resource = this::class.java.getResourceAsStream("/remote${request.uri.path}")
+        val resource = classpathResource("/remote${request.uri.path}")
         resource?.let {
             Response(OK).body(resource)
         } ?: Response(NOT_FOUND)

@@ -9,11 +9,12 @@ import org.http4k.core.Status.Companion.NOT_FOUND
 object ErrorHandler {
     operator fun invoke(e: Throwable) = when (e) {
         is PdfError -> when (e) {
+            is ClasspathResourceNotFound,
             is CustomResourceProviderNotFound,
             is FontNotFound,
             is ImageNotFound,
-            is PageTemplateNotFound -> NOT_FOUND
             is KeyParseError,
+            is PageTemplateNotFound -> NOT_FOUND
             is RenderingError -> INTERNAL_SERVER_ERROR
         }.let { status -> Response(status).body(e.toString()) }
 

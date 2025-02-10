@@ -2,6 +2,7 @@ package io.pdf4k.domain
 
 import io.pdf4k.domain.ResourceLocation.Remote.Custom
 import io.pdf4k.domain.ResourceLocation.Remote.Uri
+import java.io.InputStream
 import java.net.URI
 
 sealed interface ResourceLocation {
@@ -16,5 +17,7 @@ sealed interface ResourceLocation {
         fun uri(uri: URI) = Uri(uri)
         fun uri(uri: String) = Uri(URI(uri))
         fun custom(providerName: String, name: String) = Custom(providerName, name)
+        fun classpathResource(name: String): InputStream = ResourceLocation::class.java.getResourceAsStream(name)
+            ?: throw PdfError.ClasspathResourceNotFound(name)
     }
 }
