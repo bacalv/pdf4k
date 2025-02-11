@@ -9,4 +9,3 @@ WORKDIR /
 COPY scripts/run.sh /app/run.sh
 RUN chmod +x /app/run.sh
 ENTRYPOINT ["/bin/sh", "/app/run.sh"]
-#ENTRYPOINT ["java", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap", "-Djava.security.egd=file:/dev/./urandom","-jar","/app/server.jar"]
