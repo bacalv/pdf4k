@@ -1,8 +1,6 @@
 package io.pdf4k.domain.dto
 
 import com.oneeyedmen.okeydoke.Approver
-import com.oneeyedmen.okeydoke.internal.DirectoryFinder
-import com.oneeyedmen.okeydoke.junit5.ApprovalsExtension
 import io.pdf4k.domain.*
 import io.pdf4k.domain.Font.Resource
 import io.pdf4k.domain.Font.Style.Bold
@@ -18,6 +16,7 @@ import io.pdf4k.domain.StyleAttributes.Companion.noBorder
 import io.pdf4k.domain.StyleAttributes.Companion.style
 import io.pdf4k.domain.VerticalAlignment.Middle
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
+import io.pdf4k.json.testing.jsonApprover
 import io.pdf4k.json.toObject
 import io.pdf4k.json.toPrettyJsonString
 import io.pdf4k.testing.domain.Musician.Companion.musicians
@@ -27,13 +26,12 @@ import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.extension.RegisterExtension
 import java.awt.Color
 import java.awt.Color.*
-import java.io.File
 import java.time.LocalDate
 import java.time.ZoneId
 
 class SerializeTest {
     @RegisterExtension
-    var approvals: ApprovalsExtension = ApprovalsExtension(DirectoryFinder.firstDirThatExists(File("src/test/resources")))
+    var approver = jsonApprover()
 
     @Test
     fun `convert pdf to json`(approver: Approver) {
@@ -124,7 +122,6 @@ class SerializeTest {
                 }
             }
         }.approve(approver)
-
     }
 
     companion object {

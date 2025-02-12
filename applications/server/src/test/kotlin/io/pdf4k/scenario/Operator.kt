@@ -11,12 +11,20 @@ import io.pdf4k.domain.ResourceLocation.Companion.classpathResource
 import io.pdf4k.dsl.PdfBuilder
 import io.pdf4k.server.service.realm.RealmService.Companion.DEFAULT_REALM_NAME
 import io.pdf4k.server.service.realm.RealmService.Companion.DEFAULT_STATIONARY_PACK_NAME
+import org.http4k.core.Method.GET
+import org.http4k.core.Request
 import org.http4k.core.Status
 import org.http4k.core.Status.Companion.OK
 import org.junit.jupiter.api.Assertions.assertEquals
 import java.io.ByteArrayOutputStream
 
 class Operator(private val client: Pdf4kServerClient) {
+    fun viewsOpenAPIDocs(): String {
+        val response = client.handler(Request(GET, "/api/openapi.json"))
+        assertEquals(OK, response.status)
+        return response.bodyString()
+    }
+
     fun createsRealm(realmName: String, expectedStatus: Status = OK) {
         val response = client.createRealm(realmName)
         assertEquals(expectedStatus, response.status)

@@ -1,0 +1,301 @@
+{
+  "info" : {
+    "title" : "PDF4k Server",
+    "version" : "v0.0.1",
+    "description" : "PDF4k Server API"
+  },
+  "tags" : [ ],
+  "servers" : [ {
+    "url" : "/",
+    "description" : null
+  } ],
+  "paths" : {
+    "/realms" : {
+      "get" : {
+        "summary" : "List realms.",
+        "description" : null,
+        "tags" : [ "" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "example" : {
+                  "realms" : [ "realm-1", "realm-2" ]
+                },
+                "schema" : {
+                  "$ref" : "#/components/schemas/RealmListResponse",
+                  "example" : null,
+                  "format" : null
+                }
+              }
+            }
+          }
+        },
+        "security" : [ ],
+        "operationId" : "getRealms",
+        "deprecated" : false,
+        "callbacks" : null
+      }
+    },
+    "/realms/{realm}" : {
+      "get" : {
+        "summary" : "List stationary packs.",
+        "description" : null,
+        "tags" : [ "" ],
+        "parameters" : [ {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "path",
+          "name" : "realm",
+          "required" : true,
+          "description" : null
+        } ],
+        "responses" : { },
+        "security" : [ ],
+        "operationId" : "getRealms_realm",
+        "deprecated" : false,
+        "callbacks" : null
+      },
+      "put" : {
+        "summary" : "Creates a new realm.",
+        "description" : null,
+        "tags" : [ "" ],
+        "parameters" : [ {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "path",
+          "name" : "realm",
+          "required" : true,
+          "description" : null
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "",
+            "content" : { }
+          }
+        },
+        "security" : [ ],
+        "operationId" : "putRealms_realm",
+        "deprecated" : false,
+        "callbacks" : null
+      }
+    },
+    "/realms/{realm}/{stationaryPack}" : {
+      "get" : {
+        "summary" : "Find a stationary pack.",
+        "description" : null,
+        "tags" : [ "" ],
+        "parameters" : [ {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "path",
+          "name" : "realm",
+          "required" : true,
+          "description" : null
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "path",
+          "name" : "stationaryPack",
+          "required" : true,
+          "description" : null
+        } ],
+        "responses" : { },
+        "security" : [ ],
+        "operationId" : "getRealms_realm__stationaryPack",
+        "deprecated" : false,
+        "callbacks" : null
+      },
+      "put" : {
+        "summary" : "Creates a stationary pack.",
+        "description" : null,
+        "tags" : [ "" ],
+        "parameters" : [ {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "path",
+          "name" : "realm",
+          "required" : true,
+          "description" : null
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "path",
+          "name" : "stationaryPack",
+          "required" : true,
+          "description" : null
+        } ],
+        "responses" : { },
+        "security" : [ ],
+        "operationId" : "putRealms_realm__stationaryPack",
+        "deprecated" : false,
+        "callbacks" : null
+      }
+    },
+    "/realms/{realm}/{stationaryPack}/font" : {
+      "post" : {
+        "summary" : "Upload a font.",
+        "description" : null,
+        "tags" : [ "" ],
+        "parameters" : [ {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "path",
+          "name" : "realm",
+          "required" : true,
+          "description" : null
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "path",
+          "name" : "stationaryPack",
+          "required" : true,
+          "description" : null
+        } ],
+        "responses" : { },
+        "security" : [ ],
+        "operationId" : "postRealms_realm__stationaryPack_Font",
+        "deprecated" : false,
+        "callbacks" : null
+      }
+    },
+    "/realms/{realm}/{stationaryPack}/image" : {
+      "post" : {
+        "summary" : "Upload an image.",
+        "description" : null,
+        "tags" : [ "" ],
+        "parameters" : [ {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "path",
+          "name" : "realm",
+          "required" : true,
+          "description" : null
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "path",
+          "name" : "stationaryPack",
+          "required" : true,
+          "description" : null
+        } ],
+        "responses" : { },
+        "security" : [ ],
+        "operationId" : "postRealms_realm__stationaryPack_Image",
+        "deprecated" : false,
+        "callbacks" : null
+      }
+    },
+    "/realms/{realm}/{stationaryPack}/page-template" : {
+      "post" : {
+        "summary" : "Upload a page template.",
+        "description" : null,
+        "tags" : [ "" ],
+        "parameters" : [ {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "path",
+          "name" : "realm",
+          "required" : true,
+          "description" : null
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "path",
+          "name" : "stationaryPack",
+          "required" : true,
+          "description" : null
+        } ],
+        "responses" : { },
+        "security" : [ ],
+        "operationId" : "postRealms_realm__stationaryPack_Page_template",
+        "deprecated" : false,
+        "callbacks" : null
+      }
+    },
+    "/realms/{realm}/{stationaryPack}/render" : {
+      "post" : {
+        "summary" : "Renders a PDF.",
+        "description" : null,
+        "tags" : [ "" ],
+        "parameters" : [ {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "path",
+          "name" : "realm",
+          "required" : true,
+          "description" : null
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "path",
+          "name" : "stationaryPack",
+          "required" : true,
+          "description" : null
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "example" : null,
+              "schema" : { }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "",
+            "content" : { }
+          }
+        },
+        "security" : [ ],
+        "operationId" : "postRealms_realm__stationaryPack_Render",
+        "deprecated" : false,
+        "callbacks" : null
+      }
+    }
+  },
+  "webhooks" : null,
+  "components" : {
+    "schemas" : {
+      "RealmListResponse" : {
+        "properties" : {
+          "realms" : {
+            "items" : {
+              "format" : null,
+              "type" : "string"
+            },
+            "example" : [ "realm-1", "realm-2" ],
+            "format" : null,
+            "type" : "array",
+            "nullable" : false
+          }
+        },
+        "example" : {
+          "realms" : [ "realm-1", "realm-2" ]
+        },
+        "format" : null,
+        "type" : "object",
+        "required" : [ "realms" ]
+      }
+    },
+    "securitySchemes" : { }
+  },
+  "openapi" : "3.0.0"
+}

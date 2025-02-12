@@ -11,28 +11,23 @@ import io.pdf4k.domain.Font
     property = "type"
 )
 @JsonSubTypes(
-    Type(value = FontDto.Included.Arial::class, name = "arial"),
-    Type(value = FontDto.BuiltIn.Courier::class, name = "courier"),
-    Type(value = FontDto.BuiltIn.Dingbats::class, name = "dingbats"),
-    Type(value = FontDto.BuiltIn.Helvetica::class, name = "helvetica"),
-    Type(value = FontDto.BuiltIn.Symbol::class, name = "symbol"),
-    Type(value = FontDto.BuiltIn.TimesRoman::class, name = "times-roman"),
+    Type(value = FontDto.Arial::class, name = "arial"),
+    Type(value = FontDto.Courier::class, name = "courier"),
+    Type(value = FontDto.Dingbats::class, name = "dingbats"),
+    Type(value = FontDto.Helvetica::class, name = "helvetica"),
+    Type(value = FontDto.Symbol::class, name = "symbol"),
+    Type(value = FontDto.TimesRoman::class, name = "times-roman"),
     Type(value = FontDto.Resource::class, name = "resource"),
 )
 sealed class FontDto {
-    sealed class Included: FontDto() {
-        data object Arial: Included()
-    }
+    data object Arial: FontDto()
+    data object Courier: FontDto()
+    data object Dingbats: FontDto()
+    data object Helvetica: FontDto()
+    data object Symbol: FontDto()
+    data object TimesRoman: FontDto()
 
-    sealed class BuiltIn: FontDto() {
-        data object Courier: BuiltIn()
-        data object Dingbats: BuiltIn()
-        data object Helvetica: BuiltIn()
-        data object Symbol: BuiltIn()
-        data object TimesRoman: BuiltIn()
-    }
-
-    data class Resource(val ref: ResourceRef, val name: String, val type: String) : FontDto()
+    data class Resource(val ref: ResourceRef, val name: String, val format: String) : FontDto()
 
     enum class Style {
         Plain,
@@ -43,12 +38,12 @@ sealed class FontDto {
 }
 
 fun Font.toDto(resourceMap: ResourceMapDto.Builder) = when (this) {
-    Font.BuiltIn.Courier -> FontDto.BuiltIn.Courier
-    Font.BuiltIn.Dingbats -> FontDto.BuiltIn.Dingbats
-    Font.BuiltIn.Helvetica -> FontDto.BuiltIn.Helvetica
-    Font.BuiltIn.Symbol -> FontDto.BuiltIn.Symbol
-    Font.BuiltIn.TimesRoman -> FontDto.BuiltIn.TimesRoman
-    Font.Included.Arial -> FontDto.Included.Arial
+    Font.BuiltIn.Courier -> FontDto.Courier
+    Font.BuiltIn.Dingbats -> FontDto.Dingbats
+    Font.BuiltIn.Helvetica -> FontDto.Helvetica
+    Font.BuiltIn.Symbol -> FontDto.Symbol
+    Font.BuiltIn.TimesRoman -> FontDto.TimesRoman
+    Font.Included.Arial -> FontDto.Arial
     is Font.Resource -> FontDto.Resource(resourceMap.resourceRef(resourceLocation.toDto()), name, format)
 }
 
@@ -60,12 +55,12 @@ fun Font.Style.toDto() = when (this) {
 }
 
 fun FontDto.toDomain(resourceMap: ResourceMap) = when (this) {
-    FontDto.BuiltIn.Courier -> Font.BuiltIn.Courier
-    FontDto.BuiltIn.Dingbats -> Font.BuiltIn.Dingbats
-    FontDto.BuiltIn.Helvetica -> Font.BuiltIn.Helvetica
-    FontDto.BuiltIn.Symbol -> Font.BuiltIn.Symbol
-    FontDto.BuiltIn.TimesRoman -> Font.BuiltIn.TimesRoman
-    FontDto.Included.Arial -> Font.Included.Arial
+    FontDto.Courier -> Font.BuiltIn.Courier
+    FontDto.Dingbats -> Font.BuiltIn.Dingbats
+    FontDto.Helvetica -> Font.BuiltIn.Helvetica
+    FontDto.Symbol -> Font.BuiltIn.Symbol
+    FontDto.TimesRoman -> Font.BuiltIn.TimesRoman
+    FontDto.Arial -> Font.Included.Arial
     is FontDto.Resource -> Font.Resource(resourceMap.getResourceLocation(ref), name)
 }
 

@@ -15,7 +15,7 @@ import org.http4k.lens.MultipartForm
 import org.http4k.lens.MultipartFormFile
 import java.io.InputStream
 
-class Pdf4kServerClient(private val handler: HttpHandler) {
+class Pdf4kServerClient(val handler: HttpHandler) {
     fun createRealm(realmName: String) = handler(Request(PUT, "/realms/$realmName"))
 
     fun listRealms() = handler(Request(GET, "/realms/"))

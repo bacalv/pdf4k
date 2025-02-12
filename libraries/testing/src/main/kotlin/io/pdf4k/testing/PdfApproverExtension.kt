@@ -61,11 +61,11 @@ class PdfApproverExtension : ParameterResolver, BeforeTestExecutionCallback, Aft
         }
     }
 
-    private companion object {
+    companion object {
         val DEFAULT_SOURCE_ROOT = System.getProperty("pdf.approver.source-root") ?: "src/test/resources"
-        const val STORE_KEY = "pdf.approver"
+        private const val STORE_KEY = "pdf.approver"
 
-        fun nameFor(testClass: Class<*>, testMethod: Method, displayName: String): String {
+        private fun nameFor(testClass: Class<*>, testMethod: Method, displayName: String): String {
             val className = testClass.getAnnotation(Name::class.java)?.value ?: testClass.simpleName
             val methodName = testMethod.getAnnotation(Name::class.java)?.value ?: testMethod.name
             val display = if (displayName.startsWith(methodName)) "" else ".$displayName"

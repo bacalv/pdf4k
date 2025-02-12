@@ -18,6 +18,7 @@ dependencies {
     testImplementation(project(":libraries::dsl"))
     testImplementation(project(":libraries::client"))
     testImplementation(testFixtures(project(":libraries::domain")))
+    testImplementation(testFixtures(project(":libraries::domain-dto")))
     testImplementation(libs.http4kClientOkHttp)
 }
 
