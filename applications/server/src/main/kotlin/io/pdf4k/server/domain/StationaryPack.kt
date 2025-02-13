@@ -5,4 +5,8 @@ data class StationaryPack(
     val pageTemplates: MutableMap<String, FileId> = mutableMapOf(),
     val fonts: MutableMap<String, FileId> = mutableMapOf(),
     val images: MutableMap<String, FileId> = mutableMapOf()
-)
+) {
+    companion object {
+        val emptyStationaryPack = StationaryPack("empty")
+    }
+}

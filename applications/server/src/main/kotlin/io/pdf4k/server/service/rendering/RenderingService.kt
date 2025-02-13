@@ -11,20 +11,18 @@ import io.pdf4k.provider.TempStreamFactory
 import io.pdf4k.provider.UriResourceLoader.Companion.defaultResourceLoader
 import io.pdf4k.renderer.DocumentAssembler
 import io.pdf4k.renderer.PdfRenderer
+import io.pdf4k.server.domain.StationaryPack
 import io.pdf4k.server.service.MultipartFileStore
-import io.pdf4k.server.service.realm.RealmService
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 
 class RenderingService(
-    private val realmService: RealmService,
     private val tempStreamFactory: TempStreamFactory,
     private val documentAssembler: DocumentAssembler,
     private val multipartFileStore: MultipartFileStore
 ) {
-    fun render(realmName: String, stationaryPackName: String, pdf: Pdf, resourceMap: ResourceMap): InputStream {
-        val stationaryPack = realmService.findStationaryPack(realmName, stationaryPackName)
+    fun render(stationaryPack: StationaryPack, pdf: Pdf, resourceMap: ResourceMap): InputStream {
         val fontProviderFactory = FontProviderFactory(defaultTempFileFactory)
         val resourceLocators = ResourceLocators(defaultResourceLoader, emptyMap(), fontProviderFactory) { type, name ->
             when (type) {

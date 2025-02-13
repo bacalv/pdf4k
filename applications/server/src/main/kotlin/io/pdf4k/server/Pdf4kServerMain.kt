@@ -12,7 +12,6 @@ import io.pdf4k.server.endpoints.routes
 import io.pdf4k.server.service.MultipartFileStore.Companion.tempFileMultipartFileStore
 import io.pdf4k.server.service.Pdf4kServerInstance
 import io.pdf4k.server.service.Pdf4kServices
-import io.pdf4k.server.service.realm.RealmService
 import io.pdf4k.server.service.rendering.RenderingService
 import org.http4k.server.Undertow
 import org.http4k.server.asServer
@@ -25,7 +24,6 @@ object Pdf4kServerMain {
 }
 
 fun Pdf4kServerConfiguration.pdf4kServer(): Pdf4kServerInstance {
-    val realmService = RealmService()
     val documentAssembler = DocumentAssembler { keyName ->
         runCatching {
             val cert = Pdf4kServerConfiguration::class.java.getResourceAsStream("/keys/${keyName.name}/cert.pem")!!
@@ -33,7 +31,7 @@ fun Pdf4kServerConfiguration.pdf4kServer(): Pdf4kServerInstance {
             KeyProvider.Key(toPrivateKey(String(pk.readAllBytes())), toCertificateChain(String(cert.readAllBytes())))
         }.getOrElse { throw PdfError.KeyNotFound(keyName.name) }
     }
-    val renderingService = RenderingService(realmService, inMemoryTempStreamFactory, documentAssembler, tempFileMultipartFileStore)
-    val services = Pdf4kServices(realmService, renderingService, tempFileMultipartFileStore)
+    val renderingService = RenderingService(inMemoryTempStreamFactory, documentAssembler, tempFileMultipartFileStore)
+    val services = Pdf4kServices(renderingService, tempFileMultipartFileStore)
     return Pdf4kServerInstance(routes(services)) { it.asServer(Undertow(port)) }
 }

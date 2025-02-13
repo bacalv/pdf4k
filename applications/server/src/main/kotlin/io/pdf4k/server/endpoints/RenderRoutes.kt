@@ -5,11 +5,9 @@ import io.pdf4k.domain.dto.ComponentDto.*
 import io.pdf4k.domain.dto.PdfPermissionsDto.PdfPermission.Assembly
 import io.pdf4k.domain.dto.ResourceLocationDto.Local
 import io.pdf4k.server.domain.ServerLens.pdfRequestLens
-import io.pdf4k.server.domain.ServerLens.realmPathLens
-import io.pdf4k.server.domain.ServerLens.stationaryPackPathLens
+import io.pdf4k.server.domain.StationaryPack.Companion.emptyStationaryPack
 import io.pdf4k.server.endpoints.request.PdfRequest
 import io.pdf4k.server.service.Pdf4kServices
-import org.http4k.contract.div
 import org.http4k.contract.meta
 import org.http4k.core.Method.POST
 import org.http4k.core.Response
@@ -21,22 +19,20 @@ import java.util.*
 
 object RenderRoutes {
     fun routes(services: Pdf4kServices) = listOf(
-        "/realms" / realmPathLens / stationaryPackPathLens / "render" meta {
+        "/render" meta {
             summary = "Renders a PDF."
             receiving(pdfRequestLens)// to examplePdfRequest)
             returning(OK)
-        } bindContract POST to { realmName, stationaryPackName, _ ->
-            { request ->
+        } bindContract POST to { request ->
                 val (pdf, resourceMap) = pdfRequestLens(request).pdf.toDomain()
                 runCatching {
-                    services.renderingService.render(realmName, stationaryPackName, pdf, resourceMap)
+                    services.renderingService.render(emptyStationaryPack, pdf, resourceMap)
                 }.map { inputStream ->
                     Response(OK)
                         .header("Content-Type", "application/pdf")
                         .header("Content-Disposition", "inline; filename=\"${UUID.randomUUID()}.pdf\"")
                         .body(inputStream)
                 }.getOrElse { ErrorHandler(it) }
-            }
         }
     )
 

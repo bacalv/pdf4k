@@ -32,7 +32,7 @@ fun main() {
                 "contact",
                 ZonedDateTime.now(ZoneId.systemDefault())
             ),
-            permissions = PdfPermissions("user", "owner", emptySet())
+            permissions = PdfPermissions("user", "owner", PdfPermissions.PdfPermission.entries.toSet())
         ).toDto()
     )
     println(domainDtoObjectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(examplePdfRequest))
