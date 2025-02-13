@@ -24,15 +24,15 @@ object RenderRoutes {
             receiving(pdfRequestLens)// to examplePdfRequest)
             returning(OK)
         } bindContract POST to { request ->
-                val (pdf, resourceMap) = pdfRequestLens(request).pdf.toDomain()
-                runCatching {
-                    services.renderingService.render(emptyStationaryPack, pdf, resourceMap)
-                }.map { inputStream ->
-                    Response(OK)
-                        .header("Content-Type", "application/pdf")
-                        .header("Content-Disposition", "inline; filename=\"${UUID.randomUUID()}.pdf\"")
-                        .body(inputStream)
-                }.getOrElse { ErrorHandler(it) }
+            val (pdf, resourceMap) = pdfRequestLens(request).pdf.toDomain()
+            runCatching {
+                services.renderingService.render(emptyStationaryPack, pdf, resourceMap)
+            }.map { inputStream ->
+                Response(OK)
+                    .header("Content-Type", "application/pdf")
+                    .header("Content-Disposition", "inline; filename=\"${UUID.randomUUID()}.pdf\"")
+                    .body(inputStream)
+            }.getOrElse { ErrorHandler(it) }
         }
     )
 
