@@ -13,6 +13,7 @@ object ErrorHandler {
             is CustomResourceProviderNotFound,
             is FontNotFound,
             is ImageNotFound,
+            is KeyNotFound,
             is KeyParseError,
             is PageTemplateNotFound -> NOT_FOUND
             is RenderingError -> INTERNAL_SERVER_ERROR

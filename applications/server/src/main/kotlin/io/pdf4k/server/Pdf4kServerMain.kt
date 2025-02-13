@@ -1,7 +1,9 @@
 package io.pdf4k.server
 
-import io.pdf4k.domain.KeyName
+import io.pdf4k.domain.PdfError
 import io.pdf4k.provider.KeyProvider
+import io.pdf4k.provider.KeyProvider.Companion.toCertificateChain
+import io.pdf4k.provider.KeyProvider.Companion.toPrivateKey
 import io.pdf4k.provider.TempStreamFactory.Companion.inMemoryTempStreamFactory
 import io.pdf4k.renderer.DocumentAssembler
 import io.pdf4k.server.config.Pdf4kServerConfiguration
@@ -24,11 +26,13 @@ object Pdf4kServerMain {
 
 fun Pdf4kServerConfiguration.pdf4kServer(): Pdf4kServerInstance {
     val realmService = RealmService()
-    val documentAssembler = DocumentAssembler(object : KeyProvider {
-        override fun lookup(keyName: KeyName): KeyProvider.Key {
-            TODO("Not yet implemented")
-        }
-    })
+    val documentAssembler = DocumentAssembler { keyName ->
+        runCatching {
+            val cert = Pdf4kServerConfiguration::class.java.getResourceAsStream("/keys/${keyName.name}/cert.pem")!!
+            val pk = Pdf4kServerConfiguration::class.java.getResourceAsStream("/keys/${keyName.name}/private-key.pem")!!
+            KeyProvider.Key(toPrivateKey(String(pk.readAllBytes())), toCertificateChain(String(cert.readAllBytes())))
+        }.getOrElse { throw PdfError.KeyNotFound(keyName.name) }
+    }
     val renderingService = RenderingService(realmService, inMemoryTempStreamFactory, documentAssembler, tempFileMultipartFileStore)
     val services = Pdf4kServices(realmService, renderingService, tempFileMultipartFileStore)
     return Pdf4kServerInstance(routes(services)) { it.asServer(Undertow(port)) }

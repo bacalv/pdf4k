@@ -26,9 +26,7 @@ object InMemoryRenderer {
 
     val defaultKeyName = KeyName("default")
     val key = mutableMapOf(defaultKeyName to KeyProvider.Key(privateKey, certificateChain))
-    private val keyProvider = object : KeyProvider {
-        override fun lookup(keyName: KeyName) = key[keyName] ?: fail("Key not found: $keyName")
-    }
+    private val keyProvider = KeyProvider { keyName -> key[keyName] ?: fail("Key not found: $keyName") }
     private val documentAssembler = DocumentAssembler(keyProvider)
     private val customProvider = object : CustomResourceProvider {
         override fun load(name: String) = runCatching { classpathResource("/custom/$name") }.getOrNull()

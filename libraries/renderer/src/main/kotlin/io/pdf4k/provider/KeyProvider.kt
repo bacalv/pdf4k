@@ -9,7 +9,7 @@ import java.security.cert.CertificateFactory
 import java.security.spec.PKCS8EncodedKeySpec
 import java.util.*
 
-interface KeyProvider {
+fun interface KeyProvider {
     data class Key(val privateKey: PrivateKey, val certificateChain: Collection<Certificate>)
 
     fun lookup(keyName: KeyName): Key

@@ -53,6 +53,6 @@ class PdfBuilder(val style: StyleAttributes?) {
             return builder.build()
         }
 
-        fun content(block: ContentBuilder<*, *, *, *>.() -> Unit) = pdf { page { content { block() } } }
+        fun content(block: AnyContentBuilder.() -> Unit) = pdf { page { content { block() } } }
     }
 }

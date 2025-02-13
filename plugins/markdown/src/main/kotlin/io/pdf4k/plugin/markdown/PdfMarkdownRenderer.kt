@@ -2,13 +2,13 @@ package io.pdf4k.plugin.markdown
 
 import io.pdf4k.domain.Font
 import io.pdf4k.domain.StyleAttributes.Companion.style
-import io.pdf4k.dsl.ContentBuilder
+import io.pdf4k.dsl.AnyContentBuilder
 import io.pdf4k.dsl.PhraseBuilder
 import org.commonmark.node.*
 import org.commonmark.renderer.Renderer
 import java.awt.Color
 
-class PdfMarkdownRenderer(private val builder: ContentBuilder<*, *, *, *>): Renderer {
+class Pdf4kDslMarkdownRenderer(private val builder: AnyContentBuilder): Renderer {
     companion object {
         private val blockQuoteDark = Color(127, 127, 127)
         private val blockQuoteLight = Color(240, 240, 240)
@@ -87,7 +87,7 @@ class PdfMarkdownRenderer(private val builder: ContentBuilder<*, *, *, *>): Rend
     )
 
     private operator fun Font.Style?.plus(other: Font.Style): Font.Style = when (this) {
-        null -> other
+        null,
         Font.Style.Plain -> other
         Font.Style.Bold -> if (other == Font.Style.Italic) { Font.Style.BoldItalic } else Font.Style.Bold
         Font.Style.Italic -> if (other == Font.Style.Bold) { Font.Style.BoldItalic } else Font.Style.Italic

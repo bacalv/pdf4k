@@ -67,3 +67,7 @@ abstract class ContentBuilder<F : PhraseBuilder<F>, P : ParagraphBuilder<F, P>, 
         override val tableBuilder: (TableAttributes, StyleAttributes?) -> TableBuilder.ForPage =  { t, s -> TableBuilder.ForPage(t, s) }
     }
 }
+
+typealias AnyContentBuilder = ContentBuilder<*, *, *, *>
+typealias PageContentBuilder = ContentBuilder<PhraseBuilder.ForPage, ParagraphBuilder.ForPage, TableBuilder.ForPage, ContentBuilder.ForPage>
+typealias BlockContentBuilder = ContentBuilder<PhraseBuilder.ForBlock, ParagraphBuilder.ForBlock, TableBuilder.ForBlock, ContentBuilder.ForBlock>

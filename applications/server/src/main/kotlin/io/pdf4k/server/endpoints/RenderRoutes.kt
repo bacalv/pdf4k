@@ -17,6 +17,7 @@ import org.http4k.core.Status.Companion.OK
 import java.awt.Color
 import java.time.LocalDate
 import java.time.ZoneOffset
+import java.util.*
 
 object RenderRoutes {
     fun routes(services: Pdf4kServices) = listOf(
@@ -32,6 +33,7 @@ object RenderRoutes {
                 }.map { inputStream ->
                     Response(OK)
                         .header("Content-Type", "application/pdf")
+                        .header("Content-Disposition", "inline; filename=\"${UUID.randomUUID()}.pdf\"")
                         .body(inputStream)
                 }.getOrElse { ErrorHandler(it) }
             }
