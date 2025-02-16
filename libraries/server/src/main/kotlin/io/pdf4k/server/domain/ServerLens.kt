@@ -1,17 +1,17 @@
-package io.pdf4k.client.domain
+package io.pdf4k.server.domain
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import io.pdf4k.client.domain.ClientLens.ClientJackson.auto
 import io.pdf4k.domain.dto.PdfDto
+import io.pdf4k.server.domain.ServerLens.ServerJackson.auto
 import org.http4k.core.Body
 import org.http4k.format.ConfigurableJackson
 
-object ClientLens {
+object ServerLens {
     @Suppress("unused")
-    object ClientJackson: ConfigurableJackson(ObjectMapper()
+    object ServerJackson: ConfigurableJackson(ObjectMapper()
         .registerModule(KotlinModule.Builder().build())
         .registerModule(JavaTimeModule())
         .setSerializationInclusion(NON_NULL)

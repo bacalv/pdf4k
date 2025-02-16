@@ -9,4 +9,5 @@ sealed class PdfError : RuntimeException() {
     data class KeyNotFound(val keyName: String): PdfError()
     data class CustomResourceProviderNotFound(val providerName: String): PdfError()
     data class ClasspathResourceNotFound(val path: String): PdfError()
+    data class CannotLoadConfiguration(val path: String): PdfError()
 }

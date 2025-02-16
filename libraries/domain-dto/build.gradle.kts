@@ -13,4 +13,7 @@ dependencies {
     testImplementation(project(":libraries::dsl"))
     testImplementation(kotlin("test"))
     testFixturesImplementation(libs.okeyDoke)
+    testFixturesApi(testFixtures(project(":libraries::domain")))
+    testFixturesApi(project(":libraries::testing"))
+    testFixturesApi(project(":libraries::dsl"))
 }

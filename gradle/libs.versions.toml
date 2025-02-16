@@ -25,6 +25,7 @@ http4kMultipart = { module = "org.http4k:http4k-multipart", version.ref="http4kV
 http4kServerUndertow = { module = "org.http4k:http4k-server-undertow", version.ref="http4kVersion" }
 jacksonAnnotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref="jacksonVersion"}
 jacksonCore = { module = "com.fasterxml.jackson.core:jackson-core", version.ref="jacksonVersion"}
+jacksonDataFormatYaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", version.ref="jacksonVersion" }
 jacksonDatatypeJsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref="jacksonVersion" }
 jacksonModuleKotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref="jacksonVersion"}
 junitJupiterApi = { module = "org.junit.jupiter:junit-jupiter-api", version.ref="junitJupiterVersion" }

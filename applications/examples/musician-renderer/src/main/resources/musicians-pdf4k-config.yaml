@@ -1,0 +1,3 @@
+port: 8080
+endpoints:
+  - io.pdf4k.example.server.MusicianEndpoint
