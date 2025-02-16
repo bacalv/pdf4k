@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.ZonedDateTime
 
-class ServerApplicationTest : AbstractServerTest() {
+class EmptyServerTest : AbstractServerTest() {
     @Test
     fun `renders a pdf signed with test key`(approver: PdfApprover) = with(emptyScenario()) {
         operator.rendersAPdfImmediately {

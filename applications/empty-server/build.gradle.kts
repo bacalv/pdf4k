@@ -4,7 +4,6 @@ plugins {
 
 dependencies {
     implementation(project(":libraries:server"))
-    implementation(testFixtures(project(":libraries::domain")))
     testImplementation(testFixtures(project(":libraries::server")))
 }
 
