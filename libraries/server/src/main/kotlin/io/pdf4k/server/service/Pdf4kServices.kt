@@ -4,5 +4,4 @@ import io.pdf4k.server.service.rendering.RenderingService
 
 data class Pdf4kServices(
     val renderingService: RenderingService,
-    val multipartFileStore: MultipartFileStore
 )

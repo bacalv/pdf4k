@@ -9,6 +9,7 @@ import io.pdf4k.domain.ResourceLocation.Companion.uri
 import io.pdf4k.domain.Stationary.Companion.BlankA4Landscape
 import io.pdf4k.domain.Stationary.Companion.BlankA4Portrait
 import io.pdf4k.domain.StyleAttributes.Companion.style
+import io.pdf4k.domain.toArgument
 import io.pdf4k.dsl.PdfBuilder.Companion.content
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
 import io.pdf4k.dsl.StationaryBuilder.Companion.stationary
@@ -230,7 +231,7 @@ class StationaryTest : AbstractPdfRendererTest() {
 
     @Test
     fun `loads stationary from a custom provider`(approver: PdfApprover) {
-        val remoteStationary = BlankA4Portrait.copy(custom("custom", "custom.pdf") )
+        val remoteStationary = BlankA4Portrait.copy(custom("custom", "custom.pdf".toArgument("location")) )
         pdf {
             page(style(background = Color(100, 200, 0, 128)), stationary = remoteStationary) {
                 content {

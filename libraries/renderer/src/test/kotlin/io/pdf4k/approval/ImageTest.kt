@@ -5,16 +5,12 @@ import io.pdf4k.domain.Font.Style.Bold
 import io.pdf4k.domain.HorizontalAlignment.*
 import io.pdf4k.domain.Leading.Companion.multiplier
 import io.pdf4k.domain.Margin
-import io.pdf4k.domain.QrStyle
-import io.pdf4k.domain.QrStyle.Companion.Logo
-import io.pdf4k.domain.QrStyle.Companion.Shape
-import io.pdf4k.domain.QrStyle.Companion.Shape.Square
 import io.pdf4k.domain.ResourceLocation.Companion.custom
-import io.pdf4k.domain.ResourceLocation.Companion.local
 import io.pdf4k.domain.StyleAttributes.Companion.border
 import io.pdf4k.domain.StyleAttributes.Companion.noBorder
 import io.pdf4k.domain.StyleAttributes.Companion.style
 import io.pdf4k.domain.VerticalAlignment.Middle
+import io.pdf4k.domain.toArgument
 import io.pdf4k.dsl.PdfBuilder.Companion.content
 import io.pdf4k.testing.AbstractPdfRendererTest
 import io.pdf4k.testing.PdfApprover
@@ -22,7 +18,8 @@ import io.pdf4k.testing.RemoteServer
 import io.pdf4k.testing.domain.Musician.Companion.musicians
 import org.junit.jupiter.api.Test
 import java.awt.Color
-import java.awt.Color.*
+import java.awt.Color.BLACK
+import java.awt.Color.WHITE
 import java.net.URI
 
 class ImageTest : AbstractPdfRendererTest() {
@@ -44,20 +41,10 @@ class ImageTest : AbstractPdfRendererTest() {
                                 height = 200f
                             )
                             tableCell(1, noBorder) {
-                                tableCell(2) {
+                                tableCell(1) {
                                     textCell(nameStyle) { +artist.name }
-                                    qrCodeCell(
-                                        link = artist.wikiLink,
-                                        qrStyle = QrStyle(
-                                            shape = Square,
-                                            colour = BLACK,
-                                            background = if (index % 2 == 0) evenRowColour else oddRowColour,
-                                            size = 50,
-                                            logo = logo
-                                        ),
-                                        style = style(align = Right)
-                                    )
                                 }
+
                                 textCell(bioStyle) { +artist.bio }
                                 tableCell(columns = 1, margin = Margin(0f, 0f, 24f, 24f)) {
                                     tableCell(2, bioTable, weights = listOf(1f, 3f)) {
@@ -111,7 +98,7 @@ class ImageTest : AbstractPdfRendererTest() {
         content {
             table(style = noBorder) {
                 imageCell(
-                    custom("custom", "dsotm.jpg"),
+                    custom("custom", "dsotm.jpg".toArgument("location")),
                     width = 200f,
                     height = 200f
                 )
@@ -135,21 +122,6 @@ class ImageTest : AbstractPdfRendererTest() {
             paragraph {
                 image("adams.png")
             }
-        }.approve(approver)
-    }
-
-    @Test
-    fun `render QR code`(approver: PdfApprover) {
-        content {
-            table(4, noBorder) {
-                Shape.entries.forEach { shape ->
-                    qrCodeCell("https://www.github.com", QrStyle(shape, BLACK, WHITE, 25, logo))
-                    qrCodeCell("https://www.github.com", QrStyle(shape, WHITE, BLACK, 25, logo))
-                    qrCodeCell("https://www.github.com", QrStyle(shape, BLACK, null, 25, null))
-                    qrCodeCell("https://www.github.com", QrStyle(shape, BLUE, null, 25, null))
-                }
-            }
-
         }.approve(approver)
     }
 
@@ -209,6 +181,5 @@ class ImageTest : AbstractPdfRendererTest() {
             colour = WHITE,
             cellBackground = Color(0x31, 0x3D, 0x5A)
         )
-        val logo = Logo(local("spades.png"), 300, 300)
     }
 }

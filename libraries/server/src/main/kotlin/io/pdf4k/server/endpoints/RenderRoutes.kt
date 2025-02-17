@@ -1,6 +1,5 @@
 package io.pdf4k.server.endpoints
 
-import io.pdf4k.server.domain.StationaryPack.Companion.emptyStationaryPack
 import io.pdf4k.server.service.Pdf4kServices
 import org.http4k.contract.meta
 import org.http4k.core.Method.POST
@@ -17,7 +16,7 @@ object RenderRoutes {
         } bindContract POST to { request ->
             val pdf = endpoint.pdfFor(request)
             runCatching {
-                services.renderingService.render(emptyStationaryPack, pdf)
+                services.renderingService.render(pdf)
             }.map { inputStream ->
                 Response(OK)
                     .header("Content-Type", "application/pdf")

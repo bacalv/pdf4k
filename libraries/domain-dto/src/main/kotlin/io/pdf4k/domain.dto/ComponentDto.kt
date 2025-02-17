@@ -19,14 +19,12 @@ import io.pdf4k.domain.dto.ComponentDto.*
     Type(value = Phrase::class, name = "ph"),
     Type(value = Chunk::class, name = "ch"),
     Type(value = Image::class, name = "im"),
-    Type(value = QrCode::class, name = "qr"),
     Type(value = Link::class, name = "l"),
     Type(value = PageNumber::class, name = "pg"),
     Type(value = Table::class, name = "t"),
     Type(value = Cell.Text::class, name = "tx"),
     Type(value = Cell.Table::class, name = "tt"),
     Type(value = Cell.Image::class, name = "ti"),
-    Type(value = Cell.QrCode::class, name = "tq"),
 )
 sealed class ComponentDto {
     data class Style(val ref: StyleRef, val children: List<ComponentDto>) : ComponentDto()
@@ -42,8 +40,6 @@ sealed class ComponentDto {
     data class Chunk(val text: String) : ComponentDto()
 
     data class Image(val ref: ResourceRef, val width: Float?, val height: Float?, val rotation: Float?) : ComponentDto()
-
-    data class QrCode(val link: String, val style: QrStyleDto) : ComponentDto()
 
     data class Link(val target: String, val text: String) : ComponentDto()
 
@@ -73,9 +69,6 @@ sealed class ComponentDto {
         ) : Cell()
 
         data class Image(override val colSpan: Int?, override val rowSpan: Int?, val image: ComponentDto.Image) : Cell()
-
-        data class QrCode(override val colSpan: Int?, override val rowSpan: Int?, val qrCode: ComponentDto.QrCode) :
-            Cell()
     }
 }
 
@@ -84,17 +77,15 @@ fun List<Component>.toDto(resourceMapBuilder: ResourceMapDto.Builder) = map { it
 fun Component.toDto(resourceMapBuilder: ResourceMapDto.Builder): ComponentDto = when (this) {
     is Component.Anchor -> Anchor(name, children.toDto(resourceMapBuilder))
     is Component.Cell.Image -> Cell.Image(colSpan, rowSpan, image.toDto(resourceMapBuilder) as Image)
-    is Component.Cell.QrCode -> Cell.QrCode(colSpan, rowSpan, qrCode.toDto(resourceMapBuilder) as QrCode)
     is Component.Cell.Table -> Cell.Table(colSpan, rowSpan, margin.toDto(), table.toDto(resourceMapBuilder) as Table)
     is Component.Cell.Text -> Cell.Text(rowSpan, colSpan, phrase.toDto(resourceMapBuilder) as Phrase)
     is Component.Chunk -> Chunk(text)
     is Component.Content -> Content(children.toDto(resourceMapBuilder))
-    is Component.Image -> Image(resource.toDto().let(resourceMapBuilder::resourceRef), width, height, rotation)
+    is Component.Image -> Image(resource.toDto(resourceMapBuilder).let(resourceMapBuilder::resourceRef), width, height, rotation)
     is Component.Link -> Link(target, text)
     is Component.PageNumber -> PageNumber
     is Component.Paragraph -> Paragraph(children.toDto(resourceMapBuilder))
     is Component.Phrase -> Phrase(children.toDto(resourceMapBuilder))
-    is Component.QrCode -> QrCode(link, style.toDto(resourceMapBuilder))
     is Component.Style -> Style(
         styleAttributes.toDto(resourceMapBuilder).let(resourceMapBuilder::styleRef),
         children.toDto(resourceMapBuilder)
@@ -111,7 +102,6 @@ fun List<ComponentDto>.toDomain(resourceMap: ResourceMap) = map { it.toDomain(re
 fun ComponentDto.toDomain(resourceMap: ResourceMap): Component = when (this) {
     is Anchor -> Component.Anchor(name, children.toDomain(resourceMap))
     is Cell.Image -> Component.Cell.Image(colSpan, rowSpan, image.toDomain(resourceMap) as Component.Image)
-    is Cell.QrCode -> Component.Cell.QrCode(colSpan, rowSpan, qrCode.toDomain(resourceMap) as Component.QrCode)
     is Cell.Table -> Component.Cell.Table(
         colSpan,
         rowSpan,
@@ -127,7 +117,6 @@ fun ComponentDto.toDomain(resourceMap: ResourceMap): Component = when (this) {
     is PageNumber -> Component.PageNumber
     is Paragraph -> Component.Paragraph(children.toDomain(resourceMap))
     is Phrase -> Component.Phrase(children.toDomain(resourceMap))
-    is QrCode -> Component.QrCode(link, style.toDomain(resourceMap))
     is Style -> Component.Style(resourceMap.getStyle(ref), children.toDomain(resourceMap))
     is Table -> Component.Table(
         columns,

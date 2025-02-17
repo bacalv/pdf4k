@@ -6,9 +6,6 @@ import io.pdf4k.domain.HorizontalAlignment.*
 import io.pdf4k.domain.Leading.Companion.multiplier
 import io.pdf4k.domain.Margin
 import io.pdf4k.domain.Pdf
-import io.pdf4k.domain.QrStyle
-import io.pdf4k.domain.QrStyle.Companion.Logo
-import io.pdf4k.domain.QrStyle.Companion.Shape.Square
 import io.pdf4k.domain.ResourceLocation.Companion.local
 import io.pdf4k.domain.StyleAttributes.Companion.border
 import io.pdf4k.domain.StyleAttributes.Companion.noBorder
@@ -16,6 +13,10 @@ import io.pdf4k.domain.StyleAttributes.Companion.style
 import io.pdf4k.domain.VerticalAlignment.Middle
 import io.pdf4k.dsl.PdfBuilder.Companion.content
 import io.pdf4k.example.server.MusicianEndpoint.MusicianList
+import io.pdf4k.plugin.qrcode.domain.QrStyle
+import io.pdf4k.plugin.qrcode.domain.QrStyle.Companion.Logo
+import io.pdf4k.plugin.qrcode.domain.QrStyle.Companion.Shape
+import io.pdf4k.plugin.qrcode.dsl.qrCodeCell
 import io.pdf4k.server.domain.ServerLens.ServerJackson.auto
 import io.pdf4k.server.endpoints.PdfEndpoint
 import io.pdf4k.testing.domain.Musician
@@ -58,13 +59,15 @@ class MusicianEndpoint : PdfEndpoint<MusicianList> {
                                     qrCodeCell(
                                         link = artist.wikiLink,
                                         qrStyle = QrStyle(
-                                            shape = Square,
+                                            shape = Shape.Square,
                                             colour = BLACK,
                                             background = if (index % 2 == 0) evenRowColour else oddRowColour,
                                             size = 50,
                                             logo = logo
                                         ),
-                                        style = style(align = Right)
+                                        style = style(align = Right),
+                                        width = 50f,
+                                        height = 50f
                                     )
                                 }
                                 textCell(bioStyle) { +artist.bio }

@@ -16,8 +16,6 @@ sealed class Component(val children: List<Component>) {
     class Image(val resource: ResourceLocation, val width: Float?, val height: Float?, val rotation: Float?)
         : Component(emptyList())
 
-    class QrCode(val link: String, val style: QrStyle) : Component(emptyList())
-
     class Link(val target: String, val text: String) : Component(emptyList())
 
     data object PageNumber : Component(emptyList())
@@ -38,7 +36,5 @@ sealed class Component(val children: List<Component>) {
         class Table(colSpan: Int?, rowSpan: Int?, val margin: Margin, val table: Component.Table) : Cell(colSpan, rowSpan)
 
         class Image(colSpan: Int?, rowSpan: Int?, val image: Component.Image) : Cell(colSpan, rowSpan)
-
-        class QrCode(colSpan: Int?, rowSpan: Int?, val qrCode: Component.QrCode) : Cell(colSpan, rowSpan)
     }
 }

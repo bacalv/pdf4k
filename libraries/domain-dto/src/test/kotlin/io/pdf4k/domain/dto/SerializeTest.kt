@@ -7,10 +7,7 @@ import io.pdf4k.domain.Font.Style.Bold
 import io.pdf4k.domain.HorizontalAlignment.*
 import io.pdf4k.domain.Leading.Companion.multiplier
 import io.pdf4k.domain.PdfPermissions.PdfPermission
-import io.pdf4k.domain.QrStyle.Companion.Logo
-import io.pdf4k.domain.QrStyle.Companion.Shape.Square
 import io.pdf4k.domain.ResourceLocation.Companion.custom
-import io.pdf4k.domain.ResourceLocation.Companion.local
 import io.pdf4k.domain.StyleAttributes.Companion.border
 import io.pdf4k.domain.StyleAttributes.Companion.noBorder
 import io.pdf4k.domain.StyleAttributes.Companion.style
@@ -89,17 +86,6 @@ class SerializeTest {
                                     tableCell(1, noBorder) {
                                         tableCell(2) {
                                             textCell(nameStyle) { +artist.name }
-                                            qrCodeCell(
-                                                link = artist.wikiLink,
-                                                qrStyle = QrStyle(
-                                                    shape = Square,
-                                                    colour = BLACK,
-                                                    background = if (index % 2 == 0) evenRowColour else oddRowColour,
-                                                    size = 50,
-                                                    logo = logo
-                                                ),
-                                                style = style(align = Right)
-                                            )
                                         }
                                         textCell(bioStyle) { +artist.bio }
                                         tableCell(columns = 1, margin = Margin(0f, 0f, 24f, 24f)) {
@@ -135,7 +121,7 @@ class SerializeTest {
             )
         }
 
-        val font = Resource(custom("custom", "ShadeBlue-2OozX.ttf"), "Shade Blue")
+        val font = Resource(custom("custom", "ShadeBlue-2OozX.ttf".toArgument("location")), "Shade Blue")
         val header = style(
             fontStyle = Bold,
             size = 12f,
@@ -174,6 +160,5 @@ class SerializeTest {
             colour = WHITE,
             cellBackground = Color(0x31, 0x3D, 0x5A)
         )
-        val logo = Logo(local("spades.png"), 300, 300)
     }
 }

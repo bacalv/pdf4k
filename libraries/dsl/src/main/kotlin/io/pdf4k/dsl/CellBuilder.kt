@@ -17,7 +17,6 @@ class CellBuilder(
             is PhraseBuilder -> Component.Cell.Text(colSpan, rowSpan, childBuilder.build())
             is TableBuilder<*, *> -> Component.Cell.Table(colSpan, rowSpan, margin, childBuilder.build())
             is ImageBuilder -> Component.Cell.Image(colSpan, rowSpan, childBuilder.build())
-            is QrBuilder -> Component.Cell.QrCode(colSpan, rowSpan, childBuilder.build())
             else -> throw IllegalStateException("Incompatible child builder of type ${childBuilder::class.simpleName}")
         }
 

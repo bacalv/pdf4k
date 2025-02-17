@@ -1,0 +1,7 @@
+port: 8080
+apiTitle: Test QR Code Plugin
+apiDescription: QR Code pdf4k plugin
+endpoints:
+  - io.pdf4k.server.endpoints.DefaultEndpoint
+customResourceProviders:
+  - io.pdf4k.plugin.qrcode.server.QrRenderer

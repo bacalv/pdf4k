@@ -2,13 +2,13 @@ package io.pdf4k.approval
 
 import io.pdf4k.domain.Font
 import io.pdf4k.domain.PdfError.*
-import io.pdf4k.domain.QrStyle
-import io.pdf4k.domain.QrStyle.Companion.Logo
-import io.pdf4k.domain.QrStyle.Companion.Shape.Square
 import io.pdf4k.domain.ResourceLocation.Companion.custom
 import io.pdf4k.domain.ResourceLocation.Companion.local
 import io.pdf4k.domain.ResourceLocation.Local
 import io.pdf4k.domain.ResourceLocation.Remote.Custom
+import io.pdf4k.domain.named
+import io.pdf4k.domain.stringValue
+import io.pdf4k.domain.toArgument
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
 import io.pdf4k.dsl.StationaryBuilder.Companion.stationary
 import io.pdf4k.provider.KeyProvider.Companion.toPrivateKey
@@ -16,8 +16,6 @@ import io.pdf4k.testing.InMemoryRenderer.render
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import java.awt.Color.BLACK
-import java.awt.Color.WHITE
 
 class ErrorHandlingTest {
     @Test
@@ -74,33 +72,13 @@ class ErrorHandlingTest {
     }
 
     @Test
-    fun `qr logo not found`() {
-        assertThrows<ImageNotFound> {
-            pdf {
-                page {
-                    content {
-                        table {
-                            qrCodeCell(
-                                "LINK",
-                                QrStyle(Square, BLACK, WHITE, 25, badLogo)
-                            )
-                        }
-                    }
-                }
-            }.render()
-        }.let { error ->
-            assertEquals("not_found", (error.resource as Local).name)
-        }
-    }
-
-    @Test
     fun `unknown custom image provider`() {
         assertThrows<CustomResourceProviderNotFound> {
             pdf {
                 page {
                     content {
                         table {
-                            imageCell(custom("not_found", "ignored.png"))
+                            imageCell(custom("not_found"))
                         }
                     }
                 }
@@ -117,18 +95,14 @@ class ErrorHandlingTest {
                 page {
                     content {
                         table {
-                            imageCell(custom("custom", "not_found"))
+                            imageCell(custom("custom", "not_found".toArgument("location")))
                         }
                     }
                 }
             }.render()
         }.let { error ->
             assertEquals("custom", (error.resource as Custom).providerName)
-            assertEquals("not_found", (error.resource as Custom).name)
+            assertEquals("not_found", (error.resource as Custom).arguments.named("location").stringValue())
         }
-    }
-
-    companion object {
-        private val badLogo = Logo(local("not_found"), 10, 10)
     }
 }

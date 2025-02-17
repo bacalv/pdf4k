@@ -4,6 +4,9 @@ plugins {
 
 dependencies {
     implementation(project(":libraries::server"))
+    implementation(project(":plugins::qrcode::domain"))
+    implementation(project(":plugins::qrcode::dsl"))
+    implementation(project(":plugins::qrcode::server"))
     implementation(testFixtures(project(":libraries::domain")))
     testImplementation(testFixtures(project(":libraries::server")))
 }

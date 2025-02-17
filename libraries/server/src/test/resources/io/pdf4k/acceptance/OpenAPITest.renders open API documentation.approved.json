@@ -1,8 +1,8 @@
 {
   "info" : {
     "title" : "PDF4k Server",
-    "version" : "v0.0.1",
-    "description" : "PDF4k Server API"
+    "version" : "0.0.1",
+    "description" : "Generic PDF4k Server API"
   },
   "tags" : [ ],
   "servers" : [ {

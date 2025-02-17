@@ -1,14 +1,12 @@
 package io.pdf4k.testing
 
+import io.pdf4k.domain.Argument
 import io.pdf4k.domain.KeyName
 import io.pdf4k.domain.Pdf
 import io.pdf4k.domain.ResourceLocation.Companion.classpathResource
-import io.pdf4k.provider.CustomResourceProvider
-import io.pdf4k.provider.FontProviderFactory
-import io.pdf4k.provider.KeyProvider
+import io.pdf4k.provider.*
 import io.pdf4k.provider.KeyProvider.Companion.toCertificateChain
 import io.pdf4k.provider.KeyProvider.Companion.toPrivateKey
-import io.pdf4k.provider.ResourceLocators
 import io.pdf4k.provider.TempFileFactory.Companion.defaultTempFileFactory
 import io.pdf4k.provider.TempStreamFactory.Companion.inMemoryTempStreamFactory
 import io.pdf4k.provider.UriResourceLoader.Companion.defaultResourceLoader
@@ -29,7 +27,11 @@ object InMemoryRenderer {
     private val keyProvider = KeyProvider { keyName -> key[keyName] ?: fail("Key not found: $keyName") }
     private val documentAssembler = DocumentAssembler(keyProvider)
     private val customProvider = object : CustomResourceProvider {
-        override fun load(name: String) = runCatching { classpathResource("/custom/$name") }.getOrNull()
+        override val name: String = "custom"
+        override fun load(arguments: List<Argument>, resourceLocator: ResourceLocator) = runCatching {
+            val location = arguments.first { it.name == "location" } as Argument.StringArgument
+            classpathResource("/custom/${location.value}")
+        }.getOrNull()
     }
     private val fontProviderFactory = FontProviderFactory(defaultTempFileFactory)
     private val resourceLocators =

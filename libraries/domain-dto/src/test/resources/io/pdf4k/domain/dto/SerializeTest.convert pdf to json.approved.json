@@ -64,8 +64,6 @@
       "fontStyle" : "Bold",
       "size" : 14.0
     }, {
-      "align" : "Right"
-    }, {
       "leading" : {
         "fixed" : 0.0,
         "multiplier" : 2.0
@@ -134,13 +132,14 @@
     }, {
       "type" : "custom",
       "providerName" : "custom",
-      "name" : "ShadeBlue-2OozX.ttf"
+      "arguments" : [ {
+        "type" : "s",
+        "name" : "location",
+        "value" : "ShadeBlue-2OozX.ttf"
+      } ]
     }, {
       "type" : "local",
       "name" : "musicians/hendrix.png"
-    }, {
-      "type" : "local",
-      "name" : "spades.png"
     }, {
       "type" : "local",
       "name" : "musicians/gilmour.png"
@@ -289,35 +288,11 @@
                         } ]
                       }
                     } ]
-                  }, {
-                    "type" : "s",
-                    "ref" : 9,
-                    "children" : [ {
-                      "type" : "tq",
-                      "colSpan" : 1,
-                      "rowSpan" : 1,
-                      "qrCode" : {
-                        "type" : "qr",
-                        "link" : "https://en.wikipedia.org/wiki/Jimi_Hendrix",
-                        "style" : {
-                          "shape" : "Square",
-                          "colour" : 4,
-                          "background" : 5,
-                          "size" : 50,
-                          "logo" : {
-                            "ref" : 3,
-                            "width" : 300,
-                            "height" : 300,
-                            "clearLogoArea" : true
-                          }
-                        }
-                      }
-                    } ]
                   } ]
                 }
               }, {
                 "type" : "s",
-                "ref" : 10,
+                "ref" : 9,
                 "children" : [ {
                   "type" : "tx",
                   "phrase" : {
@@ -353,10 +328,10 @@
                       "columns" : 2,
                       "widthPercentage" : 100.0,
                       "weights" : [ 1.0, 3.0 ],
-                      "style" : 11,
+                      "style" : 10,
                       "children" : [ {
                         "type" : "s",
-                        "ref" : 12,
+                        "ref" : 11,
                         "children" : [ {
                           "type" : "tx",
                           "phrase" : {
@@ -378,7 +353,7 @@
                         }
                       }, {
                         "type" : "s",
-                        "ref" : 13,
+                        "ref" : 12,
                         "children" : [ {
                           "type" : "tx",
                           "phrase" : {
@@ -416,7 +391,163 @@
           } ]
         }, {
           "type" : "s",
-          "ref" : 14,
+          "ref" : 13,
+          "children" : [ {
+            "type" : "s",
+            "ref" : 6,
+            "children" : [ {
+              "type" : "ti",
+              "colSpan" : 1,
+              "rowSpan" : 1,
+              "image" : {
+                "type" : "im",
+                "ref" : 3,
+                "width" : 200.0,
+                "height" : 200.0
+              }
+            } ]
+          }, {
+            "type" : "tt",
+            "margin" : {
+              "top" : 0.0,
+              "bottom" : 0.0,
+              "left" : 0.0,
+              "right" : 0.0
+            },
+            "table" : {
+              "type" : "t",
+              "columns" : 1,
+              "widthPercentage" : 100.0,
+              "style" : 7,
+              "children" : [ {
+                "type" : "tt",
+                "margin" : {
+                  "top" : 0.0,
+                  "bottom" : 0.0,
+                  "left" : 0.0,
+                  "right" : 0.0
+                },
+                "table" : {
+                  "type" : "t",
+                  "columns" : 2,
+                  "widthPercentage" : 100.0,
+                  "children" : [ {
+                    "type" : "s",
+                    "ref" : 8,
+                    "children" : [ {
+                      "type" : "tx",
+                      "phrase" : {
+                        "type" : "ph",
+                        "children" : [ {
+                          "type" : "ch",
+                          "text" : "David Gilmour"
+                        } ]
+                      }
+                    } ]
+                  } ]
+                }
+              }, {
+                "type" : "s",
+                "ref" : 9,
+                "children" : [ {
+                  "type" : "tx",
+                  "phrase" : {
+                    "type" : "ph",
+                    "children" : [ {
+                      "type" : "ch",
+                      "text" : "As a member of Pink Floyd, Gilmour was inducted into the US Rock and Roll Hall of Fame in 1996, and the UK Music Hall of Fame in 2005. In 2003, Gilmour was made a Commander of the Order of the British Empire (CBE). He received the award for Outstanding Contribution at the 2008 Q Awards.[4] In 2023, Rolling Stone named him the 28th-greatest guitarist."
+                    } ]
+                  }
+                } ]
+              }, {
+                "type" : "tt",
+                "margin" : {
+                  "top" : 0.0,
+                  "bottom" : 0.0,
+                  "left" : 24.0,
+                  "right" : 24.0
+                },
+                "table" : {
+                  "type" : "t",
+                  "columns" : 1,
+                  "widthPercentage" : 100.0,
+                  "children" : [ {
+                    "type" : "tt",
+                    "margin" : {
+                      "top" : 0.0,
+                      "bottom" : 0.0,
+                      "left" : 0.0,
+                      "right" : 0.0
+                    },
+                    "table" : {
+                      "type" : "t",
+                      "columns" : 2,
+                      "widthPercentage" : 100.0,
+                      "weights" : [ 1.0, 3.0 ],
+                      "style" : 10,
+                      "children" : [ {
+                        "type" : "s",
+                        "ref" : 11,
+                        "children" : [ {
+                          "type" : "tx",
+                          "phrase" : {
+                            "type" : "ph",
+                            "children" : [ {
+                              "type" : "ch",
+                              "text" : "DOB"
+                            } ]
+                          }
+                        } ]
+                      }, {
+                        "type" : "tx",
+                        "phrase" : {
+                          "type" : "ph",
+                          "children" : [ {
+                            "type" : "ch",
+                            "text" : "1946-03-06"
+                          } ]
+                        }
+                      }, {
+                        "type" : "s",
+                        "ref" : 12,
+                        "children" : [ {
+                          "type" : "tx",
+                          "phrase" : {
+                            "type" : "ph",
+                            "children" : [ {
+                              "type" : "ch",
+                              "text" : "Address"
+                            } ]
+                          }
+                        } ]
+                      }, {
+                        "type" : "tx",
+                        "phrase" : {
+                          "type" : "ph",
+                          "children" : [ {
+                            "type" : "ch",
+                            "text" : "1 Globe House, N8 8PN"
+                          } ]
+                        }
+                      } ]
+                    }
+                  } ]
+                }
+              }, {
+                "type" : "tx",
+                "phrase" : {
+                  "type" : "ph",
+                  "children" : [ {
+                    "type" : "ch",
+                    "text" : " "
+                  } ]
+                }
+              } ]
+            }
+          } ]
+        }, {
+          "type" : "s",
+          "ref" : 5,
           "children" : [ {
             "type" : "s",
             "ref" : 6,
@@ -465,46 +596,22 @@
                         "type" : "ph",
                         "children" : [ {
                           "type" : "ch",
-                          "text" : "David Gilmour"
+                          "text" : "Rory Gallagher"
                         } ]
-                      }
-                    } ]
-                  }, {
-                    "type" : "s",
-                    "ref" : 9,
-                    "children" : [ {
-                      "type" : "tq",
-                      "colSpan" : 1,
-                      "rowSpan" : 1,
-                      "qrCode" : {
-                        "type" : "qr",
-                        "link" : "https://en.wikipedia.org/wiki/David_Gilmour",
-                        "style" : {
-                          "shape" : "Square",
-                          "colour" : 4,
-                          "background" : 6,
-                          "size" : 50,
-                          "logo" : {
-                            "ref" : 3,
-                            "width" : 300,
-                            "height" : 300,
-                            "clearLogoArea" : true
-                          }
-                        }
                       }
                     } ]
                   } ]
                 }
               }, {
                 "type" : "s",
-                "ref" : 10,
+                "ref" : 9,
                 "children" : [ {
                   "type" : "tx",
                   "phrase" : {
                     "type" : "ph",
                     "children" : [ {
                       "type" : "ch",
-                      "text" : "As a member of Pink Floyd, Gilmour was inducted into the US Rock and Roll Hall of Fame in 1996, and the UK Music Hall of Fame in 2005. In 2003, Gilmour was made a Commander of the Order of the British Empire (CBE). He received the award for Outstanding Contribution at the 2008 Q Awards.[4] In 2023, Rolling Stone named him the 28th-greatest guitarist."
+                      "text" : "In 1966, Gallagher formed the blues rock power trio Taste, which experienced moderate commercial success and popularity in the United Kingdom. After the dissolution of Taste, Gallagher pursued a solo career, releasing music throughout the 1970s and 1980s and selling more than 30 million records worldwide."
                     } ]
                   }
                 } ]
@@ -533,10 +640,10 @@
                       "columns" : 2,
                       "widthPercentage" : 100.0,
                       "weights" : [ 1.0, 3.0 ],
-                      "style" : 11,
+                      "style" : 10,
                       "children" : [ {
                         "type" : "s",
-                        "ref" : 12,
+                        "ref" : 11,
                         "children" : [ {
                           "type" : "tx",
                           "phrase" : {
@@ -553,12 +660,12 @@
                           "type" : "ph",
                           "children" : [ {
                             "type" : "ch",
-                            "text" : "1946-03-06"
+                            "text" : "1948-03-02"
                           } ]
                         }
                       }, {
                         "type" : "s",
-                        "ref" : 13,
+                        "ref" : 12,
                         "children" : [ {
                           "type" : "tx",
                           "phrase" : {
@@ -575,7 +682,7 @@
                           "type" : "ph",
                           "children" : [ {
                             "type" : "ch",
-                            "text" : "1 Globe House, N8 8PN"
+                            "text" : "Ballyshannon, County Donegal"
                           } ]
                         }
                       } ]
@@ -596,7 +703,7 @@
           } ]
         }, {
           "type" : "s",
-          "ref" : 5,
+          "ref" : 13,
           "children" : [ {
             "type" : "s",
             "ref" : 6,
@@ -645,46 +752,22 @@
                         "type" : "ph",
                         "children" : [ {
                           "type" : "ch",
-                          "text" : "Rory Gallagher"
+                          "text" : "Frank Zappa"
                         } ]
-                      }
-                    } ]
-                  }, {
-                    "type" : "s",
-                    "ref" : 9,
-                    "children" : [ {
-                      "type" : "tq",
-                      "colSpan" : 1,
-                      "rowSpan" : 1,
-                      "qrCode" : {
-                        "type" : "qr",
-                        "link" : "https://en.wikipedia.org/wiki/Rory_Gallagher",
-                        "style" : {
-                          "shape" : "Square",
-                          "colour" : 4,
-                          "background" : 5,
-                          "size" : 50,
-                          "logo" : {
-                            "ref" : 3,
-                            "width" : 300,
-                            "height" : 300,
-                            "clearLogoArea" : true
-                          }
-                        }
                       }
                     } ]
                   } ]
                 }
               }, {
                 "type" : "s",
-                "ref" : 10,
+                "ref" : 9,
                 "children" : [ {
                   "type" : "tx",
                   "phrase" : {
                     "type" : "ph",
                     "children" : [ {
                       "type" : "ch",
-                      "text" : "In 1966, Gallagher formed the blues rock power trio Taste, which experienced moderate commercial success and popularity in the United Kingdom. After the dissolution of Taste, Gallagher pursued a solo career, releasing music throughout the 1970s and 1980s and selling more than 30 million records worldwide."
+                      "text" : "As a mostly self-taught composer and performer, Zappa had diverse musical influences that led him  to create music that was sometimes difficult to categorize. While in his teens, he acquired a taste  for 20th-century classical modernism, African-American rhythm and blues, and doo-wop music.[7] He  began writing classical music in high school, while simultaneously playing drums in rhythm and  blues bands, later switching to electric guitar. His debut studio album with the Mothers of  Invention, Freak Out! (1966), combined satirical but seemingly conventional rock and roll songs  with extended sound collages. He continued this eclectic and experimental approach throughout his career."
                     } ]
                   }
                 } ]
@@ -713,10 +796,10 @@
                       "columns" : 2,
                       "widthPercentage" : 100.0,
                       "weights" : [ 1.0, 3.0 ],
-                      "style" : 11,
+                      "style" : 10,
                       "children" : [ {
                         "type" : "s",
-                        "ref" : 12,
+                        "ref" : 11,
                         "children" : [ {
                           "type" : "tx",
                           "phrase" : {
@@ -733,12 +816,12 @@
                           "type" : "ph",
                           "children" : [ {
                             "type" : "ch",
-                            "text" : "1948-03-02"
+                            "text" : "1940-12-21"
                           } ]
                         }
                       }, {
                         "type" : "s",
-                        "ref" : 13,
+                        "ref" : 12,
                         "children" : [ {
                           "type" : "tx",
                           "phrase" : {
@@ -755,7 +838,7 @@
                           "type" : "ph",
                           "children" : [ {
                             "type" : "ch",
-                            "text" : "Ballyshannon, County Donegal"
+                            "text" : "Baltimore, Maryland, U.S."
                           } ]
                         }
                       } ]
@@ -776,7 +859,7 @@
           } ]
         }, {
           "type" : "s",
-          "ref" : 14,
+          "ref" : 5,
           "children" : [ {
             "type" : "s",
             "ref" : 6,
@@ -825,219 +908,15 @@
                         "type" : "ph",
                         "children" : [ {
                           "type" : "ch",
-                          "text" : "Frank Zappa"
-                        } ]
-                      }
-                    } ]
-                  }, {
-                    "type" : "s",
-                    "ref" : 9,
-                    "children" : [ {
-                      "type" : "tq",
-                      "colSpan" : 1,
-                      "rowSpan" : 1,
-                      "qrCode" : {
-                        "type" : "qr",
-                        "link" : "https://en.wikipedia.org/wiki/Frank_Zappa",
-                        "style" : {
-                          "shape" : "Square",
-                          "colour" : 4,
-                          "background" : 6,
-                          "size" : 50,
-                          "logo" : {
-                            "ref" : 3,
-                            "width" : 300,
-                            "height" : 300,
-                            "clearLogoArea" : true
-                          }
-                        }
-                      }
-                    } ]
-                  } ]
-                }
-              }, {
-                "type" : "s",
-                "ref" : 10,
-                "children" : [ {
-                  "type" : "tx",
-                  "phrase" : {
-                    "type" : "ph",
-                    "children" : [ {
-                      "type" : "ch",
-                      "text" : "As a mostly self-taught composer and performer, Zappa had diverse musical influences that led him  to create music that was sometimes difficult to categorize. While in his teens, he acquired a taste  for 20th-century classical modernism, African-American rhythm and blues, and doo-wop music.[7] He  began writing classical music in high school, while simultaneously playing drums in rhythm and  blues bands, later switching to electric guitar. His debut studio album with the Mothers of  Invention, Freak Out! (1966), combined satirical but seemingly conventional rock and roll songs  with extended sound collages. He continued this eclectic and experimental approach throughout his career."
-                    } ]
-                  }
-                } ]
-              }, {
-                "type" : "tt",
-                "margin" : {
-                  "top" : 0.0,
-                  "bottom" : 0.0,
-                  "left" : 24.0,
-                  "right" : 24.0
-                },
-                "table" : {
-                  "type" : "t",
-                  "columns" : 1,
-                  "widthPercentage" : 100.0,
-                  "children" : [ {
-                    "type" : "tt",
-                    "margin" : {
-                      "top" : 0.0,
-                      "bottom" : 0.0,
-                      "left" : 0.0,
-                      "right" : 0.0
-                    },
-                    "table" : {
-                      "type" : "t",
-                      "columns" : 2,
-                      "widthPercentage" : 100.0,
-                      "weights" : [ 1.0, 3.0 ],
-                      "style" : 11,
-                      "children" : [ {
-                        "type" : "s",
-                        "ref" : 12,
-                        "children" : [ {
-                          "type" : "tx",
-                          "phrase" : {
-                            "type" : "ph",
-                            "children" : [ {
-                              "type" : "ch",
-                              "text" : "DOB"
-                            } ]
-                          }
-                        } ]
-                      }, {
-                        "type" : "tx",
-                        "phrase" : {
-                          "type" : "ph",
-                          "children" : [ {
-                            "type" : "ch",
-                            "text" : "1940-12-21"
-                          } ]
-                        }
-                      }, {
-                        "type" : "s",
-                        "ref" : 13,
-                        "children" : [ {
-                          "type" : "tx",
-                          "phrase" : {
-                            "type" : "ph",
-                            "children" : [ {
-                              "type" : "ch",
-                              "text" : "Address"
-                            } ]
-                          }
-                        } ]
-                      }, {
-                        "type" : "tx",
-                        "phrase" : {
-                          "type" : "ph",
-                          "children" : [ {
-                            "type" : "ch",
-                            "text" : "Baltimore, Maryland, U.S."
-                          } ]
-                        }
-                      } ]
-                    }
-                  } ]
-                }
-              }, {
-                "type" : "tx",
-                "phrase" : {
-                  "type" : "ph",
-                  "children" : [ {
-                    "type" : "ch",
-                    "text" : " "
-                  } ]
-                }
-              } ]
-            }
-          } ]
-        }, {
-          "type" : "s",
-          "ref" : 5,
-          "children" : [ {
-            "type" : "s",
-            "ref" : 6,
-            "children" : [ {
-              "type" : "ti",
-              "colSpan" : 1,
-              "rowSpan" : 1,
-              "image" : {
-                "type" : "im",
-                "ref" : 7,
-                "width" : 200.0,
-                "height" : 200.0
-              }
-            } ]
-          }, {
-            "type" : "tt",
-            "margin" : {
-              "top" : 0.0,
-              "bottom" : 0.0,
-              "left" : 0.0,
-              "right" : 0.0
-            },
-            "table" : {
-              "type" : "t",
-              "columns" : 1,
-              "widthPercentage" : 100.0,
-              "style" : 7,
-              "children" : [ {
-                "type" : "tt",
-                "margin" : {
-                  "top" : 0.0,
-                  "bottom" : 0.0,
-                  "left" : 0.0,
-                  "right" : 0.0
-                },
-                "table" : {
-                  "type" : "t",
-                  "columns" : 2,
-                  "widthPercentage" : 100.0,
-                  "children" : [ {
-                    "type" : "s",
-                    "ref" : 8,
-                    "children" : [ {
-                      "type" : "tx",
-                      "phrase" : {
-                        "type" : "ph",
-                        "children" : [ {
-                          "type" : "ch",
                           "text" : "Debbie Harry"
                         } ]
                       }
                     } ]
-                  }, {
-                    "type" : "s",
-                    "ref" : 9,
-                    "children" : [ {
-                      "type" : "tq",
-                      "colSpan" : 1,
-                      "rowSpan" : 1,
-                      "qrCode" : {
-                        "type" : "qr",
-                        "link" : "https://en.wikipedia.org/wiki/Debbie_Harry",
-                        "style" : {
-                          "shape" : "Square",
-                          "colour" : 4,
-                          "background" : 5,
-                          "size" : 50,
-                          "logo" : {
-                            "ref" : 3,
-                            "width" : 300,
-                            "height" : 300,
-                            "clearLogoArea" : true
-                          }
-                        }
-                      }
-                    } ]
                   } ]
                 }
               }, {
                 "type" : "s",
-                "ref" : 10,
+                "ref" : 9,
                 "children" : [ {
                   "type" : "tx",
                   "phrase" : {
@@ -1073,10 +952,10 @@
                       "columns" : 2,
                       "widthPercentage" : 100.0,
                       "weights" : [ 1.0, 3.0 ],
-                      "style" : 11,
+                      "style" : 10,
                       "children" : [ {
                         "type" : "s",
-                        "ref" : 12,
+                        "ref" : 11,
                         "children" : [ {
                           "type" : "tx",
                           "phrase" : {
@@ -1098,7 +977,7 @@
                         }
                       }, {
                         "type" : "s",
-                        "ref" : 13,
+                        "ref" : 12,
                         "children" : [ {
                           "type" : "tx",
                           "phrase" : {

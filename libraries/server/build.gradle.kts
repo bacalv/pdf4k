@@ -8,7 +8,7 @@ dependencies {
     api(project(":libraries:domain"))
     api(project(":libraries::domain-dto"))
     api(project(":libraries::dsl"))
-    implementation(project(":libraries::renderer"))
+    api(project(":libraries::renderer"))
     implementation(platform(libs.http4kBom))
     implementation(libs.http4kApiOpenApi)
     implementation(libs.http4kContract)

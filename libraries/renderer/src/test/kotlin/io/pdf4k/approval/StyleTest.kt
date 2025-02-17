@@ -11,6 +11,7 @@ import io.pdf4k.domain.Stationary
 import io.pdf4k.domain.StyleAttributes.Companion.noBorder
 import io.pdf4k.domain.StyleAttributes.Companion.style
 import io.pdf4k.domain.VerticalAlignment.Middle
+import io.pdf4k.domain.toArgument
 import io.pdf4k.dsl.PdfBuilder.Companion.content
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
 import io.pdf4k.dsl.StationaryBuilder.Companion.plusBlocks
@@ -226,7 +227,7 @@ class StyleTest : AbstractPdfRendererTest() {
         content {
             paragraph {
                 "The quick brown fox jumped over the lazy hen." and style(
-                    font = Resource(custom("custom", "ShadeBlue-2OozX.ttf"), "Shade Blue"),
+                    font = Resource(custom("custom", "ShadeBlue-2OozX.ttf".toArgument("location")), "Shade Blue"),
                     size = 24f
                 )
             }

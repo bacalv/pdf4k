@@ -51,8 +51,6 @@ object ComponentRenderer {
                 context.getImage(component.resource, component.width, component.height, component.rotation)
             )
 
-            is Component.QrCode -> listOf(context.getQrCode(component))
-
             is Component.Table -> listOf(PdfPTable(component.columns).also { table ->
                 context.pushStyle(component.style)
                 table.setStyle(context, component)
@@ -65,7 +63,6 @@ object ComponentRenderer {
                 is Component.Cell.Text -> component.phrase.render<Phrase>(context)
                 is Component.Cell.Table -> component.table.render<PdfPTable>(context)
                 is Component.Cell.Image -> component.image.render<Image>(context)
-                is Component.Cell.QrCode -> component.qrCode.render(context)
             }.let { element ->
                 when (element) {
                     is Phrase -> PdfPCell(element).also { it.setStyle(context) }

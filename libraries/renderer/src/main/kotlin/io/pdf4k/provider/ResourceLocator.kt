@@ -28,7 +28,7 @@ class ResourceLocator(
     private fun loadFromCustomProvider(location: Custom): InputStream {
         val provider = customProviders[location.providerName] ?:
             throw CustomResourceProviderNotFound(location.providerName)
-        val result = provider.load(location.name)
+        val result = provider.load(location.arguments, this)
         return result ?: throw notFound(location)
     }
 }

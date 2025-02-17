@@ -81,11 +81,6 @@ class RendererContext(
                 rotation?.let { img.setRotationDegrees(it) }
             }
 
-    fun getQrCode(component: Component.QrCode) =
-        QrRenderer(resourceLocators).render(component.link, component.style)
-            .let { Image.getInstance(it) }
-            .also { it.scaleToFit(component.style.size.toFloat(), component.style.size.toFloat()) }
-
     fun getBlockPageMapping() = stationaryByPage.mapIndexed { pageNumber, (_, blocksFilled) ->
         pageNumber to blocksFilled
     }.map { (pageNumber, blocksFilled) ->

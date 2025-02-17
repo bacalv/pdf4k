@@ -20,17 +20,17 @@ import java.net.URI
 sealed class ResourceLocationDto {
     data class Local(val name: String) : ResourceLocationDto()
     data class Uri(val uri: String) : ResourceLocationDto()
-    data class Custom(val providerName: String, val name: String) : ResourceLocationDto()
+    data class Custom(val providerName: String, val arguments: List<ArgumentDto>) : ResourceLocationDto()
 }
 
-fun ResourceLocation.toDto() = when (this) {
+fun ResourceLocation.toDto(resourceMapBuilder: ResourceMapDto.Builder) = when (this) {
     is ResourceLocation.Local -> Local(name)
-    is ResourceLocation.Remote.Custom -> Custom(providerName, name)
+    is ResourceLocation.Remote.Custom -> Custom(providerName, arguments.map { it.toDto(resourceMapBuilder) })
     is ResourceLocation.Remote.Uri -> Uri(uri.toString())
 }
 
-fun ResourceLocationDto.toDomain() = when (this) {
-    is Custom -> ResourceLocation.Remote.Custom(providerName, name)
+fun ResourceLocationDto.toDomain(resourceMap: ResourceMap) = when (this) {
+    is Custom -> ResourceLocation.Remote.Custom(providerName, arguments.map { it.toDomain(resourceMap) })
     is Local -> ResourceLocation.Local(name)
     is Uri -> ResourceLocation.Remote.Uri(URI(uri))
 }

@@ -44,7 +44,7 @@ fun Font.toDto(resourceMap: ResourceMapDto.Builder) = when (this) {
     Font.BuiltIn.Symbol -> FontDto.Symbol
     Font.BuiltIn.TimesRoman -> FontDto.TimesRoman
     Font.Included.Arial -> FontDto.Arial
-    is Font.Resource -> FontDto.Resource(resourceMap.resourceRef(resourceLocation.toDto()), name, format)
+    is Font.Resource -> FontDto.Resource(resourceMap.resourceRef(resourceLocation.toDto(resourceMap)), name, format)
 }
 
 fun Font.Style.toDto() = when (this) {

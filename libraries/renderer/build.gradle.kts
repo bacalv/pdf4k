@@ -6,7 +6,6 @@ dependencies {
     api(project(":libraries::domain"))
     implementation(libs.kotlinReflect)
     implementation(libs.openPdf)
-    implementation(libs.qrCode)
     implementation(libs.bouncyCastleBcmail)
     testFixturesApi(project(":libraries::domain-dto"))
     testFixturesApi(project(":libraries::dsl"))

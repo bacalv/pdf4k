@@ -12,7 +12,7 @@ data class StationaryDto(
 )
 
 fun Stationary.toDto(resourceMapBuilder: ResourceMapDto.Builder) = StationaryDto(
-    template = template.toDto().let(resourceMapBuilder::resourceRef),
+    template = template.toDto(resourceMapBuilder).let(resourceMapBuilder::resourceRef),
     templatePage = templatePage,
     width = width,
     height = height,

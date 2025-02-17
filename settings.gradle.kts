@@ -19,6 +19,9 @@ include(
     "libraries:client",
     "libraries:server",
     "plugins:markdown",
+    "plugins:qrcode:domain",
+    "plugins:qrcode:dsl",
+    "plugins:qrcode:server",
     "applications:empty-server",
     "applications:examples:musician-renderer"
 )

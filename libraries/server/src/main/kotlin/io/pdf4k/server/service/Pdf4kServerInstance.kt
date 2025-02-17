@@ -1,5 +1,6 @@
 package io.pdf4k.server.service
 
+import io.pdf4k.server.config.Pdf4kServerConfiguration
 import org.http4k.contract.ContractRoute
 import org.http4k.contract.contract
 import org.http4k.contract.openapi.ApiInfo
@@ -12,6 +13,7 @@ import org.http4k.server.Http4kServer
 import java.util.concurrent.atomic.AtomicReference
 
 class Pdf4kServerInstance(
+    private val configuration: Pdf4kServerConfiguration,
     private val routes: List<ContractRoute>,
     private val factory: (HttpHandler) -> Http4kServer
 ) {
@@ -20,7 +22,7 @@ class Pdf4kServerInstance(
 
     fun start() {
         val handler = contract {
-            renderer = OpenApi3(ApiInfo("PDF4k Server", "v0.0.1", "PDF4k Server API"), Jackson)
+            renderer = with(configuration) { OpenApi3(ApiInfo(apiTitle, apiVersion, apiDescription), Jackson) }
             descriptionPath = "/api/openapi.json"
             routes += this@Pdf4kServerInstance.routes
         }
@@ -28,7 +30,7 @@ class Pdf4kServerInstance(
             handler,
             swaggerUiLite {
                 url = "/api/openapi.json"
-                pageTitle = "PDF4k Server API"
+                pageTitle = configuration.apiTitle
                 persistAuthorization = true
             }
         )
