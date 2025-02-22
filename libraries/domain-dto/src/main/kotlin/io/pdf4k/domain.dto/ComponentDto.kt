@@ -41,7 +41,7 @@ sealed class ComponentDto {
 
     data class Image(val ref: ResourceRef, val width: Float?, val height: Float?, val rotation: Float?) : ComponentDto()
 
-    data class Link(val target: String, val text: String) : ComponentDto()
+    data class Link(val target: String, val phrase: Phrase) : ComponentDto()
 
     data object PageNumber : ComponentDto()
 
@@ -82,7 +82,7 @@ fun Component.toDto(resourceMapBuilder: ResourceMapDto.Builder): ComponentDto = 
     is Component.Chunk -> Chunk(text)
     is Component.Content -> Content(children.toDto(resourceMapBuilder))
     is Component.Image -> Image(resource.toDto(resourceMapBuilder).let(resourceMapBuilder::resourceRef), width, height, rotation)
-    is Component.Link -> Link(target, text)
+    is Component.Link -> Link(target, phrase.toDto(resourceMapBuilder) as Phrase)
     is Component.PageNumber -> PageNumber
     is Component.Paragraph -> Paragraph(children.toDto(resourceMapBuilder))
     is Component.Phrase -> Phrase(children.toDto(resourceMapBuilder))
@@ -113,7 +113,7 @@ fun ComponentDto.toDomain(resourceMap: ResourceMap): Component = when (this) {
     is Chunk -> Component.Chunk(text)
     is Content -> Component.Content(children.toDomain(resourceMap))
     is Image -> Component.Image(resourceMap.getResourceLocation(ref), width, height, rotation)
-    is Link -> Component.Link(target, text)
+    is Link -> Component.Link(target, phrase.toDomain(resourceMap) as Component.Phrase)
     is PageNumber -> Component.PageNumber
     is Paragraph -> Component.Paragraph(children.toDomain(resourceMap))
     is Phrase -> Component.Phrase(children.toDomain(resourceMap))

@@ -16,7 +16,7 @@ sealed class Component(val children: List<Component>) {
     class Image(val resource: ResourceLocation, val width: Float?, val height: Float?, val rotation: Float?)
         : Component(emptyList())
 
-    class Link(val target: String, val text: String) : Component(emptyList())
+    class Link(val target: String, val phrase: Phrase) : Component(emptyList())
 
     data object PageNumber : Component(emptyList())
 

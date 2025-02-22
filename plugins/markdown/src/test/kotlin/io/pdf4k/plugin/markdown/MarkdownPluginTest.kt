@@ -30,7 +30,17 @@ class MarkdownPluginTest: AbstractPdfRendererTest() {
                 
                 # Block quotes
                 
-                > Text in a block quote
+                > ### Heading in a block quote
+                > Some more text
+                >> Nested text
+                >
+                > After nested
+                
+                # Links
+                
+                [Look **here** that was *bold*](https://github.com/commonmark/commonmark.js)
+                
+                > [Link](https://pdf4k.io) in a **block quote**!
             """.trimIndent())
         }.approve(approver)
     }

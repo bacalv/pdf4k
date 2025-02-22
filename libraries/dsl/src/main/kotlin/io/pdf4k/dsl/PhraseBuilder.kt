@@ -23,7 +23,11 @@ abstract class PhraseBuilder<P : PhraseBuilder<P>> : BuildsTextStyle<Component.P
     }
 
     fun link(target: String, text: String) {
-        children += LinkBuilder(target, text)
+        link(target) { +text }
+    }
+
+    fun link(target: String, block: PhraseBuilder<P>.() -> Unit) {
+        children += LinkBuilder(target, childBuilder().also { it.block() })
     }
 
     fun anchor(name: String, block: PhraseBuilder<P>.() -> Unit) {

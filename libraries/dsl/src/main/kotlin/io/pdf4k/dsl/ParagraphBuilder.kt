@@ -39,6 +39,10 @@ abstract class ParagraphBuilder<F : PhraseBuilder<F>, P : ParagraphBuilder<F, P>
         phrase(style) { link(target, text) }
     }
 
+    fun link(target: String, style: StyleAttributes? = null, block: PhraseBuilder<F>.() -> Unit) {
+        phrase(style) { link(target, block) }
+    }
+
     fun anchor(name: String, text: String) {
         phrase { anchor(name) { +text } }
     }

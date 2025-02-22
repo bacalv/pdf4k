@@ -35,7 +35,7 @@ object ComponentRenderer {
 
             is Component.Link -> listOf(Anchor().also {
                 it.reference = component.target
-                it.add(Chunk(component.text).also { it.setStyle(context) })
+                it.addAll(component.phrase.render(context))
             })
 
             is Component.Anchor -> listOf(Anchor().also {

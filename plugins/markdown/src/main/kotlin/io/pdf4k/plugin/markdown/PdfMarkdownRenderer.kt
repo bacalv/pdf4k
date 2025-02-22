@@ -1,17 +1,20 @@
 package io.pdf4k.plugin.markdown
 
 import io.pdf4k.domain.Font
+import io.pdf4k.domain.Margin
 import io.pdf4k.domain.StyleAttributes.Companion.style
-import io.pdf4k.dsl.AnyContentBuilder
+import io.pdf4k.dsl.AnyTableBuilder
 import io.pdf4k.dsl.PhraseBuilder
 import org.commonmark.node.*
 import org.commonmark.renderer.Renderer
 import java.awt.Color
+import java.awt.Color.BLUE
 
-class Pdf4kDslMarkdownRenderer(private val builder: AnyContentBuilder): Renderer {
+class Pdf4kDslMarkdownRenderer(private val builder: AnyTableBuilder): Renderer {
     companion object {
         private val blockQuoteDark = Color(127, 127, 127)
         private val blockQuoteLight = Color(240, 240, 240)
+        private val linkStyle = style(underlined = true, colour = BLUE)
     }
 
     override fun render(node: Node, out: Appendable) {
@@ -20,59 +23,87 @@ class Pdf4kDslMarkdownRenderer(private val builder: AnyContentBuilder): Renderer
 
     override fun render(node: Node): String {
         when (node) {
-            is Document -> node.forEachChild { render(it) }
+            is Document -> {
+                builder.text(node.firstChild)
+            }
 
             is Heading -> {
-                builder.paragraph(headingStyle(node.level)) {
+                builder.textCell(headingStyle(node.level)) {
                     +(node.firstChild as Text).literal
                 }
             }
 
-            is Paragraph -> builder.paragraph { phrase { text(node) } }
-
-            is BlockQuote -> builder.table(2, weights = listOf(1f, 49f)) {
-                textCell(style(cellBackground = blockQuoteDark)) { +"" }
-                textCell(style(cellBackground = blockQuoteLight)) {
-                    text(node)
-                }
+            is Paragraph -> {
+                builder.text(node, null)
             }
+
+            is BlockQuote -> builder.blockQuote(node)
+
             else -> TODO("Unsupported node type ${node::class.simpleName}")
         }
 
         return ""
     }
 
-    private fun PhraseBuilder<*>.text(node: Node) {
-        text(node, null)
+    private fun AnyTableBuilder.blockQuote(node: BlockQuote) {
+        style(paddingLeft = 14f, borderWidthLeft = 10f, borderColourLeft = blockQuoteDark, cellBackground = blockQuoteLight) {
+            tableCell(1, margin = Margin(0f, 0f, 14f, 0f)) {
+                style(paddingLeft = 4f, borderWidthLeft = 0f, borderColourLeft = Color.BLACK) {
+                    text(node.firstChild, null)
+                }
+            }
+        }
+    }
+
+    private fun AnyTableBuilder.text(node: Node, currentFontStyle: Font.Style? = null) {
+        var child: Node? = node
+
+        while (child != null) {
+            when (val c = child) {
+                is Heading -> {
+                    textCell(headingStyle(c.level)) {
+                        +(c.firstChild as Text).literal
+                    }
+                }
+                is Paragraph -> textCell { text(c.firstChild, currentFontStyle) }
+                is BlockQuote -> blockQuote(c)
+                else -> TODO("UNKNOWN TYPE $c")
+            }
+            child = child.next
+        }
     }
 
     private fun PhraseBuilder<*>.text(node: Node, currentFontStyle: Font.Style? = null) {
-        var child = node.firstChild
-
+        var child: Node? = node
         while (child != null) {
-            when (child) {
-                is Text -> +child.literal
+            when (val c = child) {
+                is Text -> +c.literal
                 is Emphasis -> (currentFontStyle + Font.Style.Italic).let {
                     style(fontStyle = it) {
-                        text(child, it)
+                        text(c.firstChild, it)
                     }
                 }
 
                 is StrongEmphasis -> (currentFontStyle + Font.Style.Bold).let {
                     style(fontStyle = it) {
-                        text(child, it)
+                        text(c.firstChild, it)
                     }
                 }
 
                 is SoftLineBreak -> crlf()
 
-                is Paragraph -> text(child, currentFontStyle)
+                is Paragraph -> text(c.firstChild, currentFontStyle)
+
+                is Link -> link(c.destination) {
+                    style(linkStyle) {
+                        text(c.firstChild, currentFontStyle)
+                    }
+                }
 
                 else -> TODO("Unsupported node type ${child::class.simpleName}")
             }
             child = child.next
         }
-
     }
 
     private fun headingStyle(level: Int) = style(
@@ -92,13 +123,5 @@ class Pdf4kDslMarkdownRenderer(private val builder: AnyContentBuilder): Renderer
         Font.Style.Bold -> if (other == Font.Style.Italic) { Font.Style.BoldItalic } else Font.Style.Bold
         Font.Style.Italic -> if (other == Font.Style.Bold) { Font.Style.BoldItalic } else Font.Style.Italic
         Font.Style.BoldItalic -> this
-    }
-
-    private fun Node.forEachChild(block: (Node) -> Unit) {
-        var child = firstChild
-        while(child != null) {
-            block(child)
-            child = child.next
-        }
     }
 }

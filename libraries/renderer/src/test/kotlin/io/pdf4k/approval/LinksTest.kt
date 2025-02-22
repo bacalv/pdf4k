@@ -1,7 +1,9 @@
 package io.pdf4k.approval
 
+import io.pdf4k.domain.Font.Style.Bold
 import io.pdf4k.domain.Stationary.Companion.BlankA4Portrait
 import io.pdf4k.domain.StyleAttributes.Companion.style
+import io.pdf4k.dsl.PdfBuilder.Companion.content
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
 import io.pdf4k.dsl.StationaryBuilder.Companion.plusBlocks
 import io.pdf4k.testing.AbstractPdfRendererTest
@@ -55,6 +57,18 @@ class LinksTest : AbstractPdfRendererTest() {
                     paragraph { anchor("page-2", "This is page 2") }
                     crlf()
                     paragraph { link("#page-1", "Go to page 1", linkStyle) }
+                }
+            }
+        }.approve(approver)
+    }
+
+    @Test
+    fun `adds a link at the paragraph level`(approver: PdfApprover) {
+        content {
+            paragraph {
+                link("https://github.com") {
+                    +"Hello "
+                    "Github!" and style(fontStyle = Bold)
                 }
             }
         }.approve(approver)

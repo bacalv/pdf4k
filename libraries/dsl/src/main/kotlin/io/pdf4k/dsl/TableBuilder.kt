@@ -93,3 +93,5 @@ abstract class TableBuilder<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(
         override val tableBuilder: (TableAttributes, StyleAttributes?) -> ForPage = { t, s -> ForPage(t, s) }
     }
 }
+
+typealias AnyTableBuilder = TableBuilder<*, *>
