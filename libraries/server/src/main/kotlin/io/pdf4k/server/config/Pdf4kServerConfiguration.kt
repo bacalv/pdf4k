@@ -40,9 +40,8 @@ data class Pdf4kServerConfiguration(
                 ?: DEFAULT_CONFIG
 
             val bytes = Pdf4kServerConfiguration::class.java.getResource(configLocation)?.openStream()?.readAllBytes()
-                ?: runCatching {
-                    FileInputStream(configLocation).readAllBytes()
-                }.getOrNull() ?: throw PdfError.CannotLoadConfiguration(configLocation)
+                ?: runCatching { FileInputStream(configLocation).readAllBytes() }.getOrNull()
+                ?: throw PdfError.CannotLoadConfiguration(configLocation)
             val mapper = ObjectMapper(YAMLFactory()).registerModule(KotlinModule.Builder().build())
             return mapper.readValue<Pdf4kServerConfiguration>(bytes)
         }

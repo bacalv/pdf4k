@@ -3,11 +3,11 @@ package io.pdf4k.plugin.qrcode.dsl
 import io.pdf4k.domain.ResourceLocation.Companion.custom
 import io.pdf4k.domain.StyleAttributes
 import io.pdf4k.domain.toArgument
-import io.pdf4k.dsl.TableBuilder
+import io.pdf4k.dsl.AnyTableBuilder
 import io.pdf4k.plugin.qrcode.domain.QrStyle
 import io.pdf4k.plugin.qrcode.domain.qrCodeProviderName
 
-fun TableBuilder<*, *>.qrCodeCell(
+fun AnyTableBuilder.qrCodeCell(
     link: String,
     qrStyle: QrStyle,
     style: StyleAttributes? = null,
