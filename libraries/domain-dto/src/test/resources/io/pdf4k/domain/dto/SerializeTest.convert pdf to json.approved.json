@@ -175,7 +175,13 @@
             "children" : [ {
               "type" : "l",
               "target" : "#link",
-              "text" : "Link"
+              "phrase" : {
+                "type" : "ph",
+                "children" : [ {
+                  "type" : "ch",
+                  "text" : "Link"
+                } ]
+              }
             } ]
           } ]
         } ]
