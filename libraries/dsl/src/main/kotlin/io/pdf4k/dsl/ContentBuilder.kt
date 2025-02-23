@@ -51,6 +51,10 @@ abstract class ContentBuilder<F : PhraseBuilder<F>, P : ParagraphBuilder<F, P>, 
         children += tableBuilder(TableAttributes(columns, widthPercentage, weights, Margin.ZERO, headerRows, extend), style).also { it.block() }
     }
 
+    fun list(block: ListBuilder<F>.() -> Unit) {
+        phrase { list(block) }
+    }
+
     override fun build() = Component.Content(children.map { it.build() })
 
     class ForBlock : ContentBuilder<PhraseBuilder.ForBlock, ParagraphBuilder.ForBlock, TableBuilder.ForBlock, ForBlock>() {

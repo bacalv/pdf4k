@@ -18,6 +18,10 @@ sealed class Component(val children: List<Component>) {
 
     class Link(val target: String, val phrase: Phrase) : Component(emptyList())
 
+    class ItemList(children: List<Component>) : Component(children)
+
+    class ListItem(val phrase: Phrase, val subList: ItemList? = null) : Component(emptyList())
+
     data object PageNumber : Component(emptyList())
 
     class Table(

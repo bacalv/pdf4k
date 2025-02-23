@@ -6,6 +6,8 @@ import com.lowagie.text.pdf.PdfPTable
 import io.pdf4k.domain.Component
 import io.pdf4k.renderer.StyleSetter.forParagraph
 import io.pdf4k.renderer.StyleSetter.setStyle
+import kotlin.collections.List
+import com.lowagie.text.List as IList
 
 object ComponentRenderer {
     fun List<Component>.render(context: RendererContext): List<Element> = map { component ->
@@ -49,6 +51,20 @@ object ComponentRenderer {
 
             is Component.Image -> listOf(
                 context.getImage(component.resource, component.width, component.height, component.rotation)
+            )
+
+            is Component.ItemList -> listOf(IList().also { list ->
+                component.children.render(context).forEach {
+                    list.add(it)
+                }
+            })
+
+            is Component.ListItem -> listOf(
+                ListItem(component.phrase.render(context) as Phrase).also { listItem ->
+                    component.subList?.children?.render(context)?.forEach {
+                        listItem.add(it)
+                    }
+                }
             )
 
             is Component.Table -> listOf(PdfPTable(component.columns).also { table ->

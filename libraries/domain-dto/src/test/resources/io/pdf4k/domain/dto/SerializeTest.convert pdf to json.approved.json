@@ -10,6 +10,10 @@
     "styles" : [ { }, {
       "colour" : 0
     }, {
+      "fontStyle" : "Bold"
+    }, {
+      "colour" : 1
+    }, {
       "font" : 0,
       "colour" : 1
     }, {
@@ -207,10 +211,83 @@
     "blockContent" : { }
   }, {
     "stationary" : [ 0 ],
-    "style" : 2,
+    "content" : [ {
+      "type" : "ph",
+      "children" : [ {
+        "type" : "il",
+        "children" : [ {
+          "type" : "li",
+          "phrase" : {
+            "type" : "ph",
+            "children" : [ {
+              "type" : "ch",
+              "text" : "This is the first item"
+            } ]
+          }
+        }, {
+          "type" : "li",
+          "phrase" : {
+            "type" : "ph",
+            "children" : [ {
+              "type" : "ch",
+              "text" : "This is the "
+            }, {
+              "type" : "s",
+              "ref" : 2,
+              "children" : [ {
+                "type" : "ch",
+                "text" : "second"
+              } ]
+            } ]
+          },
+          "subList" : {
+            "type" : "il",
+            "children" : [ {
+              "type" : "il",
+              "children" : [ {
+                "type" : "s",
+                "ref" : 3,
+                "children" : [ {
+                  "type" : "li",
+                  "phrase" : {
+                    "type" : "ph",
+                    "children" : [ {
+                      "type" : "ch",
+                      "text" : "This is a nested item under the second item"
+                    } ]
+                  }
+                }, {
+                  "type" : "li",
+                  "phrase" : {
+                    "type" : "ph",
+                    "children" : [ {
+                      "type" : "ch",
+                      "text" : "This is another nested item under the second item"
+                    } ]
+                  }
+                } ]
+              } ]
+            } ]
+          }
+        }, {
+          "type" : "li",
+          "phrase" : {
+            "type" : "ph",
+            "children" : [ {
+              "type" : "ch",
+              "text" : "This is the third item"
+            } ]
+          }
+        } ]
+      } ]
+    } ],
+    "blockContent" : { }
+  }, {
+    "stationary" : [ 0 ],
+    "style" : 4,
     "content" : [ {
       "type" : "s",
-      "ref" : 3,
+      "ref" : 5,
       "children" : [ {
         "type" : "t",
         "columns" : 2,
@@ -219,7 +296,7 @@
         "extend" : false,
         "children" : [ {
           "type" : "s",
-          "ref" : 4,
+          "ref" : 6,
           "children" : [ {
             "type" : "tx",
             "phrase" : {
@@ -241,10 +318,10 @@
           } ]
         }, {
           "type" : "s",
-          "ref" : 5,
+          "ref" : 7,
           "children" : [ {
             "type" : "s",
-            "ref" : 6,
+            "ref" : 8,
             "children" : [ {
               "type" : "ti",
               "colSpan" : 1,
@@ -268,7 +345,7 @@
               "type" : "t",
               "columns" : 1,
               "widthPercentage" : 100.0,
-              "style" : 7,
+              "style" : 9,
               "children" : [ {
                 "type" : "tt",
                 "margin" : {
@@ -283,7 +360,7 @@
                   "widthPercentage" : 100.0,
                   "children" : [ {
                     "type" : "s",
-                    "ref" : 8,
+                    "ref" : 10,
                     "children" : [ {
                       "type" : "tx",
                       "phrase" : {
@@ -298,7 +375,7 @@
                 }
               }, {
                 "type" : "s",
-                "ref" : 9,
+                "ref" : 11,
                 "children" : [ {
                   "type" : "tx",
                   "phrase" : {
@@ -334,10 +411,10 @@
                       "columns" : 2,
                       "widthPercentage" : 100.0,
                       "weights" : [ 1.0, 3.0 ],
-                      "style" : 10,
+                      "style" : 12,
                       "children" : [ {
                         "type" : "s",
-                        "ref" : 11,
+                        "ref" : 13,
                         "children" : [ {
                           "type" : "tx",
                           "phrase" : {
@@ -359,7 +436,7 @@
                         }
                       }, {
                         "type" : "s",
-                        "ref" : 12,
+                        "ref" : 14,
                         "children" : [ {
                           "type" : "tx",
                           "phrase" : {
@@ -397,10 +474,10 @@
           } ]
         }, {
           "type" : "s",
-          "ref" : 13,
+          "ref" : 15,
           "children" : [ {
             "type" : "s",
-            "ref" : 6,
+            "ref" : 8,
             "children" : [ {
               "type" : "ti",
               "colSpan" : 1,
@@ -424,7 +501,7 @@
               "type" : "t",
               "columns" : 1,
               "widthPercentage" : 100.0,
-              "style" : 7,
+              "style" : 9,
               "children" : [ {
                 "type" : "tt",
                 "margin" : {
@@ -439,7 +516,7 @@
                   "widthPercentage" : 100.0,
                   "children" : [ {
                     "type" : "s",
-                    "ref" : 8,
+                    "ref" : 10,
                     "children" : [ {
                       "type" : "tx",
                       "phrase" : {
@@ -454,7 +531,7 @@
                 }
               }, {
                 "type" : "s",
-                "ref" : 9,
+                "ref" : 11,
                 "children" : [ {
                   "type" : "tx",
                   "phrase" : {
@@ -490,10 +567,10 @@
                       "columns" : 2,
                       "widthPercentage" : 100.0,
                       "weights" : [ 1.0, 3.0 ],
-                      "style" : 10,
+                      "style" : 12,
                       "children" : [ {
                         "type" : "s",
-                        "ref" : 11,
+                        "ref" : 13,
                         "children" : [ {
                           "type" : "tx",
                           "phrase" : {
@@ -515,7 +592,7 @@
                         }
                       }, {
                         "type" : "s",
-                        "ref" : 12,
+                        "ref" : 14,
                         "children" : [ {
                           "type" : "tx",
                           "phrase" : {
@@ -553,10 +630,10 @@
           } ]
         }, {
           "type" : "s",
-          "ref" : 5,
+          "ref" : 7,
           "children" : [ {
             "type" : "s",
-            "ref" : 6,
+            "ref" : 8,
             "children" : [ {
               "type" : "ti",
               "colSpan" : 1,
@@ -580,7 +657,7 @@
               "type" : "t",
               "columns" : 1,
               "widthPercentage" : 100.0,
-              "style" : 7,
+              "style" : 9,
               "children" : [ {
                 "type" : "tt",
                 "margin" : {
@@ -595,7 +672,7 @@
                   "widthPercentage" : 100.0,
                   "children" : [ {
                     "type" : "s",
-                    "ref" : 8,
+                    "ref" : 10,
                     "children" : [ {
                       "type" : "tx",
                       "phrase" : {
@@ -610,7 +687,7 @@
                 }
               }, {
                 "type" : "s",
-                "ref" : 9,
+                "ref" : 11,
                 "children" : [ {
                   "type" : "tx",
                   "phrase" : {
@@ -646,10 +723,10 @@
                       "columns" : 2,
                       "widthPercentage" : 100.0,
                       "weights" : [ 1.0, 3.0 ],
-                      "style" : 10,
+                      "style" : 12,
                       "children" : [ {
                         "type" : "s",
-                        "ref" : 11,
+                        "ref" : 13,
                         "children" : [ {
                           "type" : "tx",
                           "phrase" : {
@@ -671,7 +748,7 @@
                         }
                       }, {
                         "type" : "s",
-                        "ref" : 12,
+                        "ref" : 14,
                         "children" : [ {
                           "type" : "tx",
                           "phrase" : {
@@ -709,10 +786,10 @@
           } ]
         }, {
           "type" : "s",
-          "ref" : 13,
+          "ref" : 15,
           "children" : [ {
             "type" : "s",
-            "ref" : 6,
+            "ref" : 8,
             "children" : [ {
               "type" : "ti",
               "colSpan" : 1,
@@ -736,7 +813,7 @@
               "type" : "t",
               "columns" : 1,
               "widthPercentage" : 100.0,
-              "style" : 7,
+              "style" : 9,
               "children" : [ {
                 "type" : "tt",
                 "margin" : {
@@ -751,7 +828,7 @@
                   "widthPercentage" : 100.0,
                   "children" : [ {
                     "type" : "s",
-                    "ref" : 8,
+                    "ref" : 10,
                     "children" : [ {
                       "type" : "tx",
                       "phrase" : {
@@ -766,7 +843,7 @@
                 }
               }, {
                 "type" : "s",
-                "ref" : 9,
+                "ref" : 11,
                 "children" : [ {
                   "type" : "tx",
                   "phrase" : {
@@ -802,10 +879,10 @@
                       "columns" : 2,
                       "widthPercentage" : 100.0,
                       "weights" : [ 1.0, 3.0 ],
-                      "style" : 10,
+                      "style" : 12,
                       "children" : [ {
                         "type" : "s",
-                        "ref" : 11,
+                        "ref" : 13,
                         "children" : [ {
                           "type" : "tx",
                           "phrase" : {
@@ -827,7 +904,7 @@
                         }
                       }, {
                         "type" : "s",
-                        "ref" : 12,
+                        "ref" : 14,
                         "children" : [ {
                           "type" : "tx",
                           "phrase" : {
@@ -865,10 +942,10 @@
           } ]
         }, {
           "type" : "s",
-          "ref" : 5,
+          "ref" : 7,
           "children" : [ {
             "type" : "s",
-            "ref" : 6,
+            "ref" : 8,
             "children" : [ {
               "type" : "ti",
               "colSpan" : 1,
@@ -892,7 +969,7 @@
               "type" : "t",
               "columns" : 1,
               "widthPercentage" : 100.0,
-              "style" : 7,
+              "style" : 9,
               "children" : [ {
                 "type" : "tt",
                 "margin" : {
@@ -907,7 +984,7 @@
                   "widthPercentage" : 100.0,
                   "children" : [ {
                     "type" : "s",
-                    "ref" : 8,
+                    "ref" : 10,
                     "children" : [ {
                       "type" : "tx",
                       "phrase" : {
@@ -922,7 +999,7 @@
                 }
               }, {
                 "type" : "s",
-                "ref" : 9,
+                "ref" : 11,
                 "children" : [ {
                   "type" : "tx",
                   "phrase" : {
@@ -958,10 +1035,10 @@
                       "columns" : 2,
                       "widthPercentage" : 100.0,
                       "weights" : [ 1.0, 3.0 ],
-                      "style" : 10,
+                      "style" : 12,
                       "children" : [ {
                         "type" : "s",
-                        "ref" : 11,
+                        "ref" : 13,
                         "children" : [ {
                           "type" : "tx",
                           "phrase" : {
@@ -983,7 +1060,7 @@
                         }
                       }, {
                         "type" : "s",
-                        "ref" : 12,
+                        "ref" : 14,
                         "children" : [ {
                           "type" : "tx",
                           "phrase" : {

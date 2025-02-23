@@ -67,6 +67,23 @@ class SerializeTest {
                     }
                 }
             }
+            page {
+                content {
+                    list {
+                        item("This is the first item")
+                        item {
+                            +"This is the "
+                            "second" and style(fontStyle = Bold)
+                        }.list {
+                            style(colour = RED) {
+                                item("This is a nested item under the second item")
+                                item("This is another nested item under the second item")
+                            }
+                        }
+                        item("This is the third item")
+                    }
+                }
+            }
             page(style(font, colour = RED)) {
                 content {
                     style(splitLate = true, splitRows = true) {

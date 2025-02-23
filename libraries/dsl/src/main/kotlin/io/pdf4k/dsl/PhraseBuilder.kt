@@ -34,6 +34,10 @@ abstract class PhraseBuilder<P : PhraseBuilder<P>> : BuildsTextStyle<Component.P
         addChild(AnchorBuilder(name, childBuilder().also { it.block() }.children))
     }
 
+    fun list(block: ListBuilder<P>.() -> Unit) {
+        addChild(ListBuilder(childBuilder).also { it.block() })
+    }
+
     fun crlf() = +"\n"
 
     class ForBlock: PhraseBuilder<ForBlock>() {
