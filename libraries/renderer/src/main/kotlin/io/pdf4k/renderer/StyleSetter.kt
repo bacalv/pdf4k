@@ -1,14 +1,14 @@
 package io.pdf4k.renderer
 
-import com.lowagie.text.Chunk
+import com.lowagie.text.*
 import com.lowagie.text.Element.*
-import com.lowagie.text.Paragraph
 import com.lowagie.text.Rectangle.NO_BORDER
 import com.lowagie.text.pdf.PdfContentByte
 import com.lowagie.text.pdf.PdfPCell
 import com.lowagie.text.pdf.PdfPTable
 import io.pdf4k.domain.Component
 import io.pdf4k.domain.HorizontalAlignment
+import io.pdf4k.domain.ListStyle
 import io.pdf4k.domain.StyleAttributes.Companion.DEFAULT_LEADING
 import io.pdf4k.domain.VerticalAlignment
 
@@ -92,6 +92,16 @@ object StyleSetter {
             isSplitRows = style.splitRows ?: true
         }
         component.weights?.let { setWidths(it.toFloatArray()) }
+    }
+
+    fun createListItem(context: RendererContext, phrase: Phrase, children: List<Element>): ListItem {
+        val item = ListItem()
+        val listStyle = context.peekStyle().listStyle ?: ListStyle.Symbol()
+        item.listSymbol = Chunk(listStyle.getListSymbol(context.nextListItemNumber()))
+        item.listSymbol.setStyle(context)
+        item.add(phrase)
+        children.forEach { item.add(it) }
+        return item
     }
 
     private fun setHorizontalAlignment(cell: PdfPCell, align: HorizontalAlignment?) {

@@ -20,6 +20,7 @@ class RendererContext(
     val resourceLocators: ResourceLocators
 ) {
     private val styleStack: Stack<StyleAttributes> = Stack()
+    private val listItemNumberStack: Stack<Int> = Stack()
     private val pageNumber: AtomicInteger = AtomicInteger()
     val stationaryByPage = mutableListOf<Pair<LoadedStationary, Int>>()
 
@@ -40,6 +41,15 @@ class RendererContext(
     }
 
     fun popStyle(): StyleAttributes = styleStack.pop()
+
+    fun pushList() {
+        val listStyle = peekStyle().listStyle ?: ListStyle.Symbol("-")
+        listItemNumberStack.push(listStyle.startAt ?: 1)
+    }
+
+    fun nextListItemNumber(): Int = listItemNumberStack.pop().also { listItemNumberStack.push(it + 1) }
+
+    fun popList() = listItemNumberStack.pop()
 
     fun currentFont() = with(peekStyle()) {
         resourceLocators.fontProvider.getFont(font, size, fontStyle, colour)

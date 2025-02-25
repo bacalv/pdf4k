@@ -278,6 +278,22 @@ class TableTest : AbstractPdfRendererTest() {
         }.approve(approver)
     }
 
+    @Test
+    fun `draw a table inside a phrase`(approver: PdfApprover) {
+        content {
+            phrase {
+                +"Top of phrase"
+                table(2) {
+                    textCell("A")
+                    textCell("B")
+                    textCell("C")
+                    textCell("D")
+                }
+                +"Bottom of phrase"
+            }
+        }.approve(approver)
+    }
+
     companion object {
         @JvmStatic
         fun alignments() = HorizontalAlignment.entries.cartesianProduct(VerticalAlignment.entries)

@@ -52,7 +52,7 @@ abstract class ContentBuilder<F : PhraseBuilder<F>, P : ParagraphBuilder<F, P>, 
     }
 
     fun list(block: ListBuilder<F>.() -> Unit) {
-        phrase { list(block) }
+        phrase { list { this.block() } }
     }
 
     override fun build() = Component.Content(children.map { it.build() })

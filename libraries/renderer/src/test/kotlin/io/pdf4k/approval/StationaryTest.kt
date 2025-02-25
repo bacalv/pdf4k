@@ -170,7 +170,6 @@ class StationaryTest : AbstractPdfRendererTest() {
         }.approve(approver)
     }
 
-
     @Test
     fun `can use different sized stationary for continuation page`(approver: PdfApprover) {
         pdf {

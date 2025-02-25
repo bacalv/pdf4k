@@ -4,9 +4,9 @@ import com.lowagie.text.*
 import com.lowagie.text.pdf.PdfPCell
 import com.lowagie.text.pdf.PdfPTable
 import io.pdf4k.domain.Component
+import io.pdf4k.renderer.StyleSetter.createListItem
 import io.pdf4k.renderer.StyleSetter.forParagraph
 import io.pdf4k.renderer.StyleSetter.setStyle
-import kotlin.collections.List
 import com.lowagie.text.List as IList
 
 object ComponentRenderer {
@@ -54,18 +54,16 @@ object ComponentRenderer {
             )
 
             is Component.ItemList -> listOf(IList().also { list ->
-                component.children.render(context).forEach {
-                    list.add(it)
-                }
+                context.pushList()
+                component.children.render(context).forEach { list.add(it) }
+                context.popList()
             })
 
-            is Component.ListItem -> listOf(
-                ListItem(component.phrase.render(context) as Phrase).also { listItem ->
-                    component.subList?.children?.render(context)?.forEach {
-                        listItem.add(it)
-                    }
-                }
-            )
+            is Component.ListItem -> listOf(createListItem(
+                context = context,
+                phrase = component.phrase.render(context),
+                children = component.subList?.children?.render(context) ?: emptyList()
+            ))
 
             is Component.Table -> listOf(PdfPTable(component.columns).also { table ->
                 context.pushStyle(component.style)

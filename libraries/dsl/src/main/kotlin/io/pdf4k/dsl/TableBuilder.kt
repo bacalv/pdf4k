@@ -64,17 +64,7 @@ abstract class TableBuilder<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(
             children += CellBuilder(colSpan, rowSpan, Margin.ZERO, ImageBuilder(resourceLocation, width, height, rotation))
         }
     }
-/*
-    fun qrCodeCell(link: String, qrStyle: QrStyle, style: StyleAttributes? = null, colSpan: Int = 1, rowSpan: Int = 1) {
-        if (style != null) {
-            style(style) {
-                qrCodeCell(link, qrStyle, null, colSpan, rowSpan)
-            }
-        } else {
-            children += CellBuilder(colSpan, rowSpan, Margin.ZERO, QrBuilder(link, qrStyle))
-        }
-    }
-*/
+
     class ForBlock(
         val attributes: TableAttributes,
         style: StyleAttributes?
@@ -95,3 +85,5 @@ abstract class TableBuilder<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(
 }
 
 typealias AnyTableBuilder = TableBuilder<*, *>
+typealias PageTableBuilder = TableBuilder<PhraseBuilder.ForPage, TableBuilder.ForPage>
+typealias BlockTableBuilder = TableBuilder<PhraseBuilder.ForBlock, TableBuilder.ForBlock>

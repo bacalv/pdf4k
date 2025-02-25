@@ -41,6 +41,12 @@ class MarkdownPluginTest: AbstractPdfRendererTest() {
                 [Look **here** that was *bold*](https://github.com/commonmark/commonmark.js)
                 
                 > [Link](https://pdf4k.io) in a **block quote**!
+                
+                # Lists
+                
+                1. First item
+                1. Second item
+                1. Third item
             """.trimIndent())
         }.approve(approver)
     }
