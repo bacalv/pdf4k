@@ -65,17 +65,13 @@ class PdfRenderer(
 
     private fun Pdf.paginateDocument(context: RendererContext) = with(context) {
         try {
-            val eventListener = PageEventListener(context)
-            contentBlocksDocumentWriter.pageEvent = eventListener
-            context.pushStyle(style)
+            pushStyle(style)
             pages.forEach {
                 eventListener.setCurrentPageTemplate(it)
                 it.render(context)
             }
-            context.popStyle()
-            contentBlocksDocumentWriter.pageEvent = null
-            eventListener.close()
-            contentBlocksDocument.close()
+            popStyle()
+            paginationComplete()
         } catch (e: PdfError) {
             throw e
         } catch (e: Exception) {

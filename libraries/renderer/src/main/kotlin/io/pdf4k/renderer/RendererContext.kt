@@ -1,5 +1,6 @@
 package io.pdf4k.renderer
 
+import com.lowagie.text.Chunk
 import com.lowagie.text.Document
 import com.lowagie.text.Element
 import com.lowagie.text.Image
@@ -20,12 +21,14 @@ class RendererContext(
     val resourceLocators: ResourceLocators
 ) {
     private val styleStack: Stack<StyleAttributes> = Stack()
-    private val listItemNumberStack: Stack<Int> = Stack()
+    private val listItemStack: Stack<ListDetail> = Stack()
     private val pageNumber: AtomicInteger = AtomicInteger()
+    val eventListener = PageEventListener(this)
     val stationaryByPage = mutableListOf<Pair<LoadedStationary, Int>>()
 
     init {
         styleStack.push(StyleAttributes())
+        contentBlocksDocumentWriter.pageEvent = eventListener
     }
 
     fun peekStyle(): StyleAttributes = styleStack.peek()
@@ -44,12 +47,20 @@ class RendererContext(
 
     fun pushList() {
         val listStyle = peekStyle().listStyle ?: ListStyle.Symbol("-")
-        listItemNumberStack.push(listStyle.startAt ?: 1)
+        listItemStack.push(ListDetail(listStyle.startAt ?: 1, 0f))
     }
 
-    fun nextListItemNumber(): Int = listItemNumberStack.pop().also { listItemNumberStack.push(it + 1) }
+    fun nextListItemNumber(): Int = listItemStack.peek().let { it.itemNumber++ }
 
-    fun popList() = listItemNumberStack.pop()
+    fun popList() = listItemStack.pop().width
+
+    fun listSymbolWidth(width: Float) {
+        listItemStack.peek().let {
+            if (it.width < width) {
+                it.width = width
+            }
+        }
+    }
 
     fun currentFont() = with(peekStyle()) {
         resourceLocators.fontProvider.getFont(font, size, fontStyle, colour)
@@ -68,7 +79,19 @@ class RendererContext(
     }
 
     fun add(elements: List<Element>) {
-        elements.forEach { contentBlocksDocument.add(it) }
+        elements.forEach {
+            when (it) {
+                blockBreak -> {
+                    contentBlocksDocument.add(Chunk(""))
+                    contentBlocksDocument.newPage()
+                }
+                pageBreak -> repeat(eventListener.blocksUntilNextPage + 1) {
+                    contentBlocksDocument.add(Chunk(""))
+                    contentBlocksDocument.newPage()
+                }
+                else -> contentBlocksDocument.add(it)
+            }
+        }
     }
 
     fun nextPage(stationary: Stationary, blocksFilled: Int) {
@@ -96,4 +119,21 @@ class RendererContext(
     }.map { (pageNumber, blocksFilled) ->
         (0 until blocksFilled).map { pageNumber }
     }.flatten()
+
+    fun paginationComplete() {
+        contentBlocksDocumentWriter.pageEvent = null
+        eventListener.close()
+        contentBlocksDocument.close()
+    }
+
+    fun pageBreakElement() = pageBreak
+
+    fun blockBreakElement() = blockBreak
+
+    private companion object {
+        data class ListDetail(var itemNumber: Int, var width: Float)
+
+        val blockBreak = Chunk()
+        val pageBreak = Chunk()
+    }
 }

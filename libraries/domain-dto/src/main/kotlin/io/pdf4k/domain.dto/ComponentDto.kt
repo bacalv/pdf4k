@@ -23,6 +23,8 @@ import io.pdf4k.domain.dto.ComponentDto.*
     Type(value = Link::class, name = "l"),
     Type(value = ListItem::class, name = "li"),
     Type(value = PageNumber::class, name = "pg"),
+    Type(value = PageBreak::class, name = "pb"),
+    Type(value = BlockBreak::class, name = "bb"),
     Type(value = Table::class, name = "t"),
     Type(value = Cell.Text::class, name = "tx"),
     Type(value = Cell.Table::class, name = "tt"),
@@ -47,9 +49,13 @@ sealed class ComponentDto {
 
     data class ItemList(val children: List<ComponentDto>) : ComponentDto()
 
-    data class ListItem(val phrase: Phrase, val subList: ItemList? = null) : ComponentDto()
+    data class ListItem(val phrase: Phrase, val subList: ItemList?, val table: Table?) : ComponentDto()
 
     data object PageNumber : ComponentDto()
+
+    data object PageBreak : ComponentDto()
+
+    data object BlockBreak : ComponentDto()
 
     data class Table(
         val columns: Int,
@@ -90,7 +96,7 @@ fun Component.toDto(resourceMapBuilder: ResourceMapDto.Builder): ComponentDto = 
     is Component.Image -> Image(resource.toDto(resourceMapBuilder).let(resourceMapBuilder::resourceRef), width, height, rotation)
     is Component.ItemList -> ItemList(children.map { it.toDto(resourceMapBuilder) })
     is Component.Link -> Link(target, phrase.toDto(resourceMapBuilder) as Phrase)
-    is Component.ListItem -> ListItem(phrase.toDto(resourceMapBuilder) as Phrase, subList?.toDto(resourceMapBuilder) as? ItemList)
+    is Component.ListItem -> ListItem(phrase.toDto(resourceMapBuilder) as Phrase, subList?.toDto(resourceMapBuilder) as? ItemList, table?.toDto(resourceMapBuilder) as? Table)
     is Component.PageNumber -> PageNumber
     is Component.Paragraph -> Paragraph(children.toDto(resourceMapBuilder))
     is Component.Phrase -> Phrase(children.toDto(resourceMapBuilder))
@@ -103,6 +109,8 @@ fun Component.toDto(resourceMapBuilder: ResourceMapDto.Builder): ComponentDto = 
         columns, widthPercentage, weights, headerRows, extend, style?.toDto(resourceMapBuilder)
             ?.let(resourceMapBuilder::styleRef), children.toDto(resourceMapBuilder)
     )
+    is Component.Break.PageBreak -> PageBreak
+    is Component.Break.BlockBreak -> BlockBreak
 }
 
 fun List<ComponentDto>.toDomain(resourceMap: ResourceMap) = map { it.toDomain(resourceMap) }
@@ -123,7 +131,7 @@ fun ComponentDto.toDomain(resourceMap: ResourceMap): Component = when (this) {
     is Image -> Component.Image(resourceMap.getResourceLocation(ref), width, height, rotation)
     is ItemList -> Component.ItemList(children.map { it.toDomain(resourceMap) })
     is Link -> Component.Link(target, phrase.toDomain(resourceMap) as Component.Phrase)
-    is ListItem -> Component.ListItem(phrase.toDomain(resourceMap) as Component.Phrase, subList?.toDomain(resourceMap) as? Component.ItemList)
+    is ListItem -> Component.ListItem(phrase.toDomain(resourceMap) as Component.Phrase, subList?.toDomain(resourceMap) as? Component.ItemList, table?.toDomain(resourceMap) as? Component.Table)
     is PageNumber -> Component.PageNumber
     is Paragraph -> Component.Paragraph(children.toDomain(resourceMap))
     is Phrase -> Component.Phrase(children.toDomain(resourceMap))
@@ -137,4 +145,6 @@ fun ComponentDto.toDomain(resourceMap: ResourceMap): Component = when (this) {
         style?.let { resourceMap.getStyle(it) },
         children.toDomain(resourceMap)
     )
+    is PageBreak -> Component.Break.PageBreak
+    is BlockBreak -> Component.Break.BlockBreak
 }

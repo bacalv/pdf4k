@@ -4,6 +4,8 @@ import io.pdf4k.domain.Component
 import io.pdf4k.domain.Margin
 import io.pdf4k.domain.StyleAttributes
 import io.pdf4k.domain.TableAttributes
+import io.pdf4k.dsl.BreakBuilder.Companion.blockBreakBuilder
+import io.pdf4k.dsl.BreakBuilder.Companion.pageBreakBuilder
 
 @PdfDsl
 abstract class ContentBuilder<F : PhraseBuilder<F>, P : ParagraphBuilder<F, P>, T : TableBuilder<F, T>, C : ContentBuilder<F, P, T, C>> :
@@ -51,8 +53,8 @@ abstract class ContentBuilder<F : PhraseBuilder<F>, P : ParagraphBuilder<F, P>, 
         children += tableBuilder(TableAttributes(columns, widthPercentage, weights, Margin.ZERO, headerRows, extend), style).also { it.block() }
     }
 
-    fun list(block: ListBuilder<F>.() -> Unit) {
-        phrase { list { this.block() } }
+    fun list(style: StyleAttributes? = null, block: ListBuilder<F, T>.() -> Unit) {
+        table(1, style) { listCell { this.block() } }
     }
 
     override fun build() = Component.Content(children.map { it.build() })
@@ -69,6 +71,10 @@ abstract class ContentBuilder<F : PhraseBuilder<F>, P : ParagraphBuilder<F, P>, 
         override val paragraphBuilder: () -> ParagraphBuilder.ForPage = { ParagraphBuilder.ForPage() }
         override val childBuilder: () -> ForPage = ::ForPage
         override val tableBuilder: (TableAttributes, StyleAttributes?) -> TableBuilder.ForPage =  { t, s -> TableBuilder.ForPage(t, s) }
+
+        fun blockBreak() { children += blockBreakBuilder }
+
+        fun pageBreak() { children += pageBreakBuilder }
     }
 }
 

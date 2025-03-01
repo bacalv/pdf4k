@@ -1,6 +1,8 @@
 package io.pdf4k.dsl
 
-import io.pdf4k.domain.*
+import io.pdf4k.domain.Component
+import io.pdf4k.domain.ResourceLocation
+import io.pdf4k.domain.StyleAttributes
 
 @PdfDsl
 abstract class PhraseBuilder<P : PhraseBuilder<P>> : BuildsTextStyle<Component.Phrase, P> {
@@ -32,35 +34,17 @@ abstract class PhraseBuilder<P : PhraseBuilder<P>> : BuildsTextStyle<Component.P
         addChild(AnchorBuilder(name, childBuilder().also { it.block() }.children))
     }
 
-    fun list(style: StyleAttributes? = null, block: ListBuilder<P>.() -> Unit) {
-        if (style != null) {
-            style(style) { list(null, block) }
-        } else {
-            addChild(ListBuilder(childBuilder).also { it.block() })
-        }
-    }
-
     fun crlf() = +"\n"
 
     class ForBlock: PhraseBuilder<ForBlock>() {
         override val childBuilder: () -> ForBlock = ::ForBlock
-        private val tableBuilder: (TableAttributes, StyleAttributes?) -> TableBuilder.ForBlock =  { t, s -> TableBuilder.ForBlock(t, s) }
 
         fun pageNumber() {
             children += PageNumberBuilder()
-        }
-
-        fun table(columns: Int = 1, style: StyleAttributes? = null, widthPercentage: Float? = null, weights: List<Float>? = null, headerRows: Int = 0, extend: Boolean = false, block: TableBuilder.ForBlock.() -> Unit) {
-            children += tableBuilder(TableAttributes(columns, widthPercentage, weights, Margin.ZERO, headerRows, extend), style).also { it.block() }
         }
     }
 
     class ForPage: PhraseBuilder<ForPage>() {
         override val childBuilder: () -> ForPage = ::ForPage
-        private val tableBuilder: (TableAttributes, StyleAttributes?) -> TableBuilder.ForBlock = { t, s -> TableBuilder.ForBlock(t, s) }
-
-        fun table(columns: Int = 1, style: StyleAttributes? = null, widthPercentage: Float? = null, weights: List<Float>? = null, headerRows: Int = 0, extend: Boolean = false, block: TableBuilder.ForBlock.() -> Unit) {
-            children += tableBuilder(TableAttributes(columns, widthPercentage, weights, Margin.ZERO, headerRows, extend), style).also { it.block() }
-        }
     }
 }

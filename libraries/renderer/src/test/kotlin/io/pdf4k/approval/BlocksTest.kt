@@ -140,6 +140,80 @@ class BlocksTest : AbstractPdfRendererTest() {
         }.approve(approver)
     }
 
+    @Test
+    fun `renders a block break`(approver: PdfApprover) {
+        pdf {
+            page(stationary = twoColumns) {
+                content(style(size = 24f, align = JustifiedAll)) {
+                    +"""
+                        Within seconds he ran out onto the deck and waved and grinned at over
+                        three billion people. The three billion people weren’t actually there, but they
+                        watched his every gesture through the eyes of a small robot tri-D camera
+                        which hovered obsequiously in the air nearby. The antics of the President
+                        always made amazingly popular tri-D; that’s what they were for.
+                        
+                        He grinned again. Three billion and six people didn’t know it, but today
+                        would be a bigger antic than anyone had bargained for.
+                    """.splitParagraphs().joinToString("")
+
+                    blockBreak()
+
+                    +"""
+                        The robot camera homed in for a close up on the more popular of his two
+                        heads and he waved again. He was roughly humanoid in appearance except
+                        for the extra head and third arm. His fair tousled hair stuck out in random
+                        directions, his blue eyes glinted with something completely unidentifiable,
+                        and his chins were almost always unshaven.
+                     """.splitParagraphs().joinToString("")
+
+                    blockBreak()
+
+                    +"""
+                        A twenty-foot-high transparent globe floated next to his boat, rolling and
+                        bobbing, glistening in the brilliant sun. Inside it floated a wide semi-circular
+                        sofa upholstered in glorious red leather: the more the globe bobbed and
+                        rolled, the more the sofa stayed perfectly still, steady as an upholstered rock.
+                        Again, all done for effect as much as anything.
+                    """.trimIndent()
+                }
+            }
+        }.approve(approver)
+    }
+
+    @Test
+    fun `renders a page break`(approver: PdfApprover) {
+        pdf {
+            page(stationary = twoColumns) {
+                content(style(size = 24f, align = JustifiedAll)) {
+                    +"""
+                        Within seconds he ran out onto the deck and waved and grinned at over
+                        three billion people. The three billion people weren’t actually there, but they
+                        watched his every gesture through the eyes of a small robot tri-D camera
+                        which hovered obsequiously in the air nearby. The antics of the President
+                        always made amazingly popular tri-D; that’s what they were for.
+                        
+                        He grinned again. Three billion and six people didn’t know it, but today
+                        would be a bigger antic than anyone had bargained for.
+                    """.splitParagraphs().joinToString("")
+
+                    pageBreak()
+
+                    +"""The robot camera homed in for a close up on the more popular of his two
+                        heads and he waved again. He was roughly humanoid in appearance except
+                        for the extra head and third arm. His fair tousled hair stuck out in random
+                        directions, his blue eyes glinted with something completely unidentifiable,
+                        and his chins were almost always unshaven.
+                     """.splitParagraphs().joinToString("")
+
+                    pageBreak()
+                    pageBreak()
+
+                    +"Last page"
+                }
+            }
+        }.approve(approver)
+    }
+
     companion object {
         private val stationaryWithBlock = BlankA4Portrait.plusBlocks {
             block("blockName", 115f, 520f, 450f, 100f)

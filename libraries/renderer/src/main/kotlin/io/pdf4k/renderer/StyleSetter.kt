@@ -1,7 +1,10 @@
 package io.pdf4k.renderer
 
-import com.lowagie.text.*
+import com.lowagie.text.Chunk
+import com.lowagie.text.Element
 import com.lowagie.text.Element.*
+import com.lowagie.text.Paragraph
+import com.lowagie.text.Phrase
 import com.lowagie.text.Rectangle.NO_BORDER
 import com.lowagie.text.pdf.PdfContentByte
 import com.lowagie.text.pdf.PdfPCell
@@ -94,14 +97,40 @@ object StyleSetter {
         component.weights?.let { setWidths(it.toFloatArray()) }
     }
 
-    fun createListItem(context: RendererContext, phrase: Phrase, children: List<Element>): ListItem {
-        val item = ListItem()
+    fun newListTable() = ListTable().also { table ->
+        table.widthPercentage = 100f
+    }
+
+    fun createListItem(context: RendererContext, phrase: Phrase, children: List<Element>, table: PdfPTable?): List<Element> {
         val listStyle = context.peekStyle().listStyle ?: ListStyle.Symbol()
-        item.listSymbol = Chunk(listStyle.getListSymbol(context.nextListItemNumber()))
-        item.listSymbol.setStyle(context)
-        item.add(phrase)
-        children.forEach { item.add(it) }
-        return item
+        val symbol = Chunk(listStyle.getListSymbol(context.nextListItemNumber())).also { chunk -> chunk.setStyle(context) }
+        context.listSymbolWidth(symbol.widthPoint)
+        return listOf(
+            listCell().also {
+                it.addElement(
+                    Paragraph().also { paragraph ->
+                        paragraph.add(Phrase().also { phrase -> phrase.add(symbol) })
+                        paragraph.alignment = ALIGN_RIGHT
+                    }
+                )
+            },
+            listCell().also { it.addElement(phrase) }
+        ) + (table?.let { listOf(
+            listCell(),
+            listCell().also { it.addElement(table) }
+        ) } ?: emptyList()
+        ) + (children.takeIf { it.isNotEmpty() }?.let {
+            listOf(listCell()) + children.filterIsInstance<PdfPCell>()
+        } ?: emptyList())
+    }
+
+    fun listCell() = PdfPCell().also {
+        it.borderWidthTop = 0f
+        it.borderWidthBottom = 0f
+        it.borderWidthLeft = 0f
+        it.borderWidthRight = 0f
+        it.isUseAscender = true
+        it.isUseDescender = true
     }
 
     private fun setHorizontalAlignment(cell: PdfPCell, align: HorizontalAlignment?) {

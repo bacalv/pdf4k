@@ -65,6 +65,14 @@ abstract class TableBuilder<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(
         }
     }
 
+    fun listCell(style: StyleAttributes? = null, block: ListBuilder<F, T>.() -> Unit) {
+        if (style != null) {
+            style(style) { listCell(null, block) }
+        } else {
+            addChild(ListBuilder(phraseBuilder, tableBuilder).also { it.block() })
+        }
+    }
+
     class ForBlock(
         val attributes: TableAttributes,
         style: StyleAttributes?

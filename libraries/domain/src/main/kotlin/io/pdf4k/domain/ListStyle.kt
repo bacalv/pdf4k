@@ -3,10 +3,10 @@ package io.pdf4k.domain
 sealed interface ListStyle {
     val startAt: Int?
 
-    fun getListSymbol(nextListItemNumber: Int): String
+    fun getListSymbol(itemNumber: Int): String
 
     data class Symbol(val symbol: String? = null) : ListStyle {
-        override fun getListSymbol(nextListItemNumber: Int): String {
+        override fun getListSymbol(itemNumber: Int): String {
             return symbol ?: "- "
         }
 
@@ -14,8 +14,8 @@ sealed interface ListStyle {
     }
 
     data class Numbered(override val startAt: Int? = null) : ListStyle {
-        override fun getListSymbol(nextListItemNumber: Int): String {
-            return "$nextListItemNumber. "
+        override fun getListSymbol(itemNumber: Int): String {
+            return "$itemNumber. "
         }
     }
 }

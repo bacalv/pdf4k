@@ -7,7 +7,7 @@ import org.http4k.lens.BiDiBodyLens
 
 interface PdfEndpoint<T : Any> {
     val path: String
-    val summary: String
+    val summary: String get() = "PDF"
     val requestLens: BiDiBodyLens<T>
     val example: T?
     val pdfFn: (T) -> Pdf

@@ -3,7 +3,7 @@ package io.pdf4k.plugin.markdown
 import io.pdf4k.domain.Font
 import io.pdf4k.domain.Margin
 import io.pdf4k.domain.StyleAttributes.Companion.style
-import io.pdf4k.dsl.ListBuilder.Companion.numbered
+import io.pdf4k.dsl.ListBuilder
 import io.pdf4k.dsl.PhraseBuilder
 import io.pdf4k.dsl.TableBuilder
 import org.commonmark.node.*
@@ -69,28 +69,25 @@ class Pdf4kDslMarkdownRenderer<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(pri
                 }
                 is Paragraph -> textCell { text(c.firstChild, currentFontStyle) }
                 is BlockQuote -> blockQuote(c)
-                is OrderedList -> {
-                    textCell {
-                        list(numbered) {
-                            var g = c.firstChild
-                            while (g != null) {
-                                (g as? ListItem)?.let { item ->
-                                    var g2 = item.firstChild
-
-                                    while (g2 != null) {
-                                        item {
-                                            text(g2)
-                                        }
-                                        g2 = g2.next
-                                    }
-                                }
-                                g = g.next
-                            }
-                        }
-                    }
-                }
+                is OrderedList -> listCell { listItems(c) }
                 else -> TODO("UNKNOWN TYPE $c")
             }
+            child = child.next
+        }
+    }
+
+    private fun ListBuilder<F, T>.listItems(node: Node) {
+        var child = node.firstChild
+
+        while (child != null) {
+            when (child) {
+                is ListItem -> item {
+                    text(child.firstChild)
+                }
+
+                else -> TODO("UNKNOWN TYPE $child")
+            }
+
             child = child.next
         }
     }

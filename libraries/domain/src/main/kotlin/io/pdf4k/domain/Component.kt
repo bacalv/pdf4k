@@ -20,9 +20,14 @@ sealed class Component(val children: List<Component>) {
 
     class ItemList(children: List<Component>) : Component(children)
 
-    class ListItem(val phrase: Phrase, val subList: ItemList? = null) : Component(emptyList())
+    class ListItem(val phrase: Phrase, val subList: ItemList? = null, val table: Table? = null) : Component(emptyList())
 
     data object PageNumber : Component(emptyList())
+
+    sealed class Break : Component(emptyList()) {
+        data object PageBreak : Break()
+        data object BlockBreak : Break()
+    }
 
     class Table(
         val columns: Int,

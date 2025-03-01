@@ -14,6 +14,8 @@ class PageEventListener(private val context: RendererContext) : PdfPageEventHelp
     private var templatePageCount = 0
     private var currentBlockCount = 0
 
+    val blocksUntilNextPage: Int get() = currentStationary().contentFlow.size - currentBlockCount
+
     fun setCurrentPageTemplate(page: Page) {
         currentPageTemplate.set(page)
         templatePageCount = 0
@@ -51,13 +53,13 @@ class PageEventListener(private val context: RendererContext) : PdfPageEventHelp
 
     fun close() {
         if (currentBlockCount > 0) {
-            val stationary = currentPageTemplate.get().stationary.elementOrLast(templatePageCount)
+            val stationary = currentStationary()
             context.nextPage(stationary, currentBlockCount)
         }
     }
 
     override fun onStartPage(writer: PdfWriter?, document: Document?) {
-        val stationary = currentPageTemplate.get().stationary.elementOrLast(templatePageCount)
+        val stationary = currentStationary()
         if (currentBlockCount == 0) {
             nextPage()
         }
@@ -71,6 +73,8 @@ class PageEventListener(private val context: RendererContext) : PdfPageEventHelp
         }
         setTemplate()
     }
+
+    private fun currentStationary() = currentPageTemplate.get().stationary.elementOrLast(templatePageCount)
 
     private fun nextPage() {
         if (!context.mainDocument.isOpen) {

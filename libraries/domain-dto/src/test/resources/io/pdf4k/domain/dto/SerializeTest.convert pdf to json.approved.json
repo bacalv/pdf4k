@@ -212,7 +212,10 @@
   }, {
     "stationary" : [ 0 ],
     "content" : [ {
-      "type" : "ph",
+      "type" : "t",
+      "columns" : 1,
+      "headerRows" : 0,
+      "extend" : false,
       "children" : [ {
         "type" : "il",
         "children" : [ {

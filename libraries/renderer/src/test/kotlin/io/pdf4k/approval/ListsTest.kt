@@ -14,20 +14,18 @@ class ListsTest : AbstractPdfRendererTest() {
     @Test
     fun `renders a nested unordered list`(approver: PdfApprover) {
         content {
-            phrase {
-                list {
-                    item("This is the first item")
-                    item {
-                        +"This is the "
-                        "second" and style(fontStyle = Bold)
-                    }.list {
-                        style(colour = Color.RED) {
-                            item("This is a nested item under the second item")
-                            item("This is another nested item under the second item")
-                        }
+            list {
+                item("This is the first item")
+                item {
+                    +"This is the "
+                    "second" and style(fontStyle = Bold)
+                }.list {
+                    style(colour = Color.RED) {
+                        item("This is a nested item under the second item")
+                        item("This is another nested item under the second item")
                     }
-                    item("This is the third item")
                 }
+                item("This is the third item")
             }
         }.approve(approver)
     }
@@ -35,52 +33,65 @@ class ListsTest : AbstractPdfRendererTest() {
     @Test
     fun `renders a nested ordered list`(approver: PdfApprover) {
         content {
-            phrase {
-                style(colour = Color.BLUE) {
-                    list(numbered) {
-                        item("This is the first item")
-                        item {
-                            +"This is the "
-                            "second" and style(fontStyle = Bold)
-                        }.list(dashed + style(colour = Color.ORANGE)) {
-                            style(colour = Color.RED) {
-                                item("This is a nested item under the second item")
-                                item("This is another nested item under the second item")
-                            }
-                        }
-                        item("This is the third item")
-                    }
-
-                    list(dashed + style(colour = Color.GREEN)) {
-                        item("This is another list")
-                        item("This is another item in the other list")
-                        item("Big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, line!)")
-                    }
-
-                    list(numbered(8)) {
+            style(colour = Color.BLUE) {
+                list(numbered) {
+                    item("This is the first item")
+                    item {
+                        +"This is the "
+                        "second" and style(fontStyle = Bold)
+                    }.list(dashed + style(colour = Color.ORANGE)) {
                         style(colour = Color.RED) {
-                            item("This is yet another list")
+                            item("This is a nested item under the second item")
+                            item("This is another nested item under the second item")
                         }
-                        style(colour = Color.GREEN) {
-                            item("This is yet another item in the other list")
-                        }
-                        style(colour = Color.BLUE) {
-                            item("Yet another Big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, line!)")
-                        }
-                        style(colour = Color.BLACK) {
-                            item {
-                                +"I can even put a table here..."
-                                table(3) {
-                                    textCell("A")
-                                    textCell("B")
-                                    textCell("C")
-                                    textCell("D")
-                                    textCell("E")
-                                }
-                            }
+                    }
+                    item("This is the third item")
+                }
+
+                list(dashed + style(colour = Color.GREEN)) {
+                    item("This is another list")
+                    item("This is another item in the other list")
+                    item("Big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, line!)")
+                }
+
+                list(numbered(8)) {
+                    style(colour = Color.RED) {
+                        item("This is yet another list")
+                    }
+                    style(colour = Color.GREEN) {
+                        item("This is yet another item in the other list")
+                    }
+                    style(colour = Color.BLUE) {
+                        item("Yet another Big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, big, line!)")
+                    }
+                    style(colour = Color.BLACK) {
+                        item {
+                            +"I can even put a table here..."
+                        }.table(3) {
+                            textCell("A")
+                            textCell("B")
+                            textCell("C")
+                            textCell("D")
+                            textCell("E")
                         }
                     }
                 }
+            }
+        }.approve(approver)
+    }
+
+    @Test
+    fun `list with item containing a table`(approver: PdfApprover) {
+        content {
+            list {
+                item("Item 1")
+                item("Item 2").table(3) {
+                    textCell("1")
+                    textCell("2")
+                    textCell("3")
+                    textCell("4")
+                }
+                item("Item 3")
             }
         }.approve(approver)
     }

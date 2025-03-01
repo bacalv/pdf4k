@@ -6,13 +6,18 @@ import com.lowagie.text.pdf.PdfPTable
 import io.pdf4k.domain.Component
 import io.pdf4k.renderer.StyleSetter.createListItem
 import io.pdf4k.renderer.StyleSetter.forParagraph
+import io.pdf4k.renderer.StyleSetter.listCell
+import io.pdf4k.renderer.StyleSetter.newListTable
 import io.pdf4k.renderer.StyleSetter.setStyle
-import com.lowagie.text.List as IList
 
 object ComponentRenderer {
     fun List<Component>.render(context: RendererContext): List<Element> = map { component ->
         when (component) {
             is Component.Content -> component.children.render(context)
+
+            is Component.Break.PageBreak -> listOf(context.pageBreakElement())
+
+            is Component.Break.BlockBreak -> listOf(context.blockBreakElement())
 
             is Component.Style -> {
                 context.pushStyle(component)
@@ -53,17 +58,22 @@ object ComponentRenderer {
                 context.getImage(component.resource, component.width, component.height, component.rotation)
             )
 
-            is Component.ItemList -> listOf(IList().also { list ->
-                context.pushList()
-                component.children.render(context).forEach { list.add(it) }
-                context.popList()
+            is Component.ItemList -> listOf(listCell().also { cell ->
+                cell.addElement(newListTable().also { table ->
+                    context.pushList()
+                    component.children.render(context).forEach {
+                        table.addCell(it as PdfPCell)
+                    }
+                    table.setFirstColumnWidth(context.popList())
+                })
             })
 
-            is Component.ListItem -> listOf(createListItem(
+            is Component.ListItem -> createListItem(
                 context = context,
                 phrase = component.phrase.render(context),
-                children = component.subList?.children?.render(context) ?: emptyList()
-            ))
+                children = component.subList?.children?.render(context) ?: emptyList(),
+                table = component.table?.render(context)
+            )
 
             is Component.Table -> listOf(PdfPTable(component.columns).also { table ->
                 context.pushStyle(component.style)
