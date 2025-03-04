@@ -3,7 +3,7 @@ package io.pdf4k.dsl
 import io.pdf4k.domain.*
 import java.awt.Color
 
-interface BuildsCellStyle<T : Component, B : ComponentBuilder<T, B>> : ComponentBuilder<T, B> {
+interface BuildsStyle<T : Component, B : ComponentBuilder<T, B>> : ComponentBuilder<T, B> {
     val childBuilder: () -> B
 
     fun style(

@@ -12,7 +12,8 @@
     }, {
       "fontStyle" : "Bold"
     }, {
-      "colour" : 1
+      "colour" : 1,
+      "underlined" : false
     }, {
       "font" : 0,
       "colour" : 1
@@ -226,7 +227,8 @@
               "type" : "ch",
               "text" : "This is the first item"
             } ]
-          }
+          },
+          "children" : [ ]
         }, {
           "type" : "li",
           "phrase" : {
@@ -243,8 +245,11 @@
               } ]
             } ]
           },
-          "subList" : {
-            "type" : "il",
+          "children" : [ {
+            "type" : "t",
+            "columns" : 1,
+            "headerRows" : 0,
+            "extend" : false,
             "children" : [ {
               "type" : "il",
               "children" : [ {
@@ -258,7 +263,8 @@
                       "type" : "ch",
                       "text" : "This is a nested item under the second item"
                     } ]
-                  }
+                  },
+                  "children" : [ ]
                 }, {
                   "type" : "li",
                   "phrase" : {
@@ -267,11 +273,12 @@
                       "type" : "ch",
                       "text" : "This is another nested item under the second item"
                     } ]
-                  }
+                  },
+                  "children" : [ ]
                 } ]
               } ]
             } ]
-          }
+          } ]
         }, {
           "type" : "li",
           "phrase" : {
@@ -280,7 +287,8 @@
               "type" : "ch",
               "text" : "This is the third item"
             } ]
-          }
+          },
+          "children" : [ ]
         } ]
       } ]
     } ],

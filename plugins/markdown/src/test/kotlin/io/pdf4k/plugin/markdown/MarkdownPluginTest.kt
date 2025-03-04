@@ -45,8 +45,32 @@ class MarkdownPluginTest: AbstractPdfRendererTest() {
                 # Lists
                 
                 1. First item
-                1. Second item
-                1. Third item
+                2. Second item
+                    1. Nested list item 1
+                    2. Nested list item 2
+                3. Third item
+                    - Dashed nested list item 1
+                    - Dashed nested list item 2
+                    
+                > Block quote with a list in...
+                >
+                > 1. Do this
+                > 2. Then this
+                >    - Not forgetting this
+                > 3. Finally this
+                >
+                > End
+                
+                List with a blockquote in...
+                
+                1. Something
+                    > Block quote
+                    > More blockquote
+                    > > Nested blockquote with list in
+                    > > 1. One
+                    > > 2. Two
+                    > > 3. Three
+                2. Something else
             """.trimIndent())
         }.approve(approver)
     }

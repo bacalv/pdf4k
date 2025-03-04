@@ -20,7 +20,7 @@ sealed class Component(val children: List<Component>) {
 
     class ItemList(children: List<Component>) : Component(children)
 
-    class ListItem(val phrase: Phrase, val subList: ItemList? = null, val table: Table? = null) : Component(emptyList())
+    class ListItem(val phrase: Phrase, children: List<Component>) : Component(children)
 
     data object PageNumber : Component(emptyList())
 

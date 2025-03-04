@@ -5,7 +5,7 @@ import io.pdf4k.domain.StyleAttributes
 
 @PdfDsl
 abstract class ParagraphBuilder<F : PhraseBuilder<F>, P : ParagraphBuilder<F, P>> :
-    BuildsTextStyle<Component.Paragraph, P> {
+    BuildsStyle<Component.Paragraph, P> {
     override val children: MutableList<ComponentBuilder<*, *>> = mutableListOf()
     abstract val phraseBuilder: () -> F
 

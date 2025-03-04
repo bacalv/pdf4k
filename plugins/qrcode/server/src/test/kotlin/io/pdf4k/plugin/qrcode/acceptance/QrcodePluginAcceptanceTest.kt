@@ -71,7 +71,6 @@ class QrcodePluginAcceptanceTest : AbstractServerTest() {
         }
     }
 
-
     companion object {
         val logo = Logo(local("spades.png"), 300, 300)
         private val badLogo = Logo(local("not_found"), 10, 10)

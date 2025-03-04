@@ -10,13 +10,13 @@ import io.pdf4k.domain.TableAttributes
 class ListBuilder<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(
     val phraseBuilder: () -> F,
     val tableBuilder: (TableAttributes, StyleAttributes?) -> T
-) : BuildsTextStyle<Component.ItemList, ListBuilder<F, T>> {
+) : BuildsStyle<Component.ItemList, ListBuilder<F, T>> {
     override val children = mutableListOf<ComponentBuilder<*, *>>()
     override val childBuilder = { ListBuilder(phraseBuilder, tableBuilder) }
 
     fun item(text: String) = item { +text }
 
-    fun item(block: F.() -> Unit) = ItemBuilder(phraseBuilder().also { it.block() }, childBuilder, tableBuilder).also { children += it }
+    fun item(block: F.() -> Unit) = ItemBuilder(phraseBuilder().also { it.block() }, tableBuilder).also { children += it }
 
     override fun build() = Component.ItemList(children.map { it.build() })
 

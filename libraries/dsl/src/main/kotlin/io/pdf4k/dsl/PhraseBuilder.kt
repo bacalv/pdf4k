@@ -5,7 +5,7 @@ import io.pdf4k.domain.ResourceLocation
 import io.pdf4k.domain.StyleAttributes
 
 @PdfDsl
-abstract class PhraseBuilder<P : PhraseBuilder<P>> : BuildsTextStyle<Component.Phrase, P> {
+abstract class PhraseBuilder<P : PhraseBuilder<P>> : BuildsStyle<Component.Phrase, P> {
     override val children = mutableListOf<ComponentBuilder<*, *>>()
 
     override fun build() = Component.Phrase(children.map { it.build() })

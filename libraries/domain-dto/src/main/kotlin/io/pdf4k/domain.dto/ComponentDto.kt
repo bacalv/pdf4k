@@ -49,7 +49,7 @@ sealed class ComponentDto {
 
     data class ItemList(val children: List<ComponentDto>) : ComponentDto()
 
-    data class ListItem(val phrase: Phrase, val subList: ItemList?, val table: Table?) : ComponentDto()
+    data class ListItem(val phrase: Phrase, val children: List<ComponentDto>) : ComponentDto()
 
     data object PageNumber : ComponentDto()
 
@@ -96,7 +96,7 @@ fun Component.toDto(resourceMapBuilder: ResourceMapDto.Builder): ComponentDto = 
     is Component.Image -> Image(resource.toDto(resourceMapBuilder).let(resourceMapBuilder::resourceRef), width, height, rotation)
     is Component.ItemList -> ItemList(children.map { it.toDto(resourceMapBuilder) })
     is Component.Link -> Link(target, phrase.toDto(resourceMapBuilder) as Phrase)
-    is Component.ListItem -> ListItem(phrase.toDto(resourceMapBuilder) as Phrase, subList?.toDto(resourceMapBuilder) as? ItemList, table?.toDto(resourceMapBuilder) as? Table)
+    is Component.ListItem -> ListItem(phrase.toDto(resourceMapBuilder) as Phrase, children.toDto(resourceMapBuilder))
     is Component.PageNumber -> PageNumber
     is Component.Paragraph -> Paragraph(children.toDto(resourceMapBuilder))
     is Component.Phrase -> Phrase(children.toDto(resourceMapBuilder))
@@ -131,7 +131,7 @@ fun ComponentDto.toDomain(resourceMap: ResourceMap): Component = when (this) {
     is Image -> Component.Image(resourceMap.getResourceLocation(ref), width, height, rotation)
     is ItemList -> Component.ItemList(children.map { it.toDomain(resourceMap) })
     is Link -> Component.Link(target, phrase.toDomain(resourceMap) as Component.Phrase)
-    is ListItem -> Component.ListItem(phrase.toDomain(resourceMap) as Component.Phrase, subList?.toDomain(resourceMap) as? Component.ItemList, table?.toDomain(resourceMap) as? Component.Table)
+    is ListItem -> Component.ListItem(phrase.toDomain(resourceMap) as Component.Phrase, children.toDomain(resourceMap))
     is PageNumber -> Component.PageNumber
     is Paragraph -> Component.Paragraph(children.toDomain(resourceMap))
     is Phrase -> Component.Phrase(children.toDomain(resourceMap))

@@ -71,8 +71,7 @@ object ComponentRenderer {
             is Component.ListItem -> createListItem(
                 context = context,
                 phrase = component.phrase.render(context),
-                children = component.subList?.children?.render(context) ?: emptyList(),
-                table = component.table?.render(context)
+                children = component.children.render(context)
             )
 
             is Component.Table -> listOf(PdfPTable(component.columns).also { table ->

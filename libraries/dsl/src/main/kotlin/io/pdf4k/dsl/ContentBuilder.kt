@@ -9,7 +9,7 @@ import io.pdf4k.dsl.BreakBuilder.Companion.pageBreakBuilder
 
 @PdfDsl
 abstract class ContentBuilder<F : PhraseBuilder<F>, P : ParagraphBuilder<F, P>, T : TableBuilder<F, T>, C : ContentBuilder<F, P, T, C>> :
-    BuildsCellStyle<Component.Content, C> {
+    BuildsStyle<Component.Content, C> {
     override val children = mutableListOf<ComponentBuilder<*, *>>()
     abstract val tableBuilder: (TableAttributes, StyleAttributes?) -> T
     abstract val phraseBuilder: () -> F

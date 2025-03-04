@@ -101,7 +101,7 @@ object StyleSetter {
         table.widthPercentage = 100f
     }
 
-    fun createListItem(context: RendererContext, phrase: Phrase, children: List<Element>, table: PdfPTable?): List<Element> {
+    fun createListItem(context: RendererContext, phrase: Phrase, children: List<Element>): List<Element> {
         val listStyle = context.peekStyle().listStyle ?: ListStyle.Symbol()
         val symbol = Chunk(listStyle.getListSymbol(context.nextListItemNumber())).also { chunk -> chunk.setStyle(context) }
         context.listSymbolWidth(symbol.widthPoint)
@@ -115,12 +115,10 @@ object StyleSetter {
                 )
             },
             listCell().also { it.addElement(phrase) }
-        ) + (table?.let { listOf(
-            listCell(),
-            listCell().also { it.addElement(table) }
-        ) } ?: emptyList()
-        ) + (children.takeIf { it.isNotEmpty() }?.let {
-            listOf(listCell()) + children.filterIsInstance<PdfPCell>()
+        )+ (children.takeIf { it.isNotEmpty() }?.let {
+            children.filterIsInstance<PdfPTable>().map {
+                listOf(listCell()) + listCell().also { nest -> nest.addElement(it) }
+            }.flatten()
         } ?: emptyList())
     }
 

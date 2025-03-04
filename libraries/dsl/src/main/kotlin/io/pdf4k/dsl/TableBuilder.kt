@@ -7,7 +7,7 @@ import java.net.URI
 abstract class TableBuilder<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(
     private val attributes: TableAttributes,
     private val style: StyleAttributes?
-) : BuildsCellStyle<Component.Table, T> {
+) : BuildsStyle<Component.Table, T> {
     override val children: MutableList<ComponentBuilder<*, *>> = mutableListOf()
     abstract val phraseBuilder: () -> F
     abstract val tableBuilder: (TableAttributes, StyleAttributes?) -> T

@@ -2,6 +2,7 @@ package io.pdf4k.approval
 
 import io.pdf4k.domain.Font.Style.Bold
 import io.pdf4k.domain.StyleAttributes.Companion.style
+import io.pdf4k.domain.VerticalAlignment
 import io.pdf4k.dsl.ListBuilder.Companion.dashed
 import io.pdf4k.dsl.ListBuilder.Companion.numbered
 import io.pdf4k.dsl.PdfBuilder.Companion.content
@@ -46,6 +47,13 @@ class ListsTest : AbstractPdfRendererTest() {
                         }
                     }
                     item("This is the third item")
+                    style(colour = Color.ORANGE, size = 24f, valign = VerticalAlignment.Middle) {
+                        item {
+                            style(colour = Color.BLUE, size = 12f) {
+                                +"This is the fourth"
+                            }
+                        }
+                    }
                 }
 
                 list(dashed + style(colour = Color.GREEN)) {
@@ -90,6 +98,9 @@ class ListsTest : AbstractPdfRendererTest() {
                     textCell("2")
                     textCell("3")
                     textCell("4")
+                }.list {
+                    item("Sub list under table 1")
+                    item("Sub list under table 2")
                 }
                 item("Item 3")
             }

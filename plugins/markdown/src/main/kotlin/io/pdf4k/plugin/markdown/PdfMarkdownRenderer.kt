@@ -1,6 +1,7 @@
 package io.pdf4k.plugin.markdown
 
 import io.pdf4k.domain.Font
+import io.pdf4k.domain.ListStyle
 import io.pdf4k.domain.Margin
 import io.pdf4k.domain.StyleAttributes.Companion.style
 import io.pdf4k.dsl.ListBuilder
@@ -46,7 +47,7 @@ class Pdf4kDslMarkdownRenderer<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(pri
         return ""
     }
 
-    private fun T.blockQuote(node: BlockQuote) {
+    private fun blockQuote(builder: TableBuilder<F, T>, node: BlockQuote) = with(builder) {
         style(paddingLeft = 6f, borderWidthLeft = 2f, borderColourLeft = blockQuoteDark, cellBackground = blockQuoteLight) {
             tableCell(1, margin = Margin(0f, 0f, 6f, 0f)) {
                 style(paddingLeft = 4f, borderWidthLeft = 0f, borderColourLeft = Color.BLACK) {
@@ -68,8 +69,9 @@ class Pdf4kDslMarkdownRenderer<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(pri
                     }
                 }
                 is Paragraph -> textCell { text(c.firstChild, currentFontStyle) }
-                is BlockQuote -> blockQuote(c)
-                is OrderedList -> listCell { listItems(c) }
+                is BlockQuote -> blockQuote(this, c)
+                is OrderedList -> listCell(style(listStyle = ListStyle.Numbered())) { listItems(c) }
+                is BulletList -> listCell(style(listStyle = ListStyle.Symbol())) { listItems(c) }
                 else -> TODO("UNKNOWN TYPE $c")
             }
             child = child.next
@@ -81,8 +83,32 @@ class Pdf4kDslMarkdownRenderer<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(pri
 
         while (child != null) {
             when (child) {
-                is ListItem -> item {
-                    text(child.firstChild)
+                is ListItem -> {
+                    var next = child.firstChild
+                    item {
+                        text(next.firstChild)
+                    }.let { item ->
+                        next = next.next
+                        while (next != null) {
+                            when (next) {
+                                is OrderedList -> {
+                                    item.list(style(listStyle = ListStyle.Numbered())) { listItems(next) }
+                                }
+
+                                is BulletList -> {
+                                    item.list(style(listStyle = ListStyle.Symbol())) { listItems(next) }
+                                }
+
+                                is BlockQuote -> {
+                                    item.table {
+                                        blockQuote(this, next as BlockQuote)
+                                    }
+                                }
+                                else -> TODO("NOOOOOOb")
+                            }
+                            next = next.next
+                        }
+                    }
                 }
 
                 else -> TODO("UNKNOWN TYPE $child")
@@ -119,7 +145,7 @@ class Pdf4kDslMarkdownRenderer<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(pri
                     }
                 }
 
-                is BlockQuote -> builder.blockQuote(c)
+                is BlockQuote -> blockQuote(builder, c)
                 else -> TODO("Unsupported node type ${child::class.simpleName}")
             }
             child = child.next
