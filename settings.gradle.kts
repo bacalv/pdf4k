@@ -22,6 +22,9 @@ include(
     "plugins:qrcode:domain",
     "plugins:qrcode:dsl",
     "plugins:qrcode:server",
+    "plugins:thumbnails:domain",
+    "plugins:thumbnails:dsl",
+    "plugins:thumbnails:server",
     "applications:empty-server",
     "applications:examples:musician-renderer"
 )

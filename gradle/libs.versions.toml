@@ -11,6 +11,7 @@ okeydokeVersion = "2.0.3"
 openPdfVersion = "2.0.3"
 pdfBoxVersion = "3.0.3"
 qrCodeVersion = "4.2.0"
+thumbnailatorVersion = "0.4.20"
 
 [libraries]
 bouncyCastleBcmail = { module = "org.bouncycastle:bcmail-jdk18on", version.ref="bouncyCastleBcmailVersion" }
@@ -38,3 +39,5 @@ okeyDoke = { module = "com.oneeyedmen:okeydoke", version.ref = "okeydokeVersion"
 openPdf = { module = "com.github.librepdf:openpdf", version.ref = "openPdfVersion" }
 pdfBox = { module = "org.apache.pdfbox:pdfbox", version.ref = "pdfBoxVersion" }
 qrCode = { module = "io.github.g0dkar:qrcode-kotlin", version.ref = "qrCodeVersion" }
+thumbnailator = { module = "net.coobird:thumbnailator", version.ref = "thumbnailatorVersion"}
+
