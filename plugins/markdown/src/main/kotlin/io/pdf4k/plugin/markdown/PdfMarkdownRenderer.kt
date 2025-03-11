@@ -1,21 +1,28 @@
 package io.pdf4k.plugin.markdown
 
+import io.pdf4k.domain.Component
 import io.pdf4k.domain.Font
 import io.pdf4k.domain.ListStyle
 import io.pdf4k.domain.Margin
+import io.pdf4k.domain.StyleAttributes.Companion.border
+import io.pdf4k.domain.StyleAttributes.Companion.padding
 import io.pdf4k.domain.StyleAttributes.Companion.style
 import io.pdf4k.dsl.ListBuilder
 import io.pdf4k.dsl.PhraseBuilder
 import io.pdf4k.dsl.TableBuilder
+import org.commonmark.ext.gfm.tables.TableBlock
+import org.commonmark.ext.gfm.tables.TableCell
+import org.commonmark.ext.gfm.tables.TableRow
 import org.commonmark.node.*
 import org.commonmark.renderer.Renderer
 import java.awt.Color
 import java.awt.Color.BLUE
 
-class Pdf4kDslMarkdownRenderer<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(private val builder: T): Renderer {
+class Pdf4kDslMarkdownRenderer<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(private val builder: T, private val images: Map<String, Component.Image>) : Renderer {
     companion object {
-        private val blockQuoteDark = Color(127, 127, 127)
-        private val blockQuoteLight = Color(240, 240, 240)
+        private val dark = Color(127, 127, 127)
+        private val light = Color(240, 240, 240)
+        private val transparent = Color(0, 0, 0, 0)
         private val linkStyle = style(underlined = true, colour = BLUE)
     }
 
@@ -24,31 +31,46 @@ class Pdf4kDslMarkdownRenderer<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(pri
     }
 
     override fun render(node: Node): String {
-        when (node) {
-            is Document -> {
-                builder.text(node.firstChild)
-            }
-//
-//            is Heading -> {
-//                builder.textCell(headingStyle(node.level)) {
-//                    +(node.firstChild as Text).literal
-//                }
-//            }
-//
-//            is Paragraph -> {
-//                builder.text(node, null)
-//            }
-//
-//            is BlockQuote -> builder.blockQuote(node)
-
-            else -> TODO("Unsupported node type ${node::class.simpleName}")
-        }
-
+        builder.text(node.firstChild)
         return ""
     }
 
+    private fun tableBlock(builder: TableBuilder<F, T>, node: TableBlock) = with(builder) {
+        val rows = node.firstChild.childList<TableRow>() + node.lastChild.childList<TableRow>()
+        val columns = node.firstChild.firstChild.childList<TableCell>().size
+        tableCell(columns, headerRows = 1, style = border(1f) + padding(4f)) {
+            rows.forEachIndexed { i, row ->
+                style(cellBackground = if (i == 0) light else transparent) {
+                    row.childList<TableCell>().forEach { cell ->
+                        textCell { text(cell.firstChild) }
+                    }
+                }
+            }
+        }
+    }
+
+    private inline fun <reified N : Node> Node.childList(): List<N> {
+        val result = mutableListOf<N>()
+        var child = firstChild
+
+        while (child != null) {
+            result += child as N
+            child = child.next
+        }
+
+        return result
+    }
+
     private fun blockQuote(builder: TableBuilder<F, T>, node: BlockQuote) = with(builder) {
-        style(paddingLeft = 6f, borderWidthLeft = 2f, borderColourLeft = blockQuoteDark, cellBackground = blockQuoteLight) {
+        style(
+            paddingLeft = 6f,
+            paddingTop = 4f,
+            paddingRight = 4f,
+            paddingBottom = 4f,
+            borderWidthLeft = 2f,
+            borderColourLeft = dark,
+            cellBackground = light
+        ) {
             tableCell(1, margin = Margin(0f, 0f, 6f, 0f)) {
                 style(paddingLeft = 4f, borderWidthLeft = 0f, borderColourLeft = Color.BLACK) {
                     text(node.firstChild, null)
@@ -65,16 +87,27 @@ class Pdf4kDslMarkdownRenderer<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(pri
                 is Heading -> {
                     textCell(headingStyle(c.level)) {
                         +(c.firstChild as Text).literal
-                        +"\n\n"
                     }
                 }
-                is Paragraph -> textCell { text(c.firstChild, currentFontStyle) }
+
+                is Paragraph -> textCell {
+                    text(c.firstChild, currentFontStyle)
+                    +"\n\n"
+                }
                 is BlockQuote -> blockQuote(this, c)
                 is OrderedList -> listCell(style(listStyle = ListStyle.Numbered())) { listItems(c) }
                 is BulletList -> listCell(style(listStyle = ListStyle.Symbol())) { listItems(c) }
+                is TableBlock -> tableBlock(this, c)
+                is IndentedCodeBlock -> codeBlock(this, c)
                 else -> TODO("UNKNOWN TYPE $c")
             }
             child = child.next
+        }
+    }
+
+    private fun codeBlock(builder: TableBuilder<F, T>, code: IndentedCodeBlock) {
+        builder.textCell(style(Font.BuiltIn.Courier, cellBackground = light)) {
+            +code.literal
         }
     }
 
@@ -104,6 +137,7 @@ class Pdf4kDslMarkdownRenderer<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(pri
                                         blockQuote(this, next as BlockQuote)
                                     }
                                 }
+
                                 else -> TODO("NOOOOOOb")
                             }
                             next = next.next
@@ -135,7 +169,7 @@ class Pdf4kDslMarkdownRenderer<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(pri
                     }
                 }
 
-                is SoftLineBreak -> crlf()
+                is SoftLineBreak -> +" "
 
                 is Paragraph -> text(c.firstChild, currentFontStyle)
 
@@ -146,6 +180,12 @@ class Pdf4kDslMarkdownRenderer<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(pri
                 }
 
                 is BlockQuote -> blockQuote(builder, c)
+
+                is Code -> style(Font.BuiltIn.Courier) { +c.literal }
+
+                is Image -> images[c.destination]?.let { img ->
+                    image(img.resource, img.width, img.height, img.rotation)
+                } ?: throw IllegalArgumentException("Image not found: ${c.destination}")
                 else -> TODO("Unsupported node type ${child::class.simpleName}")
             }
             child = child.next
@@ -160,14 +200,37 @@ class Pdf4kDslMarkdownRenderer<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(pri
             4 -> 20f
             5 -> 16f
             else -> 12f
-        }
+        },
+        paddingBottom = when (level) {
+            1 -> 32f
+            2 -> 28f
+            3 -> 24f
+            4 -> 20f
+            5 -> 16f
+            else -> 12f
+        } * 0.5f,
+        paddingTop = when (level) {
+            1 -> 32f
+            2 -> 28f
+            3 -> 24f
+            4 -> 20f
+            5 -> 16f
+            else -> 12f
+        } * 0.5f
     )
 
     private operator fun Font.Style?.plus(other: Font.Style): Font.Style = when (this) {
         null,
         Font.Style.Plain -> other
-        Font.Style.Bold -> if (other == Font.Style.Italic) { Font.Style.BoldItalic } else Font.Style.Bold
-        Font.Style.Italic -> if (other == Font.Style.Bold) { Font.Style.BoldItalic } else Font.Style.Italic
+
+        Font.Style.Bold -> if (other == Font.Style.Italic) {
+            Font.Style.BoldItalic
+        } else Font.Style.Bold
+
+        Font.Style.Italic -> if (other == Font.Style.Bold) {
+            Font.Style.BoldItalic
+        } else Font.Style.Italic
+
         Font.Style.BoldItalic -> this
     }
 }

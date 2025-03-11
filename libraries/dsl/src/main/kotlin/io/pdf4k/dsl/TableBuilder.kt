@@ -31,7 +31,7 @@ abstract class TableBuilder<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(
     }
 
     fun tableCell(
-        columns: Int,
+        columns: Int = 1,
         style: StyleAttributes? = null,
         weights: List<Float>? = null,
         margin: Margin = Margin.ZERO,

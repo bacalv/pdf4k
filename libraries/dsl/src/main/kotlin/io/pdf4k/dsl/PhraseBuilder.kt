@@ -19,7 +19,11 @@ abstract class PhraseBuilder<P : PhraseBuilder<P>> : BuildsStyle<Component.Phras
     }
 
     fun image(resource: String, width: Float? = null, height: Float? = null, rotation: Float? = null) {
-        children += ImageBuilder(ResourceLocation.Local(resource), width, height, rotation)
+        image(ResourceLocation.local(resource), width, height, rotation)
+    }
+
+    fun image(resource: ResourceLocation, width: Float? = null, height: Float? = null, rotation: Float? = null) {
+        children += ImageBuilder(resource, width, height, rotation)
     }
 
     fun link(target: String, text: String) {

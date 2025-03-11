@@ -24,9 +24,16 @@ class MarkdownPluginTest: AbstractPdfRendererTest() {
 
                 # Bold / Italic
                 
+                Blah blah blah
+                blah blah blah
+                
+                blah blah blah
+              
                 This is *italic*.
                 This is **bold**.
                 This is ***bold italic***.
+                
+                This is another paragraph
                 
                 # Block quotes
                 
@@ -71,7 +78,31 @@ class MarkdownPluginTest: AbstractPdfRendererTest() {
                     > > 2. Two
                     > > 3. Three
                 2. Something else
-            """.trimIndent())
+                
+                # Tables
+                
+                | Name    | Rank       | Notes
+                | ------- | ---------- | -----
+                | Fred    | First      | Winner
+                | Jim     | Second     | Runner up
+                | Dave    | Third      | Last
+                
+                # Code block
+                
+                Code block:
+                
+                    10 INPUT "WHAT IS YOUR NAME?", A$
+                    20 PRINT "HELLO, " + A$
+                    30 GOTO 20
+                    
+                Inline `code` literal
+                
+                # Images
+                
+                ![Some Image](image-1)
+            """.trimIndent(),
+                "image-1" to localImage("img.png", 160f, 120f)
+            )
         }.approve(approver)
     }
 }
