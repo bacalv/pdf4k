@@ -22,18 +22,20 @@ fun thumbnailResource(
 fun AnyPhraseBuilder.thumbnail(
     resource: ResourceLocation,
     width: Int,
-    height: Int
+    height: Int,
+    rotation: Float? = null
 ) {
-    image(thumbnailResource(resource, width, height), width = width.toFloat(), height = height.toFloat())
+    image(thumbnailResource(resource, width, height), width = width.toFloat(), height = height.toFloat(), rotation = rotation)
 }
 
 fun AnyTableBuilder.thumbnail(
     resource: ResourceLocation,
     width: Int,
     height: Int,
+    rotation: Float? = null,
     style: StyleAttributes? = null,
     colSpan: Int = 1,
     rowSpan: Int = 1
 ) {
-    imageCell(thumbnailResource(resource, width, height), style, colSpan, rowSpan, width.toFloat(), height.toFloat())
+    imageCell(thumbnailResource(resource, width, height), style, colSpan, rowSpan, width.toFloat(), height.toFloat(), rotation)
 }
