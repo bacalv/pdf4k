@@ -1,14 +1,12 @@
 package io.pdf4k.dsl
 
-import io.pdf4k.domain.Component
-import io.pdf4k.domain.Page
-import io.pdf4k.domain.Stationary
-import io.pdf4k.domain.StyleAttributes
+import io.pdf4k.domain.*
 
 @PdfDsl
 class PageBuilder(val style: StyleAttributes?, private val stationary: List<Stationary>) {
     private val builder = ContentBuilder.ForPage()
     private val blockContent = mutableMapOf<String, Component.Content>()
+    private val backgroundImages = mutableMapOf<String, ResourceLocation>()
 
     fun content(style: StyleAttributes? = null, block: ContentBuilder.ForPage.() -> Unit) {
         if (style == null) {
@@ -20,7 +18,7 @@ class PageBuilder(val style: StyleAttributes?, private val stationary: List<Stat
         }
     }
 
-    fun block(ref: String, style: StyleAttributes? = null, block: ContentBuilder.ForBlock.() -> Unit) {
+    fun block(ref: String, style: StyleAttributes? = null, backgroundImage: ResourceLocation? = null, block: ContentBuilder.ForBlock.() -> Unit) {
         val builder = ContentBuilder.ForBlock()
         if (style == null) {
             builder.block()
@@ -30,7 +28,8 @@ class PageBuilder(val style: StyleAttributes?, private val stationary: List<Stat
             }
         }
         blockContent[ref] = builder.build()
+        backgroundImage?.let { backgroundImages[ref] = it }
     }
 
-    fun build() = Page(stationary, style, builder.build(), blockContent)
+    fun build() = Page(stationary, style, builder.build(), blockContent, backgroundImages)
 }

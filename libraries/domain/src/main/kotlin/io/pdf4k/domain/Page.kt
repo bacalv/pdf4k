@@ -4,5 +4,6 @@ data class Page(
     val stationary: List<Stationary>,
     val style: StyleAttributes?,
     val content: Component.Content,
-    val blockContent: Map<String, Component.Content>
+    val blockContent: Map<String, Component.Content>,
+    val backgroundImages: Map<String, ResourceLocation>
 )

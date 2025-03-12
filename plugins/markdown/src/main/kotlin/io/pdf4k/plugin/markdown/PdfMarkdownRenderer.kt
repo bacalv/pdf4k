@@ -3,13 +3,12 @@ package io.pdf4k.plugin.markdown
 import io.pdf4k.domain.Component
 import io.pdf4k.domain.Font
 import io.pdf4k.domain.ListStyle
-import io.pdf4k.domain.Margin
 import io.pdf4k.domain.StyleAttributes.Companion.border
 import io.pdf4k.domain.StyleAttributes.Companion.padding
 import io.pdf4k.domain.StyleAttributes.Companion.style
+import io.pdf4k.dsl.AnyContentBuilder
 import io.pdf4k.dsl.ListBuilder
 import io.pdf4k.dsl.PhraseBuilder
-import io.pdf4k.dsl.TableBuilder
 import org.commonmark.ext.gfm.tables.TableBlock
 import org.commonmark.ext.gfm.tables.TableCell
 import org.commonmark.ext.gfm.tables.TableRow
@@ -18,7 +17,7 @@ import org.commonmark.renderer.Renderer
 import java.awt.Color
 import java.awt.Color.BLUE
 
-class Pdf4kDslMarkdownRenderer<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(private val builder: T, private val images: Map<String, Component.Image>) : Renderer {
+class Pdf4kDslMarkdownRenderer(private val builder: AnyContentBuilder, private val images: Map<String, Component.Image>) : Renderer {
     companion object {
         private val dark = Color(127, 127, 127)
         private val light = Color(240, 240, 240)
@@ -31,18 +30,20 @@ class Pdf4kDslMarkdownRenderer<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(pri
     }
 
     override fun render(node: Node): String {
-        builder.text(node.firstChild)
+        builder.style(spacingBefore = 24f) {
+            text(node.firstChild)
+        }
         return ""
     }
 
-    private fun tableBlock(builder: TableBuilder<F, T>, node: TableBlock) = with(builder) {
+    private fun tableBlock(builder: AnyContentBuilder, node: TableBlock) = with(builder) {
         val rows = node.firstChild.childList<TableRow>() + node.lastChild.childList<TableRow>()
         val columns = node.firstChild.firstChild.childList<TableCell>().size
-        tableCell(columns, headerRows = 1, style = border(1f) + padding(4f)) {
+        table(columns, headerRows = 1, style = border(1f) + padding(4f)) {
             rows.forEachIndexed { i, row ->
                 style(cellBackground = if (i == 0) light else transparent) {
                     row.childList<TableCell>().forEach { cell ->
-                        textCell { text(cell.firstChild) }
+                        cell { text(cell.firstChild) }
                     }
                 }
             }
@@ -61,7 +62,7 @@ class Pdf4kDslMarkdownRenderer<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(pri
         return result
     }
 
-    private fun blockQuote(builder: TableBuilder<F, T>, node: BlockQuote) = with(builder) {
+    private fun AnyContentBuilder.blockQuote(node: BlockQuote) {
         style(
             paddingLeft = 6f,
             paddingTop = 4f,
@@ -71,47 +72,50 @@ class Pdf4kDslMarkdownRenderer<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(pri
             borderColourLeft = dark,
             cellBackground = light
         ) {
-            tableCell(1, margin = Margin(0f, 0f, 6f, 0f)) {
-                style(paddingLeft = 4f, borderWidthLeft = 0f, borderColourLeft = Color.BLACK) {
-                    text(node.firstChild, null)
+            table {
+                cell {
+                    style(paddingLeft = 4f, borderWidthLeft = 0f, borderColourLeft = Color.BLACK) {
+                        text(node.firstChild, null)
+                    }
                 }
             }
         }
     }
 
-    private fun T.text(node: Node, currentFontStyle: Font.Style? = null) {
+    private fun AnyContentBuilder.text(node: Node, currentFontStyle: Font.Style? = null) {
         var child: Node? = node
 
         while (child != null) {
             when (val c = child) {
-                is Heading -> {
-                    textCell(headingStyle(c.level)) {
-                        +(c.firstChild as Text).literal
-                    }
+                is Heading -> style(headingStyle(c.level)) {
+                    +(c.firstChild as Text).literal
                 }
-
-                is Paragraph -> textCell {
-                    text(c.firstChild, currentFontStyle)
-                    +"\n\n"
+                is Paragraph -> phrase { text(c.firstChild, currentFontStyle) }
+                is BlockQuote -> blockQuote(c)
+                is OrderedList -> table {
+                    listCell(style(listStyle = ListStyle.Numbered())) { listItems(c) }
                 }
-                is BlockQuote -> blockQuote(this, c)
-                is OrderedList -> listCell(style(listStyle = ListStyle.Numbered())) { listItems(c) }
-                is BulletList -> listCell(style(listStyle = ListStyle.Symbol())) { listItems(c) }
+                is BulletList -> table {
+                    listCell(style(listStyle = ListStyle.Symbol())) { listItems(c) }
+                }
                 is TableBlock -> tableBlock(this, c)
                 is IndentedCodeBlock -> codeBlock(this, c)
+                is Text -> phrase { text(c) }
                 else -> TODO("UNKNOWN TYPE $c")
             }
             child = child.next
         }
     }
 
-    private fun codeBlock(builder: TableBuilder<F, T>, code: IndentedCodeBlock) {
-        builder.textCell(style(Font.BuiltIn.Courier, cellBackground = light)) {
-            +code.literal
+    private fun codeBlock(builder: AnyContentBuilder, code: IndentedCodeBlock) {
+        builder.table {
+            textCell(style(Font.BuiltIn.Courier, cellBackground = light)) {
+                +code.literal
+            }
         }
     }
 
-    private fun ListBuilder<F, T>.listItems(node: Node) {
+    private fun ListBuilder<*, *, *, *>.listItems(node: Node) {
         var child = node.firstChild
 
         while (child != null) {
@@ -119,7 +123,7 @@ class Pdf4kDslMarkdownRenderer<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(pri
                 is ListItem -> {
                     var next = child.firstChild
                     item {
-                        text(next.firstChild)
+                        text(next.firstChild, null)
                     }.let { item ->
                         next = next.next
                         while (next != null) {
@@ -134,7 +138,9 @@ class Pdf4kDslMarkdownRenderer<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(pri
 
                                 is BlockQuote -> {
                                     item.table {
-                                        blockQuote(this, next as BlockQuote)
+                                        cell {
+                                            blockQuote(next as BlockQuote)
+                                        }
                                     }
                                 }
 
@@ -152,7 +158,7 @@ class Pdf4kDslMarkdownRenderer<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(pri
         }
     }
 
-    private fun F.text(node: Node, currentFontStyle: Font.Style? = null) {
+    private fun PhraseBuilder<*>.text(node: Node, currentFontStyle: Font.Style? = null) {
         var child: Node? = node
         while (child != null) {
             when (val c = child) {
@@ -179,7 +185,7 @@ class Pdf4kDslMarkdownRenderer<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(pri
                     }
                 }
 
-                is BlockQuote -> blockQuote(builder, c)
+//                is BlockQuote -> blockQuote(c)
 
                 is Code -> style(Font.BuiltIn.Courier) { +c.literal }
 
@@ -200,23 +206,7 @@ class Pdf4kDslMarkdownRenderer<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(pri
             4 -> 20f
             5 -> 16f
             else -> 12f
-        },
-        paddingBottom = when (level) {
-            1 -> 32f
-            2 -> 28f
-            3 -> 24f
-            4 -> 20f
-            5 -> 16f
-            else -> 12f
-        } * 0.5f,
-        paddingTop = when (level) {
-            1 -> 32f
-            2 -> 28f
-            3 -> 24f
-            4 -> 20f
-            5 -> 16f
-            else -> 12f
-        } * 0.5f
+        }
     )
 
     private operator fun Font.Style?.plus(other: Font.Style): Font.Style = when (this) {

@@ -86,6 +86,13 @@ object ComponentRenderer {
                 is Component.Cell.Text -> component.phrase.render<Phrase>(context)
                 is Component.Cell.Table -> component.table.render<PdfPTable>(context)
                 is Component.Cell.Image -> component.image.render<Image>(context)
+                is Component.Cell.Composite -> {
+                    PdfPCell().also { c ->
+                        component.content.children.render(context).forEach { e ->
+                            c.addElement(e)
+                        }
+                    }
+                }
             }.let { element ->
                 when (element) {
                     is Phrase -> PdfPCell(element).also { it.setStyle(context) }
@@ -99,6 +106,7 @@ object ComponentRenderer {
                         }
                     }
                     is Image -> PdfPCell(element).also { it.setStyle(context) }
+                    is PdfPCell -> element.also { it.setStyle(context) }
                     else -> throw IllegalStateException("Unexpected element: " + element::class.simpleName)
                 }.also { cell ->
                     cell.colspan = component.colSpan ?: 1

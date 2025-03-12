@@ -29,6 +29,7 @@ import io.pdf4k.domain.dto.ComponentDto.*
     Type(value = Cell.Text::class, name = "tx"),
     Type(value = Cell.Table::class, name = "tt"),
     Type(value = Cell.Image::class, name = "ti"),
+    Type(value = Cell.Composite::class, name = "tc"),
 )
 sealed class ComponentDto {
     data class Style(val ref: StyleRef, val children: List<ComponentDto>) : ComponentDto()
@@ -81,6 +82,8 @@ sealed class ComponentDto {
         ) : Cell()
 
         data class Image(override val colSpan: Int?, override val rowSpan: Int?, val image: ComponentDto.Image) : Cell()
+
+        data class Composite(override val colSpan: Int?, override val rowSpan: Int?, val content: ComponentDto.Content) : Cell()
     }
 }
 
@@ -91,6 +94,7 @@ fun Component.toDto(resourceMapBuilder: ResourceMapDto.Builder): ComponentDto = 
     is Component.Cell.Image -> Cell.Image(colSpan, rowSpan, image.toDto(resourceMapBuilder) as Image)
     is Component.Cell.Table -> Cell.Table(colSpan, rowSpan, margin.toDto(), table.toDto(resourceMapBuilder) as Table)
     is Component.Cell.Text -> Cell.Text(rowSpan, colSpan, phrase.toDto(resourceMapBuilder) as Phrase)
+    is Component.Cell.Composite -> Cell.Composite(rowSpan, colSpan, content.toDto(resourceMapBuilder) as Content)
     is Component.Chunk -> Chunk(text)
     is Component.Content -> Content(children.toDto(resourceMapBuilder))
     is Component.Image -> Image(resource.toDto(resourceMapBuilder).let(resourceMapBuilder::resourceRef), width, height, rotation)
@@ -126,6 +130,7 @@ fun ComponentDto.toDomain(resourceMap: ResourceMap): Component = when (this) {
     )
 
     is Cell.Text -> Component.Cell.Text(rowSpan, colSpan, phrase.toDomain(resourceMap) as Component.Phrase)
+    is Cell.Composite -> Component.Cell.Composite(rowSpan, colSpan, content.toDomain(resourceMap) as Component.Content)
     is Chunk -> Component.Chunk(text)
     is Content -> Component.Content(children.toDomain(resourceMap))
     is Image -> Component.Image(resourceMap.getResourceLocation(ref), width, height, rotation)

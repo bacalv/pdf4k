@@ -278,6 +278,26 @@ class TableTest : AbstractPdfRendererTest() {
         }.approve(approver)
     }
 
+    @Test
+    fun `draws a composite cell`(approver: PdfApprover) {
+        content {
+            table {
+                cell(style(spacingBefore = 20f, size = 24f)) {
+                    +"First paragraph should not have any space before because it is the first one in the block"
+                    +"Next paragraph should have space before because it is not the first one in the block"
+                    table {
+                        textCell("Text in a table cell")
+                        listCell {
+                            item("One")
+                            item("Two")
+                            item("Three")
+                        }
+                    }
+                }
+            }
+        }.approve(approver)
+    }
+
     companion object {
         @JvmStatic
         fun alignments() = HorizontalAlignment.entries.cartesianProduct(VerticalAlignment.entries)

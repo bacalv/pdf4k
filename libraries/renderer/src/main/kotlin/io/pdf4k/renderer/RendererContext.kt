@@ -69,6 +69,9 @@ class RendererContext(
     fun drawBlocks(page: Page, stationary: Stationary) {
         page.blockContent.forEach { (blockName, content) ->
             stationary.blocks[blockName]?.let { block ->
+                page.backgroundImages[blockName]?.let { backgroundImage ->
+                    mainDocumentWriter.directContent.addImage(getImage(backgroundImage, block.w, block.h, null), block.w, 0f, 0f, block.h, block.x, block.y)
+                }
                 ColumnText(contentBlocksDocumentWriter.directContent).let { columnText ->
                     columnText.setSimpleColumn(block.x, block.y + block.h, block.x + block.w, block.y)
                     content.children.render(this).forEach { columnText.addElement(it) }

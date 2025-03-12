@@ -60,6 +60,8 @@ object StyleSetter {
         widthPercentage = 100.0f
         keepTogether = false
         context.peekStyle().let { style ->
+            setSpacingBefore(style.spacingBefore ?: 0f)
+            setSpacingAfter(style.spacingAfter ?: 0f)
             isSplitLate = style.splitLate ?: false
             isSplitRows = style.splitRows ?: true
             addCell(PdfPCell().also { cell ->
@@ -91,6 +93,8 @@ object StyleSetter {
         defaultCell.isUseAscender = true
         defaultCell.isUseDescender = true
         context.peekStyle().let { style ->
+            setSpacingBefore(style.spacingBefore ?: 0f)
+            setSpacingAfter(style.spacingAfter ?: 0f)
             isSplitLate = style.splitLate ?: false
             isSplitRows = style.splitRows ?: true
         }

@@ -51,6 +51,10 @@ abstract class PhraseBuilder<P : PhraseBuilder<P>> : BuildsStyle<Component.Phras
     class ForPage: PhraseBuilder<ForPage>() {
         override val childBuilder: () -> ForPage = ::ForPage
     }
+
+    class ForCell: PhraseBuilder<ForCell>() {
+        override val childBuilder: () -> ForCell = ::ForCell
+    }
 }
 
 typealias AnyPhraseBuilder = PhraseBuilder<*>

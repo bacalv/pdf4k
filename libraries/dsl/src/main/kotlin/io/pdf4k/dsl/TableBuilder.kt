@@ -4,7 +4,7 @@ import io.pdf4k.domain.*
 import java.net.URI
 
 @PdfDsl
-abstract class TableBuilder<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(
+abstract class TableBuilder<F : PhraseBuilder<F>, P : ParagraphBuilder<F, P>, T : TableBuilder<F, P, T, C>, C : ContentBuilder<F, P, T, C>>(
     private val attributes: TableAttributes,
     private val style: StyleAttributes?
 ) : BuildsStyle<Component.Table, T> {
@@ -65,7 +65,7 @@ abstract class TableBuilder<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(
         }
     }
 
-    fun listCell(style: StyleAttributes? = null, block: ListBuilder<F, T>.() -> Unit) {
+    fun listCell(style: StyleAttributes? = null, block: ListBuilder<F, P, T, C>.() -> Unit) {
         if (style != null) {
             style(style) { listCell(null, block) }
         } else {
@@ -73,25 +73,42 @@ abstract class TableBuilder<F : PhraseBuilder<F>, T : TableBuilder<F, T>>(
         }
     }
 
+    fun cell(style: StyleAttributes? = null, colSpan: Int = 1, rowSpan: Int = 1, block: ContentBuilder.ForCell.() -> Unit) {
+        if (style != null) {
+            style(style) { cell(null, colSpan, rowSpan, block) }
+        } else {
+            addChild(CellBuilder(colSpan, rowSpan, Margin.ZERO, ContentBuilder.ForCell().apply(block)))
+        }
+    }
+
     class ForBlock(
-        val attributes: TableAttributes,
+        private val attributes: TableAttributes,
         style: StyleAttributes?
-    ) : TableBuilder<PhraseBuilder.ForBlock, ForBlock>(attributes, style) {
+    ) : TableBuilder<PhraseBuilder.ForBlock, ParagraphBuilder.ForBlock, ForBlock, ContentBuilder.ForBlock>(attributes, style) {
         override val phraseBuilder: () -> PhraseBuilder.ForBlock = { PhraseBuilder.ForBlock() }
         override val childBuilder: () -> ForBlock = { ForBlock(TableAttributes(0, attributes.widthPercentage, null, attributes.margin, 0, attributes.extend), style) }
         override val tableBuilder: (TableAttributes, StyleAttributes?) -> ForBlock = { t, s -> ForBlock(t, s) }
     }
 
     class ForPage(
-        val attributes: TableAttributes,
+        private val attributes: TableAttributes,
         style: StyleAttributes?
-    ) : TableBuilder<PhraseBuilder.ForPage, ForPage>(attributes, style) {
+    ) : TableBuilder<PhraseBuilder.ForPage, ParagraphBuilder.ForPage, ForPage, ContentBuilder.ForPage>(attributes, style) {
         override val phraseBuilder: () -> PhraseBuilder.ForPage = { PhraseBuilder.ForPage() }
         override val childBuilder: () -> ForPage = { ForPage(TableAttributes(0, attributes.widthPercentage, null, attributes.margin, 0, attributes.extend), style) }
         override val tableBuilder: (TableAttributes, StyleAttributes?) -> ForPage = { t, s -> ForPage(t, s) }
     }
+
+    class ForCell(
+        private val attributes: TableAttributes,
+        style: StyleAttributes?
+    ) : TableBuilder<PhraseBuilder.ForCell, ParagraphBuilder.ForCell, ForCell, ContentBuilder.ForCell>(attributes, style) {
+        override val phraseBuilder: () -> PhraseBuilder.ForCell = { PhraseBuilder.ForCell() }
+        override val childBuilder: () -> ForCell = { ForCell(TableAttributes(0, attributes.widthPercentage, null, attributes.margin, 0, attributes.extend), style) }
+        override val tableBuilder: (TableAttributes, StyleAttributes?) -> ForCell = { t, s -> ForCell(t, s) }
+    }
 }
 
-typealias AnyTableBuilder = TableBuilder<*, *>
-typealias PageTableBuilder = TableBuilder<PhraseBuilder.ForPage, TableBuilder.ForPage>
-typealias BlockTableBuilder = TableBuilder<PhraseBuilder.ForBlock, TableBuilder.ForBlock>
+typealias AnyTableBuilder = TableBuilder<*, *, *, *>
+typealias PageTableBuilder = TableBuilder<PhraseBuilder.ForPage, ParagraphBuilder.ForPage, TableBuilder.ForPage, ContentBuilder.ForPage>
+typealias BlockTableBuilder = TableBuilder<PhraseBuilder.ForBlock, ParagraphBuilder.ForBlock, TableBuilder.ForBlock, ContentBuilder.ForBlock>

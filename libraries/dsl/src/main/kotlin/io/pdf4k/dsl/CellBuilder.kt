@@ -15,8 +15,9 @@ class CellBuilder(
     override fun build() =
         when (childBuilder) {
             is PhraseBuilder -> Component.Cell.Text(colSpan, rowSpan, childBuilder.build())
-            is TableBuilder<*, *> -> Component.Cell.Table(colSpan, rowSpan, margin, childBuilder.build())
+            is AnyTableBuilder -> Component.Cell.Table(colSpan, rowSpan, margin, childBuilder.build())
             is ImageBuilder -> Component.Cell.Image(colSpan, rowSpan, childBuilder.build())
+            is AnyContentBuilder -> Component.Cell.Composite(colSpan, rowSpan, childBuilder.build())
             else -> throw IllegalStateException("Incompatible child builder of type ${childBuilder::class.simpleName}")
         }
 

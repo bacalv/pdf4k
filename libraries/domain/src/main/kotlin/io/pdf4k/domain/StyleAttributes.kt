@@ -29,7 +29,9 @@ data class StyleAttributes(
     val borderColourRight: Color? = null,
     val splitLate: Boolean? = null,
     val splitRows: Boolean? = null,
-    val listStyle: ListStyle? = null
+    val listStyle: ListStyle? = null,
+    val spacingBefore: Float? = null,
+    val spacingAfter: Float? = null
 ) {
     companion object {
         val DEFAULT_LEADING = leading(0f, 1.2f)
@@ -60,7 +62,9 @@ data class StyleAttributes(
             borderColourRight: Color? = null,
             splitLate: Boolean? = null,
             splitRows: Boolean? = null,
-            listStyle: ListStyle? = null
+            listStyle: ListStyle? = null,
+            spacingBefore: Float? = null,
+            spacingAfter: Float? = null
         ) = StyleAttributes(
             font,
             fontStyle,
@@ -87,7 +91,9 @@ data class StyleAttributes(
             borderColourRight,
             splitLate,
             splitRows,
-            listStyle
+            listStyle,
+            spacingBefore,
+            spacingAfter
         )
 
         fun border(width: Float, colour: Color? = null) = StyleAttributes(
@@ -98,7 +104,7 @@ data class StyleAttributes(
             borderColourTop = colour,
             borderColourBottom = colour,
             borderColourLeft = colour,
-            borderColourRight = colour,
+            borderColourRight = colour
         )
 
         val noBorder = border(0f)
@@ -132,6 +138,8 @@ data class StyleAttributes(
         other.borderColourRight ?: borderColourRight,
         other.splitLate ?: splitLate,
         other.splitRows ?: splitRows,
-        other.listStyle ?: listStyle
+        other.listStyle ?: listStyle,
+        other.spacingBefore ?: spacingBefore,
+        other.spacingAfter ?: spacingAfter
     )
 }

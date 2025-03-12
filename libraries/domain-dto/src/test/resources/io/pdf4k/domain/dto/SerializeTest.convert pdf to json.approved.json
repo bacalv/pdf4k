@@ -192,7 +192,8 @@
         } ]
       } ]
     } ],
-    "blockContent" : { }
+    "blockContent" : { },
+    "backgroundImages" : { }
   }, {
     "stationary" : [ 0 ],
     "content" : [ {
@@ -209,7 +210,8 @@
         } ]
       } ]
     } ],
-    "blockContent" : { }
+    "blockContent" : { },
+    "backgroundImages" : { }
   }, {
     "stationary" : [ 0 ],
     "content" : [ {
@@ -292,7 +294,8 @@
         } ]
       } ]
     } ],
-    "blockContent" : { }
+    "blockContent" : { },
+    "backgroundImages" : { }
   }, {
     "stationary" : [ 0 ],
     "style" : 4,
@@ -1110,7 +1113,8 @@
         } ]
       } ]
     } ],
-    "blockContent" : { }
+    "blockContent" : { },
+    "backgroundImages" : { }
   } ],
   "metadata" : {
     "title" : "Hitchhiker's Guide to the Galaxy",

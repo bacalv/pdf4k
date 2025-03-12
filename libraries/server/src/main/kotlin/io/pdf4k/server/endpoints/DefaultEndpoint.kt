@@ -95,7 +95,8 @@ class DefaultEndpoint : PdfEndpoint<PdfDto> {
                                 )
                             )
                         )
-                    )
+                    ),
+                    backgroundImages = emptyMap()
                 )
             ),
             metadata = PdfMetadataDto(

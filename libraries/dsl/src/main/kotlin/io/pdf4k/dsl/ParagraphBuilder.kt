@@ -60,4 +60,9 @@ abstract class ParagraphBuilder<F : PhraseBuilder<F>, P : ParagraphBuilder<F, P>
         override val childBuilder: () -> ForPage = ::ForPage
         override val phraseBuilder: () -> PhraseBuilder.ForPage = { PhraseBuilder.ForPage() }
     }
+
+    class ForCell : ParagraphBuilder<PhraseBuilder.ForCell, ForCell>() {
+        override val childBuilder: () -> ForCell = ::ForCell
+        override val phraseBuilder: () -> PhraseBuilder.ForCell = { PhraseBuilder.ForCell() }
+    }
 }

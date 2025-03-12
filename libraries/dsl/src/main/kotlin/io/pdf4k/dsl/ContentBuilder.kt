@@ -8,7 +8,7 @@ import io.pdf4k.dsl.BreakBuilder.Companion.blockBreakBuilder
 import io.pdf4k.dsl.BreakBuilder.Companion.pageBreakBuilder
 
 @PdfDsl
-abstract class ContentBuilder<F : PhraseBuilder<F>, P : ParagraphBuilder<F, P>, T : TableBuilder<F, T>, C : ContentBuilder<F, P, T, C>> :
+abstract class ContentBuilder<F : PhraseBuilder<F>, P : ParagraphBuilder<F, P>, T : TableBuilder<F, P, T, C>, C : ContentBuilder<F, P, T, C>> :
     BuildsStyle<Component.Content, C> {
     override val children = mutableListOf<ComponentBuilder<*, *>>()
     abstract val tableBuilder: (TableAttributes, StyleAttributes?) -> T
@@ -53,7 +53,7 @@ abstract class ContentBuilder<F : PhraseBuilder<F>, P : ParagraphBuilder<F, P>, 
         children += tableBuilder(TableAttributes(columns, widthPercentage, weights, Margin.ZERO, headerRows, extend), style).also { it.block() }
     }
 
-    fun list(style: StyleAttributes? = null, block: ListBuilder<F, T>.() -> Unit) {
+    fun list(style: StyleAttributes? = null, block: ListBuilder<F, P, T, C>.() -> Unit) {
         table(1, style) { listCell { this.block() } }
     }
 
@@ -75,6 +75,13 @@ abstract class ContentBuilder<F : PhraseBuilder<F>, P : ParagraphBuilder<F, P>, 
         fun blockBreak() { children += blockBreakBuilder }
 
         fun pageBreak() { children += pageBreakBuilder }
+    }
+
+    class ForCell : ContentBuilder<PhraseBuilder.ForCell, ParagraphBuilder.ForCell, TableBuilder.ForCell, ForCell>() {
+        override val phraseBuilder: () -> PhraseBuilder.ForCell = { PhraseBuilder.ForCell() }
+        override val paragraphBuilder: () -> ParagraphBuilder.ForCell = { ParagraphBuilder.ForCell() }
+        override val childBuilder: () -> ForCell = ::ForCell
+        override val tableBuilder: (TableAttributes, StyleAttributes?) -> TableBuilder.ForCell =  { t, s -> TableBuilder.ForCell(t, s) }
     }
 }
 

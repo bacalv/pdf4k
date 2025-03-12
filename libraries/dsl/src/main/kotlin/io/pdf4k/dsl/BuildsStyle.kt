@@ -32,6 +32,9 @@ interface BuildsStyle<T : Component, B : ComponentBuilder<T, B>> : ComponentBuil
         borderColourRight: Color? = null,
         splitLate: Boolean? = null,
         splitRows: Boolean? = null,
+        listStyle: ListStyle? = null,
+        spacingBefore: Float? = null,
+        spacingAfter: Float? = null,
         block: B.() -> Unit
     ) = style(
         StyleAttributes(
@@ -59,9 +62,11 @@ interface BuildsStyle<T : Component, B : ComponentBuilder<T, B>> : ComponentBuil
             borderColourLeft,
             borderColourRight,
             splitLate,
-            splitRows
-        ), block
-    )
+            splitRows,
+            listStyle,
+            spacingBefore,
+            spacingAfter
+        ), block)
 
     fun style(attributes: StyleAttributes, block: B.() -> Unit) {
         addChild(

@@ -17,7 +17,7 @@ class PageEventListenerTest {
     fun `throws exception if loaded stationary not found on set current page template`() {
         val context = mockk<RendererContext>()
         val listener = PageEventListener(context)
-        val page = Page(listOf(BlankA4Portrait), style = null, content = mockk(), blockContent = mockk())
+        val page = Page(listOf(BlankA4Portrait), style = null, content = mockk(), blockContent = mockk(), backgroundImages = mockk())
 
         every { context.loadedStationary }.returns(emptyMap())
 
@@ -30,7 +30,7 @@ class PageEventListenerTest {
         val context = mockk<RendererContext>(relaxed = true)
         val listener = PageEventListener(context)
         val stationary = BlankA4Portrait.withBlocks { }
-        val page = Page(listOf(stationary), style = null, content = mockk(), blockContent = mockk())
+        val page = Page(listOf(stationary), style = null, content = mockk(), blockContent = mockk(), backgroundImages = mockk())
 
         every { context.loadedStationary }.returns(mapOf(stationary to LoadedStationary(stationary, mockk())))
         every { context.mainDocument }.returns(mockk(relaxed = true))
@@ -48,7 +48,7 @@ class PageEventListenerTest {
             block("2", 100f, 100f, 100f, 100f)
             contentFlow("1", "2")
         }
-        val page = Page(listOf(stationary), style = null, content = mockk(), blockContent = mockk())
+        val page = Page(listOf(stationary), style = null, content = mockk(), blockContent = mockk(), backgroundImages = mockk())
 
         every { context.loadedStationary }.returns(mapOf(stationary to LoadedStationary(stationary, mockk())))
         every { context.mainDocument }.returns(mockk(relaxed = true))
@@ -69,7 +69,7 @@ class PageEventListenerTest {
             block("2", 100f, 100f, 100f, 100f)
             contentFlow("1", "2")
         }
-        val page = Page(listOf(stationary), style = null, content = mockk(), blockContent = mockk())
+        val page = Page(listOf(stationary), style = null, content = mockk(), blockContent = mockk(), backgroundImages = mockk())
 
         every { context.loadedStationary }.returns(mapOf(stationary to LoadedStationary(stationary, mockk())))
         every { context.mainDocument }.returns(mockk(relaxed = true))
@@ -92,7 +92,7 @@ class PageEventListenerTest {
             block("2", 100f, 100f, 100f, 100f)
             contentFlow("1", "2")
         }
-        val page = Page(listOf(stationary), style = null, content = mockk(), blockContent = mockk())
+        val page = Page(listOf(stationary), style = null, content = mockk(), blockContent = mockk(), backgroundImages = mockk())
 
         every { context.loadedStationary }.returns(mapOf(stationary to LoadedStationary(stationary, mockk())))
         every { context.mainDocument }.returns(mockk(relaxed = true))

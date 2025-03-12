@@ -45,5 +45,7 @@ sealed class Component(val children: List<Component>) {
         class Table(colSpan: Int?, rowSpan: Int?, val margin: Margin, val table: Component.Table) : Cell(colSpan, rowSpan)
 
         class Image(colSpan: Int?, rowSpan: Int?, val image: Component.Image) : Cell(colSpan, rowSpan)
+
+        class Composite(colSpan: Int?, rowSpan: Int?, val content: Content) : Cell(colSpan, rowSpan)
     }
 }
