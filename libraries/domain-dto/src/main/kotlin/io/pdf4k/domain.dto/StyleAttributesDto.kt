@@ -29,8 +29,8 @@ data class StyleAttributesDto(
     val splitLate: Boolean? = null,
     val splitRows: Boolean? = null,
     val listStyle: ListStyleDto? = null,
-    val spacingBefore: Float? = null,
-    val spacingAfter: Float? = null,
+    val spacingBefore: SpacingDto? = null,
+    val spacingAfter: SpacingDto? = null,
 )
 
 fun StyleAttributes.toDto(resourceMapBuilder: ResourceMapDto.Builder) = StyleAttributesDto(
@@ -60,8 +60,8 @@ fun StyleAttributes.toDto(resourceMapBuilder: ResourceMapDto.Builder) = StyleAtt
     splitLate = splitLate,
     splitRows = splitRows,
     listStyle = listStyle?.toDto(),
-    spacingBefore = spacingBefore,
-    spacingAfter = spacingAfter,
+    spacingBefore = spacingBefore?.toDto(),
+    spacingAfter = spacingAfter?.toDto(),
 
 )
 
@@ -92,6 +92,6 @@ fun StyleAttributesDto.toDomain(resourceMap: ResourceMap): StyleAttributes = Sty
     splitLate = splitLate,
     splitRows = splitRows,
     listStyle = listStyle?.toDomain(),
-    spacingBefore = spacingBefore,
-    spacingAfter = spacingAfter
+    spacingBefore = spacingBefore?.toDomain(),
+    spacingAfter = spacingAfter?.toDomain()
 )

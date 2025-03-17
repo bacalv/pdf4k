@@ -3,6 +3,7 @@ package io.pdf4k.plugin.markdown
 import io.pdf4k.domain.Component
 import io.pdf4k.domain.Font
 import io.pdf4k.domain.ListStyle
+import io.pdf4k.domain.Spacing
 import io.pdf4k.domain.StyleAttributes.Companion.border
 import io.pdf4k.domain.StyleAttributes.Companion.padding
 import io.pdf4k.domain.StyleAttributes.Companion.style
@@ -30,7 +31,7 @@ class Pdf4kDslMarkdownRenderer(private val builder: AnyContentBuilder, private v
     }
 
     override fun render(node: Node): String {
-        builder.style(spacingBefore = 24f) {
+        builder.style(spacingBefore = Spacing.ZERO, spacingAfter = Spacing.Lines(1f)) {
             text(node.firstChild)
         }
         return ""

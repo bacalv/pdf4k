@@ -33,8 +33,8 @@ interface BuildsStyle<T : Component, B : ComponentBuilder<T, B>> : ComponentBuil
         splitLate: Boolean? = null,
         splitRows: Boolean? = null,
         listStyle: ListStyle? = null,
-        spacingBefore: Float? = null,
-        spacingAfter: Float? = null,
+        spacingBefore: Spacing? = null,
+        spacingAfter: Spacing? = null,
         block: B.() -> Unit
     ) = style(
         StyleAttributes(

@@ -30,8 +30,8 @@ data class StyleAttributes(
     val splitLate: Boolean? = null,
     val splitRows: Boolean? = null,
     val listStyle: ListStyle? = null,
-    val spacingBefore: Float? = null,
-    val spacingAfter: Float? = null
+    val spacingBefore: Spacing? = null,
+    val spacingAfter: Spacing? = null
 ) {
     companion object {
         val DEFAULT_LEADING = leading(0f, 1.2f)
@@ -63,8 +63,8 @@ data class StyleAttributes(
             splitLate: Boolean? = null,
             splitRows: Boolean? = null,
             listStyle: ListStyle? = null,
-            spacingBefore: Float? = null,
-            spacingAfter: Float? = null
+            spacingBefore: Spacing? = null,
+            spacingAfter: Spacing? = null
         ) = StyleAttributes(
             font,
             fontStyle,

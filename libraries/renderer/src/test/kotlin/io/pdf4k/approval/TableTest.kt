@@ -1,15 +1,12 @@
 package io.pdf4k.approval
 
+import io.pdf4k.domain.*
 import io.pdf4k.domain.Font.Style.Bold
 import io.pdf4k.domain.Font.Style.Plain
-import io.pdf4k.domain.HorizontalAlignment
 import io.pdf4k.domain.HorizontalAlignment.*
-import io.pdf4k.domain.Leading
-import io.pdf4k.domain.Stationary
 import io.pdf4k.domain.StyleAttributes.Companion.border
 import io.pdf4k.domain.StyleAttributes.Companion.padding
 import io.pdf4k.domain.StyleAttributes.Companion.style
-import io.pdf4k.domain.VerticalAlignment
 import io.pdf4k.domain.VerticalAlignment.*
 import io.pdf4k.dsl.PdfBuilder.Companion.content
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
@@ -252,7 +249,7 @@ class TableTest : AbstractPdfRendererTest() {
     fun `renders different padding`(approver: PdfApprover) {
         val justifiedAll = style(align = JustifiedAll)
         content {
-            style(leading = Leading.multiplier(1.5f), spacingBefore = 0f) {
+            style(leading = Leading.multiplier(1.5f), spacingBefore = Spacing.ZERO) {
                 paragraph(style(fontStyle = Bold)) {
                     +"Default\n\n"
                 }
@@ -282,7 +279,7 @@ class TableTest : AbstractPdfRendererTest() {
     fun `draws a composite cell`(approver: PdfApprover) {
         content {
             table {
-                cell(style(spacingBefore = 20f, size = 24f)) {
+                cell(style(spacingBefore = Spacing.Fixed(20f), size = 24f)) {
                     +"First paragraph should not have any space before because it is the first one in the block"
                     +"Next paragraph should have space before because it is not the first one in the block"
                     table {

@@ -53,8 +53,24 @@ object StyleSetter {
         }
     }
 
-    fun StyleAttributes.lineHeight() = (size ?: 12f).let { size ->
-        (leading ?: DEFAULT_LEADING).let { (fixed, multiplier) ->
+    private fun StyleAttributes.spacingBefore() = (size ?: 12f).let { size ->
+        when (val s = spacingBefore) {
+            null -> lineHeight()
+            is Spacing.Fixed -> s.fixed
+            is Spacing.Lines -> lineHeight() * s.lines
+        }
+    }
+
+    private fun StyleAttributes.spacingAfter() = (size ?: 12f).let { size ->
+        when (val s = spacingAfter) {
+            null -> 0f
+            is Spacing.Fixed -> s.fixed
+            is Spacing.Lines -> lineHeight() * s.lines
+        }
+    }
+
+    private fun StyleAttributes.lineHeight() = (leading ?: DEFAULT_LEADING).let { (fixed, multiplier) ->
+        (size ?: 12f).let { size ->
             size + fixed + (size * (multiplier - 1f))
         }
     }
@@ -63,8 +79,8 @@ object StyleSetter {
         widthPercentage = 100.0f
         keepTogether = false
         context.peekStyle().let { style ->
-            setSpacingBefore(style.spacingBefore ?: style.lineHeight())
-            setSpacingAfter(style.spacingAfter ?: 0f)
+            setSpacingBefore(style.spacingBefore())
+            setSpacingAfter(style.spacingAfter())
             isSplitLate = style.splitLate ?: false
             isSplitRows = style.splitRows ?: true
             addCell(PdfPCell().also { cell ->
@@ -96,8 +112,8 @@ object StyleSetter {
         defaultCell.isUseAscender = true
         defaultCell.isUseDescender = true
         context.peekStyle().let { style ->
-            setSpacingBefore(style.spacingBefore ?: 0f)
-            setSpacingAfter(style.spacingAfter ?: 0f)
+            setSpacingBefore(style.spacingBefore())
+            setSpacingAfter(style.spacingAfter())
             isSplitLate = style.splitLate ?: false
             isSplitRows = style.splitRows ?: true
         }

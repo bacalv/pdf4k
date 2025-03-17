@@ -6,6 +6,7 @@ import io.pdf4k.domain.HorizontalAlignment.Right
 import io.pdf4k.domain.Margin
 import io.pdf4k.domain.ResourceLocation.Companion.custom
 import io.pdf4k.domain.ResourceLocation.Companion.uri
+import io.pdf4k.domain.Spacing
 import io.pdf4k.domain.Stationary.Companion.BlankA4Landscape
 import io.pdf4k.domain.Stationary.Companion.BlankA4Portrait
 import io.pdf4k.domain.StyleAttributes.Companion.style
@@ -94,7 +95,7 @@ class StationaryTest : AbstractPdfRendererTest() {
                     paragraph(style(align = Right)) {
                         +"23rd September, 2025"
                     }
-                    paragraph(style(spacingBefore = 0f)) {
+                    paragraph(style(spacingBefore = Spacing.ZERO)) {
                         "RE: NOTICE OF NEW BYPASS" and style(fontStyle = Bold)
                     }
                     paragraph("Dear Mr Dent")
@@ -216,7 +217,7 @@ class StationaryTest : AbstractPdfRendererTest() {
             val port = server.start()
             val remoteStationary = BlankA4Portrait.copy(uri("http://localhost:$port/RemotePageTemplate.pdf"))
             pdf {
-                page(style(background = Color(100, 200, 0, 128), spacingBefore = 0f), stationary = remoteStationary) {
+                page(style(background = Color(100, 200, 0, 128), spacingBefore = Spacing.ZERO), stationary = remoteStationary) {
                     content {
                         repeat(50) { +"Remote Stationary" }
                     }
@@ -230,7 +231,7 @@ class StationaryTest : AbstractPdfRendererTest() {
     fun `loads stationary from a custom provider`(approver: PdfApprover) {
         val remoteStationary = BlankA4Portrait.copy(custom("custom", "custom.pdf".toArgument("location")) )
         pdf {
-            page(style(background = Color(100, 200, 0, 128), spacingBefore = 0f), stationary = remoteStationary) {
+            page(style(background = Color(100, 200, 0, 128), spacingBefore = Spacing.ZERO), stationary = remoteStationary) {
                 content {
                     repeat(50) { +"Custom Provider Stationary" }
                 }

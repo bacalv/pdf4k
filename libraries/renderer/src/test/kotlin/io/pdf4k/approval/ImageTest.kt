@@ -6,6 +6,7 @@ import io.pdf4k.domain.HorizontalAlignment.*
 import io.pdf4k.domain.Leading.Companion.multiplier
 import io.pdf4k.domain.Margin
 import io.pdf4k.domain.ResourceLocation.Companion.custom
+import io.pdf4k.domain.Spacing
 import io.pdf4k.domain.StyleAttributes.Companion.border
 import io.pdf4k.domain.StyleAttributes.Companion.noBorder
 import io.pdf4k.domain.StyleAttributes.Companion.style
@@ -119,7 +120,7 @@ class ImageTest : AbstractPdfRendererTest() {
                 }
                 textCell("Here's some text on the line below")
             }
-            paragraph(style(spacingBefore = 0f)) {
+            paragraph(style(spacingBefore = Spacing.ZERO)) {
                 image("adams.png")
             }
         }.approve(approver)

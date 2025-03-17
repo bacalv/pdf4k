@@ -3,6 +3,7 @@ package io.pdf4k.approval
 import io.pdf4k.domain.Font.Style.Bold
 import io.pdf4k.domain.HorizontalAlignment.*
 import io.pdf4k.domain.ResourceLocation.Companion.local
+import io.pdf4k.domain.Spacing
 import io.pdf4k.domain.Stationary.Companion.BlankA4Portrait
 import io.pdf4k.domain.StyleAttributes.Companion.border
 import io.pdf4k.domain.StyleAttributes.Companion.noBorder
@@ -269,7 +270,7 @@ class BlocksTest : AbstractPdfRendererTest() {
         pdf {
             page(stationary = twoColumns, style = style(size = 24f)) {
                 content {
-                    table(1, border(0.5f, BLACK) + padding(0f) + style(spacingBefore = 24f)) {
+                    table(1, border(0.5f, BLACK) + padding(0f) + style(spacingBefore = Spacing.Fixed(24f))) {
                         cell {
                             """
                                 Within seconds he ran out onto the deck and waved and grinned at over
