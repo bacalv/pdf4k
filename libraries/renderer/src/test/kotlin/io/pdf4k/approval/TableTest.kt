@@ -252,7 +252,7 @@ class TableTest : AbstractPdfRendererTest() {
     fun `renders different padding`(approver: PdfApprover) {
         val justifiedAll = style(align = JustifiedAll)
         content {
-            style(leading = Leading.multiplier(1.5f)) {
+            style(leading = Leading.multiplier(1.5f), spacingBefore = 0f) {
                 paragraph(style(fontStyle = Bold)) {
                     +"Default\n\n"
                 }

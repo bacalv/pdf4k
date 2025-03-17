@@ -99,9 +99,7 @@ class ParagraphTest : AbstractPdfRendererTest() {
             paragraph(style(align = HorizontalAlignment.Left)) { +"Left aligned" }
             paragraph(style(align = HorizontalAlignment.Right)) { +"Right aligned" }
             paragraph(style(align = HorizontalAlignment.Justified)) {
-                crlf()
                 "Justified." and style(fontStyle = Bold)
-                crlf()
                 crlf()
                 +"""
                     A twenty-foot-high transparent globe floated next to his boat, rolling and
@@ -112,9 +110,7 @@ class ParagraphTest : AbstractPdfRendererTest() {
                 """.singleLine()
             }
             paragraph(style(align = HorizontalAlignment.JustifiedAll)) {
-                crlf()
                 "Justified all." and style(fontStyle = Bold)
-                crlf()
                 crlf()
                 +"""
                     Zaphod stepped through the wall of the globe and relaxed on the sofa.

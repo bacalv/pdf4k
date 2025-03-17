@@ -18,24 +18,19 @@ class LinksTest : AbstractPdfRendererTest() {
             page {
                 content {
                     paragraph { anchor("page-1", "This is page 1") }
-                    crlf()
                     paragraph { link("#page-2", "Go to page 2", linkStyle) }
                 }
             }
             page {
                 content {
                     paragraph { anchor("page-2", "This is page 2") }
-                    crlf()
                     paragraph { link("#page-3", "Go to page 3", linkStyle) }
                 }
             }
             page {
                 content {
                     paragraph { anchor("page-3", "This is page 3") }
-                    crlf()
                     paragraph { link("#page-1", "Go to page 1", linkStyle) }
-                    crlf()
-                    crlf()
                     paragraph { link("https://github.com", "Go to Github", linkStyle) }
                 }
             }
@@ -48,14 +43,12 @@ class LinksTest : AbstractPdfRendererTest() {
             page {
                 content {
                     paragraph { anchor("page-1", "This is page 1") }
-                    crlf()
                     paragraph { link("#page-2", "Go to page 2", linkStyle) }
                 }
             }
             page(stationary = stationaryWithBlock) {
                 block("blockName") {
                     paragraph { anchor("page-2", "This is page 2") }
-                    crlf()
                     paragraph { link("#page-1", "Go to page 1", linkStyle) }
                 }
             }

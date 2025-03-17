@@ -94,12 +94,10 @@ class StationaryTest : AbstractPdfRendererTest() {
                     paragraph(style(align = Right)) {
                         +"23rd September, 2025"
                     }
-                    paragraph {
+                    paragraph(style(spacingBefore = 0f)) {
                         "RE: NOTICE OF NEW BYPASS" and style(fontStyle = Bold)
                     }
-                    crlf()
                     paragraph("Dear Mr Dent")
-                    crlf()
                     """
                         The house stood on a slight rise just on the edge of the village. It stood on
                         its own and looked over a broad spread of West Country farmland. Not a
@@ -218,7 +216,7 @@ class StationaryTest : AbstractPdfRendererTest() {
             val port = server.start()
             val remoteStationary = BlankA4Portrait.copy(uri("http://localhost:$port/RemotePageTemplate.pdf"))
             pdf {
-                page(style(background = Color(100, 200, 0, 128)), stationary = remoteStationary) {
+                page(style(background = Color(100, 200, 0, 128), spacingBefore = 0f), stationary = remoteStationary) {
                     content {
                         repeat(50) { +"Remote Stationary" }
                     }
@@ -232,7 +230,7 @@ class StationaryTest : AbstractPdfRendererTest() {
     fun `loads stationary from a custom provider`(approver: PdfApprover) {
         val remoteStationary = BlankA4Portrait.copy(custom("custom", "custom.pdf".toArgument("location")) )
         pdf {
-            page(style(background = Color(100, 200, 0, 128)), stationary = remoteStationary) {
+            page(style(background = Color(100, 200, 0, 128), spacingBefore = 0f), stationary = remoteStationary) {
                 content {
                     repeat(50) { +"Custom Provider Stationary" }
                 }

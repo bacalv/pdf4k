@@ -9,10 +9,15 @@ import org.http4k.core.Method.POST
 import org.http4k.core.Request
 import org.http4k.core.Response
 import org.http4k.core.with
+import java.net.URL
 
 class Pdf4kServerClient(val handler: HttpHandler) {
     fun renderImmediate(block: PdfBuilder.() -> Unit): Response {
         val request = pdf { block() }.toDto()
         return handler(Request(POST, "/render").with(pdfDtoLens of request))
+    }
+
+    fun renderAsync(callbackUrl: URL, block: PdfBuilder.() -> Unit) {
+        TODO()
     }
 }

@@ -8,6 +8,7 @@ import io.pdf4k.provider.ResourceLocators
 import io.pdf4k.provider.StationaryLoader.loadStationary
 import io.pdf4k.provider.TempStreamFactory
 import io.pdf4k.renderer.PageRenderer.render
+import java.io.FileOutputStream
 import java.io.OutputStream
 
 class PdfRenderer(
@@ -27,6 +28,7 @@ class PdfRenderer(
                 }.let { context ->
                     paginateDocument(context)
                     contentBlocksDocumentStream.outputStream.close()
+                    contentBlocksDocumentStream.read().use { it.copyTo(FileOutputStream("paginated.pdf")) }
                     PdfReader(contentBlocksDocumentStream.read()).let { contentReader ->
                         context.copyNamedDestinations(contentReader)
                         context.mainDocument.setMetadata(metadata)

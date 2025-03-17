@@ -4,7 +4,9 @@ import io.pdf4k.domain.Font.Style.Bold
 import io.pdf4k.domain.HorizontalAlignment.*
 import io.pdf4k.domain.ResourceLocation.Companion.local
 import io.pdf4k.domain.Stationary.Companion.BlankA4Portrait
+import io.pdf4k.domain.StyleAttributes.Companion.border
 import io.pdf4k.domain.StyleAttributes.Companion.noBorder
+import io.pdf4k.domain.StyleAttributes.Companion.padding
 import io.pdf4k.domain.StyleAttributes.Companion.style
 import io.pdf4k.dsl.PdfBuilder.Companion.pdf
 import io.pdf4k.dsl.StationaryBuilder.Companion.plusBlocks
@@ -15,6 +17,7 @@ import io.pdf4k.testing.domain.Musician.Companion.musicians
 import io.pdf4k.testing.extensions.splitParagraphs
 import org.junit.jupiter.api.Test
 import java.awt.Color
+import java.awt.Color.BLACK
 import java.awt.Color.RED
 
 class BlocksTest : AbstractPdfRendererTest() {
@@ -82,7 +85,7 @@ class BlocksTest : AbstractPdfRendererTest() {
         pdf {
             page(stationary = twoColumns) {
                 content(style(size = 24f, align = JustifiedAll)) {
-                    +"""
+                    """
                         Within seconds he ran out onto the deck and waved and grinned at over
                         three billion people. The three billion people weren’t actually there, but they
                         watched his every gesture through the eyes of a small robot tri-D camera
@@ -114,7 +117,7 @@ class BlocksTest : AbstractPdfRendererTest() {
                         climbed, throwing stilts of light at the cliff. Up it surged on the jet, the
                         water falling from beneath it, crashing back into the sea hundreds of feet
                         below.
-                    """.splitParagraphs().joinToString("")
+                    """.splitParagraphs().map(::paragraph)
                 }
             }
         }.approve(approver)
@@ -147,7 +150,7 @@ class BlocksTest : AbstractPdfRendererTest() {
         pdf {
             page(stationary = twoColumns) {
                 content(style(size = 24f, align = JustifiedAll)) {
-                    +"""
+                    """
                         Within seconds he ran out onto the deck and waved and grinned at over
                         three billion people. The three billion people weren’t actually there, but they
                         watched his every gesture through the eyes of a small robot tri-D camera
@@ -156,27 +159,27 @@ class BlocksTest : AbstractPdfRendererTest() {
                         
                         He grinned again. Three billion and six people didn’t know it, but today
                         would be a bigger antic than anyone had bargained for.
-                    """.splitParagraphs().joinToString("")
+                    """.splitParagraphs().map(::paragraph)
 
                     blockBreak()
 
-                    +"""
+                    """
                         The robot camera homed in for a close up on the more popular of his two
                         heads and he waved again. He was roughly humanoid in appearance except
                         for the extra head and third arm. His fair tousled hair stuck out in random
                         directions, his blue eyes glinted with something completely unidentifiable,
                         and his chins were almost always unshaven.
-                     """.splitParagraphs().joinToString("")
+                     """.splitParagraphs().map(::paragraph)
 
                     blockBreak()
 
-                    +"""
+                    """
                         A twenty-foot-high transparent globe floated next to his boat, rolling and
                         bobbing, glistening in the brilliant sun. Inside it floated a wide semi-circular
                         sofa upholstered in glorious red leather: the more the globe bobbed and
                         rolled, the more the sofa stayed perfectly still, steady as an upholstered rock.
                         Again, all done for effect as much as anything.
-                    """.trimIndent()
+                    """.splitParagraphs().map(::paragraph)
                 }
             }
         }.approve(approver)
@@ -187,7 +190,7 @@ class BlocksTest : AbstractPdfRendererTest() {
         pdf {
             page(stationary = twoColumns) {
                 content(style(size = 24f, align = JustifiedAll)) {
-                    +"""
+                    """
                         Within seconds he ran out onto the deck and waved and grinned at over
                         three billion people. The three billion people weren’t actually there, but they
                         watched his every gesture through the eyes of a small robot tri-D camera
@@ -196,16 +199,16 @@ class BlocksTest : AbstractPdfRendererTest() {
                         
                         He grinned again. Three billion and six people didn’t know it, but today
                         would be a bigger antic than anyone had bargained for.
-                    """.splitParagraphs().joinToString("")
+                    """.splitParagraphs().map(::paragraph)
 
                     pageBreak()
 
-                    +"""The robot camera homed in for a close up on the more popular of his two
+                    """The robot camera homed in for a close up on the more popular of his two
                         heads and he waved again. He was roughly humanoid in appearance except
                         for the extra head and third arm. His fair tousled hair stuck out in random
                         directions, his blue eyes glinted with something completely unidentifiable,
                         and his chins were almost always unshaven.
-                     """.splitParagraphs().joinToString("")
+                     """.splitParagraphs().map(::paragraph)
 
                     pageBreak()
                     pageBreak()
@@ -256,6 +259,39 @@ class BlocksTest : AbstractPdfRendererTest() {
                         water falling from beneath it, crashing back into the sea hundreds of feet
                         below
                     """.trimIndent()
+                }
+            }
+        }.approve(approver)
+    }
+
+    @Test
+    fun `moves on to next page template after filling one block out of two`(approver: PdfApprover) {
+        pdf {
+            page(stationary = twoColumns, style = style(size = 24f)) {
+                content {
+                    table(1, border(0.5f, BLACK) + padding(0f) + style(spacingBefore = 24f)) {
+                        cell {
+                            """
+                                Within seconds he ran out onto the deck and waved and grinned at over
+                                three billion people. The three billion people weren’t actually there, but they
+                                watched his every gesture through the eyes of a small robot tri-D camera
+                                which hovered obsequiously in the air nearby. The antics of the President
+                                always made amazingly popular tri-D; that’s what they were for.
+                                
+                                He grinned again. Three billion and six people didn’t know it, but today
+                                would be a bigger antic than anyone had bargained for.
+                                
+                                The robot camera homed in for a close up on the more popular of his two
+                                heads and he...
+                            """.splitParagraphs().forEach(::paragraph)
+                        }
+                    }
+                }
+            }
+
+            page {
+                content {
+                    +"This document should only be two pages long."
                 }
             }
         }.approve(approver)

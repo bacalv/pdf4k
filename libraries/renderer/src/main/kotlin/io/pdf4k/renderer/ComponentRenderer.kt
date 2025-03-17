@@ -82,15 +82,14 @@ object ComponentRenderer {
                 table.completeRow()
             })
 
-            is Component.Cell -> listOf(when (component) {
+            is Component.Cell -> listOf(
+                when (component) {
                 is Component.Cell.Text -> component.phrase.render<Phrase>(context)
                 is Component.Cell.Table -> component.table.render<PdfPTable>(context)
                 is Component.Cell.Image -> component.image.render<Image>(context)
-                is Component.Cell.Composite -> {
-                    PdfPCell().also { c ->
-                        component.content.children.render(context).forEach { e ->
-                            c.addElement(e)
-                        }
+                is Component.Cell.Composite -> PdfPCell().also { c ->
+                    component.content.children.render(context).forEach { e ->
+                        c.addElement(e)
                     }
                 }
             }.let { element ->
@@ -105,6 +104,7 @@ object ComponentRenderer {
                             it.paddingBottom = margin.bottom
                         }
                     }
+
                     is Image -> PdfPCell(element).also { it.setStyle(context) }
                     is PdfPCell -> element.also { it.setStyle(context) }
                     else -> throw IllegalStateException("Unexpected element: " + element::class.simpleName)

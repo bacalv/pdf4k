@@ -5,6 +5,7 @@ import com.lowagie.text.Document
 import com.lowagie.text.Rectangle
 import com.lowagie.text.pdf.PdfPageEventHelper
 import com.lowagie.text.pdf.PdfWriter
+import io.pdf4k.domain.LoadedStationary
 import io.pdf4k.domain.Page
 import io.pdf4k.domain.Stationary
 import java.util.concurrent.atomic.AtomicReference
@@ -17,6 +18,9 @@ class PageEventListener(private val context: RendererContext) : PdfPageEventHelp
     val blocksUntilNextPage: Int get() = currentStationary().contentFlow.size - currentBlockCount
 
     fun setCurrentPageTemplate(page: Page) {
+        if (currentBlockCount > 0 && currentPageTemplate.get() != null) {
+            currentTemplate()?.let { context.stationaryByPage += it to currentBlockCount }
+        }
         currentPageTemplate.set(page)
         templatePageCount = 0
         currentBlockCount = 0
@@ -29,9 +33,7 @@ class PageEventListener(private val context: RendererContext) : PdfPageEventHelp
     }
 
     private fun setTemplate() {
-        val currentTemplate = currentPageTemplate.get().stationary.getOrNull(templatePageCount)
-            ?: currentPageTemplate.get().stationary.last()
-        context.loadedStationary[currentTemplate]?.let { loadedStationary ->
+        currentTemplate()?.let { loadedStationary ->
             val pageSize = Rectangle(loadedStationary.stationary.width, loadedStationary.stationary.height)
             context.mainDocument.setPageSize(pageSize)
             context.mainDocument.setMargins(0f, 0f, 0f, 0f)
@@ -43,9 +45,15 @@ class PageEventListener(private val context: RendererContext) : PdfPageEventHelp
                     pageSize.height - (currentBlock.y + currentBlock.h),
                     currentBlock.y
                 )
-            } ?: throw IllegalStateException("Cannot find block #${currentBlockCount}" +
-                    " for template '${currentTemplate.template}'")
-        } ?: throw IllegalStateException("Cannot find loaded stationary for template '${currentTemplate.template}'")
+            } ?: throw IllegalStateException(
+                "Cannot find block #${currentBlockCount}" +
+                        " for template '${loadedStationary.stationary.template}'"
+            )
+        } ?: throw IllegalStateException("Cannot find loaded stationary for template '${currentStationary().template}'")
+    }
+
+    private fun currentTemplate(): LoadedStationary? {
+        return context.loadedStationary[currentStationary()]
     }
 
     private fun Stationary.getBlock(sequence: Int) = contentFlow.getOrNull(sequence)

@@ -9,11 +9,8 @@ import com.lowagie.text.Rectangle.NO_BORDER
 import com.lowagie.text.pdf.PdfContentByte
 import com.lowagie.text.pdf.PdfPCell
 import com.lowagie.text.pdf.PdfPTable
-import io.pdf4k.domain.Component
-import io.pdf4k.domain.HorizontalAlignment
-import io.pdf4k.domain.ListStyle
+import io.pdf4k.domain.*
 import io.pdf4k.domain.StyleAttributes.Companion.DEFAULT_LEADING
-import io.pdf4k.domain.VerticalAlignment
 
 object StyleSetter {
     fun Chunk.setStyle(context: RendererContext) {
@@ -56,11 +53,17 @@ object StyleSetter {
         }
     }
 
+    fun StyleAttributes.lineHeight() = (size ?: 12f).let { size ->
+        (leading ?: DEFAULT_LEADING).let { (fixed, multiplier) ->
+            size + fixed + (size * (multiplier - 1f))
+        }
+    }
+
     fun PdfPTable.forParagraph(context: RendererContext, block: Paragraph.() -> Unit) {
         widthPercentage = 100.0f
         keepTogether = false
         context.peekStyle().let { style ->
-            setSpacingBefore(style.spacingBefore ?: 0f)
+            setSpacingBefore(style.spacingBefore ?: style.lineHeight())
             setSpacingAfter(style.spacingAfter ?: 0f)
             isSplitLate = style.splitLate ?: false
             isSplitRows = style.splitRows ?: true

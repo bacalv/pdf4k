@@ -119,7 +119,7 @@ class ImageTest : AbstractPdfRendererTest() {
                 }
                 textCell("Here's some text on the line below")
             }
-            paragraph {
+            paragraph(style(spacingBefore = 0f)) {
                 image("adams.png")
             }
         }.approve(approver)
