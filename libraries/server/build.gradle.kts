@@ -14,6 +14,7 @@ dependencies {
     implementation(libs.http4kContract)
     implementation(libs.http4kMultipart)
     implementation(libs.http4kServerUndertow)
+    implementation(libs.http4kClientOkHttp)
     implementation(libs.jacksonDataFormatYaml)
     implementation(libs.jacksonDatatypeJsr310)
     testFixturesApi(project(":libraries::testing"))
@@ -23,4 +24,6 @@ dependencies {
     testFixturesApi(testFixtures(project(":libraries::domain-dto")))
     testFixturesApi(testFixtures(project(":libraries::renderer")))
     testFixturesApi(libs.http4kClientOkHttp)
+    testFixturesImplementation(libs.http4kServerUndertow)
+    testFixturesImplementation(libs.awaitilityKotlin)
 }

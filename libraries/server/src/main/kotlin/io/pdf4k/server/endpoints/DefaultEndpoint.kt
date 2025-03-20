@@ -7,7 +7,7 @@ import java.awt.Color
 import java.time.LocalDate
 import java.time.ZoneOffset
 
-class DefaultEndpoint : PdfEndpoint<PdfDto> {
+class DefaultEndpoint : SyncPdfEndpoint<PdfDto> {
     override val path = "render"
     override val summary = "Render a PDF"
     override val requestLens = ServerLens.pdfDtoLens

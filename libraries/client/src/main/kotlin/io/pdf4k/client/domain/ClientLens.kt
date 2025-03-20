@@ -18,4 +18,6 @@ object ClientLens {
     )
 
     val pdfDtoLens = Body.auto<PdfDto>().toLens()
+    val asyncPdfDtoLens = Body.auto<AsyncPdfDtoRequest>().toLens()
+    val asyncPdfResponseLens = Body.auto<AsyncPdfResponse>().toLens()
 }

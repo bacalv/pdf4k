@@ -1,5 +1,8 @@
 package io.pdf4k.client
 
+import io.pdf4k.client.domain.AsyncPdfDtoRequest
+import io.pdf4k.client.domain.CallbackMode
+import io.pdf4k.client.domain.ClientLens.asyncPdfDtoLens
 import io.pdf4k.client.domain.ClientLens.pdfDtoLens
 import io.pdf4k.domain.dto.toDto
 import io.pdf4k.dsl.PdfBuilder
@@ -17,7 +20,12 @@ class Pdf4kServerClient(val handler: HttpHandler) {
         return handler(Request(POST, "/render").with(pdfDtoLens of request))
     }
 
-    fun renderAsync(callbackUrl: URL, block: PdfBuilder.() -> Unit) {
-        TODO()
+    fun renderAsync(callbackMode: CallbackMode, callbackUrl: URL, block: PdfBuilder.() -> Unit): Response {
+        val request = AsyncPdfDtoRequest(
+            callbackMode = callbackMode,
+            callbackUrl = callbackUrl,
+            payload = pdf { block() }.toDto()
+        )
+        return handler(Request(POST, "/async/render").with(asyncPdfDtoLens of request))
     }
 }

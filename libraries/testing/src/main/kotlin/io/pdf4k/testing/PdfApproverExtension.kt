@@ -10,12 +10,6 @@ import java.io.File
 import java.lang.reflect.Method
 
 class PdfApproverExtension : ParameterResolver, BeforeTestExecutionCallback, AfterTestExecutionCallback {
-    init {
-        println("ZZZ")
-        Thread.sleep(15000)
-        println("Cock-a-doodle-ooo")
-    }
-
     override fun beforeTestExecution(context: ExtensionContext) {
         val password = context.testMethod.map {
             it.annotations.filterIsInstance<PdfPassword>().firstOrNull()?.value ?: ""

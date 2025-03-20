@@ -14,7 +14,9 @@ import io.pdf4k.renderer.DocumentAssembler
 import io.pdf4k.server.endpoints.routes
 import io.pdf4k.server.service.Pdf4kServerInstance
 import io.pdf4k.server.service.Pdf4kServices
+import io.pdf4k.server.service.rendering.AsyncRenderingService
 import io.pdf4k.server.service.rendering.RenderingService
+import org.http4k.client.OkHttp
 import org.http4k.server.Undertow
 import org.http4k.server.asServer
 import java.io.FileInputStream
@@ -57,7 +59,8 @@ data class Pdf4kServerConfiguration(
         }
         val customProviders = customResourceProviders?.map { Class.forName(it).kotlin.primaryConstructor?.call() as CustomResourceProvider }?.associateBy { it.name } ?: emptyMap()
         val renderingService = RenderingService(inMemoryTempStreamFactory, documentAssembler, customProviders)
-        val services = Pdf4kServices(renderingService)
+        val asyncRenderingService = AsyncRenderingService(renderingService, OkHttp())
+        val services = Pdf4kServices(renderingService, asyncRenderingService)
         return Pdf4kServerInstance(this, routes(services)) { it.asServer(Undertow(port)) }
     }
 }

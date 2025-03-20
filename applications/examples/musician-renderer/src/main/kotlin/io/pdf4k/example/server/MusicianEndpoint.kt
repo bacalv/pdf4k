@@ -18,7 +18,7 @@ import io.pdf4k.plugin.qrcode.domain.QrStyle.Companion.Logo
 import io.pdf4k.plugin.qrcode.domain.QrStyle.Companion.Shape
 import io.pdf4k.plugin.qrcode.dsl.qrCodeCell
 import io.pdf4k.server.domain.ServerLens.ServerJackson.auto
-import io.pdf4k.server.endpoints.PdfEndpoint
+import io.pdf4k.server.endpoints.SyncPdfEndpoint
 import io.pdf4k.testing.domain.Musician
 import io.pdf4k.testing.domain.Musician.Companion.musicians
 import org.http4k.core.Body
@@ -28,7 +28,7 @@ import java.awt.Color.BLACK
 import java.awt.Color.WHITE
 
 @Suppress("unused")
-class MusicianEndpoint : PdfEndpoint<MusicianList> {
+class MusicianEndpoint : SyncPdfEndpoint<MusicianList> {
     data class MusicianList(
         val musicians: List<Musician>
     )

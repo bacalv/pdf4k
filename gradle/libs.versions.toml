@@ -1,4 +1,5 @@
 [versions]
+awaitilityKotlinVersion = "4.3.0"
 bouncyCastleBcmailVersion = "1.80"
 commonMarkVersion = "0.24.0"
 http4kVersion = "5.46.0.0"
@@ -14,6 +15,7 @@ qrCodeVersion = "4.2.0"
 thumbnailatorVersion = "0.4.20"
 
 [libraries]
+awaitilityKotlin = { module = "org.awaitility:awaitility-kotlin", version.ref="awaitilityKotlinVersion" }
 bouncyCastleBcmail = { module = "org.bouncycastle:bcmail-jdk18on", version.ref="bouncyCastleBcmailVersion" }
 commonMark = { module = "org.commonmark:commonmark", version.ref="commonMarkVersion" }
 commonMarkTables = { module = "org.commonmark:commonmark-ext-gfm-tables", version.ref="commonMarkVersion" }

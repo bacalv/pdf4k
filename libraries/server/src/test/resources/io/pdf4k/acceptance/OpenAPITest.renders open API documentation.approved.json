@@ -10,6 +10,33 @@
     "description" : null
   } ],
   "paths" : {
+    "/async/render" : {
+      "post" : {
+        "summary" : "Render a PDF asynchronously",
+        "description" : null,
+        "tags" : [ "" ],
+        "parameters" : [ ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "example" : null,
+              "schema" : { }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "202" : {
+            "description" : "",
+            "content" : { }
+          }
+        },
+        "security" : [ ],
+        "operationId" : "postAsyncRender",
+        "deprecated" : false,
+        "callbacks" : null
+      }
+    },
     "/render" : {
       "post" : {
         "summary" : "Render a PDF",
