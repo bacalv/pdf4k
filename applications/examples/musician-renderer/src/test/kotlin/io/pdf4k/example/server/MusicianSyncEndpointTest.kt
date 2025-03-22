@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 
-class MusicianEndpointTest : AbstractServerTest() {
+class MusicianSyncEndpointTest : AbstractServerTest() {
     @Test
     fun `renders musicians`(approver: PdfApprover): Unit = with(emptyScenario()) {
         handler(Request(Method.POST, "/musicians")

@@ -2,6 +2,7 @@ port: 8080
 apiTitle: Musician PDF Renderer
 apiDescription: Example pdf4k application
 endpoints:
-  - io.pdf4k.example.server.MusicianEndpoint
+  - io.pdf4k.example.server.MusicianAsyncEndpoint
+  - io.pdf4k.example.server.MusicianSyncEndpoint
 customResourceProviders:
   - io.pdf4k.plugin.qrcode.server.QrRenderer
