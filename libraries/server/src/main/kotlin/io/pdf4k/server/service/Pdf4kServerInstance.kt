@@ -15,6 +15,7 @@ import java.util.concurrent.atomic.AtomicReference
 class Pdf4kServerInstance(
     private val configuration: Pdf4kServerConfiguration,
     private val routes: List<ContractRoute>,
+    private val onStop: () -> Unit,
     private val factory: (HttpHandler) -> Http4kServer
 ) {
     private val server = AtomicReference<Http4kServer>()
@@ -42,5 +43,6 @@ class Pdf4kServerInstance(
     fun stop() {
         server.get()?.stop()
         server.set(null)
+        onStop()
     }
 }

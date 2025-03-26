@@ -16,6 +16,7 @@ import io.pdf4k.server.service.Pdf4kServerInstance
 import io.pdf4k.server.service.Pdf4kServices
 import io.pdf4k.server.service.rendering.AsyncRenderingService
 import io.pdf4k.server.service.rendering.RenderingService
+import io.pdf4k.server.store.InMemoryJobStore
 import org.http4k.client.OkHttp
 import org.http4k.server.Undertow
 import org.http4k.server.asServer
@@ -59,8 +60,9 @@ data class Pdf4kServerConfiguration(
         }
         val customProviders = customResourceProviders?.map { Class.forName(it).kotlin.primaryConstructor?.call() as CustomResourceProvider }?.associateBy { it.name } ?: emptyMap()
         val renderingService = RenderingService(inMemoryTempStreamFactory, documentAssembler, customProviders)
-        val asyncRenderingService = AsyncRenderingService(renderingService, OkHttp())
+        val jobStore = InMemoryJobStore()
+        val asyncRenderingService = AsyncRenderingService(renderingService, OkHttp(), jobStore).also { it.start() }
         val services = Pdf4kServices(renderingService, asyncRenderingService)
-        return Pdf4kServerInstance(this, routes(services)) { it.asServer(Undertow(port)) }
+        return Pdf4kServerInstance(this, routes(services), asyncRenderingService::stop) { it.asServer(Undertow(port)) }
     }
 }
