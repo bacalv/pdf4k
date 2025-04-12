@@ -35,7 +35,7 @@ object InMemoryRenderer {
     }
     private val fontProviderFactory = FontProviderFactory(defaultTempFileFactory)
     private val resourceLocators =
-        ResourceLocators(defaultResourceLoader, mapOf("custom" to customProvider), fontProviderFactory)
+        DefaultResourceLocators(defaultResourceLoader, mapOf("custom" to customProvider), fontProviderFactory)
     val renderer = PdfRenderer(resourceLocators, inMemoryTempStreamFactory, documentAssembler)
 
     fun Pdf.render(outputStream: OutputStream = ByteArrayOutputStream()) = renderer.render(this, outputStream)

@@ -3,8 +3,8 @@ package io.pdf4k.server.service.rendering
 import io.pdf4k.domain.Pdf
 import io.pdf4k.domain.ResourceLocation.Companion.classpathResource
 import io.pdf4k.provider.CustomResourceProvider
+import io.pdf4k.provider.DefaultResourceLocators
 import io.pdf4k.provider.FontProviderFactory
-import io.pdf4k.provider.ResourceLocators
 import io.pdf4k.provider.TempFileFactory.Companion.defaultTempFileFactory
 import io.pdf4k.provider.TempStreamFactory
 import io.pdf4k.provider.UriResourceLoader.Companion.defaultResourceLoader
@@ -21,7 +21,7 @@ class RenderingService(
 ) {
     fun render(pdf: Pdf): InputStream {
         val fontProviderFactory = FontProviderFactory(defaultTempFileFactory)
-        val resourceLocators = ResourceLocators(defaultResourceLoader, customResourceProviders, fontProviderFactory) { type, name ->
+        val resourceLocators = DefaultResourceLocators(defaultResourceLoader, customResourceProviders, fontProviderFactory) { type, name ->
             classpathResource(type(name))
         }
         val pdfRenderer = PdfRenderer(resourceLocators, tempStreamFactory, documentAssembler)

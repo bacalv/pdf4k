@@ -10,14 +10,18 @@ import io.pdf4k.domain.ResourceLocation.Remote.Uri
 import io.pdf4k.domain.ResourceType
 import java.io.InputStream
 
-class ResourceLocator(
+fun interface ResourceLocator {
+    fun load(location: ResourceLocation): InputStream
+}
+
+class DefaultResourceLocator(
     private val type: ResourceType,
     private val uriResourceLoader: UriResourceLoader,
     private val customProviders: Map<String, CustomResourceProvider>,
     private val loadResource: (ResourceType, String) -> InputStream?,
     private val notFound: (ResourceLocation) -> PdfError
-) {
-    fun load(location: ResourceLocation): InputStream = when (location) {
+): ResourceLocator {
+    override fun load(location: ResourceLocation): InputStream = when (location) {
         is Local -> loadResource(type, location.name)
         is Remote -> when (location) {
             is Uri -> uriResourceLoader.load(location.uri)
