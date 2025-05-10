@@ -6,22 +6,22 @@ import com.lowagie.text.Rectangle
 import com.lowagie.text.pdf.PdfPageEventHelper
 import com.lowagie.text.pdf.PdfWriter
 import io.pdf4k.domain.LoadedStationary
-import io.pdf4k.domain.Page
+import io.pdf4k.domain.Section
 import io.pdf4k.domain.Stationary
 import java.util.concurrent.atomic.AtomicReference
 
 class PageEventListener(private val context: RendererContext) : PdfPageEventHelper() {
-    private val currentPageTemplate = AtomicReference<Page>()
+    private val currentSection = AtomicReference<Section>()
     private var templatePageCount = 0
     private var currentBlockCount = 0
 
     val blocksUntilNextPage: Int get() = currentStationary().contentFlow.size - currentBlockCount
 
-    fun setCurrentPageTemplate(page: Page) {
-        if (currentBlockCount > 0 && currentPageTemplate.get() != null) {
+    fun setCurrentSection(section: Section) {
+        if (currentBlockCount > 0 && currentSection.get() != null) {
             currentTemplate()?.let { context.stationaryByPage += it to currentBlockCount }
         }
-        currentPageTemplate.set(page)
+        currentSection.set(section)
         templatePageCount = 0
         currentBlockCount = 0
         setTemplate()
@@ -73,7 +73,7 @@ class PageEventListener(private val context: RendererContext) : PdfPageEventHelp
         }
         if (currentBlockCount == stationary.contentFlow.size - 1) {
             context.nextPage(stationary, currentBlockCount + 1)
-            context.drawBlocks(currentPageTemplate.get(), stationary)
+            context.drawBlocks(currentSection.get(), stationary)
             templatePageCount++
             currentBlockCount = 0
         } else {
@@ -82,7 +82,7 @@ class PageEventListener(private val context: RendererContext) : PdfPageEventHelp
         setTemplate()
     }
 
-    private fun currentStationary() = currentPageTemplate.get().stationary.elementOrLast(templatePageCount)
+    private fun currentStationary() = currentSection.get().stationary.elementOrLast(templatePageCount)
 
     private fun nextPage() {
         if (!context.mainDocument.isOpen) {

@@ -15,19 +15,19 @@ class LinksTest : AbstractPdfRendererTest() {
     @Test
     fun `adds a link to another part of the document`(approver: PdfApprover) {
         pdf {
-            page {
+            section {
                 content {
                     paragraph { anchor("page-1", "This is page 1") }
                     paragraph { link("#page-2", "Go to page 2", linkStyle) }
                 }
             }
-            page {
+            section {
                 content {
                     paragraph { anchor("page-2", "This is page 2") }
                     paragraph { link("#page-3", "Go to page 3", linkStyle) }
                 }
             }
-            page {
+            section {
                 content {
                     paragraph { anchor("page-3", "This is page 3") }
                     paragraph { link("#page-1", "Go to page 1", linkStyle) }
@@ -40,13 +40,13 @@ class LinksTest : AbstractPdfRendererTest() {
     @Test
     fun `adds a link from a block to main content`(approver: PdfApprover) {
         pdf {
-            page {
+            section {
                 content {
                     paragraph { anchor("page-1", "This is page 1") }
                     paragraph { link("#page-2", "Go to page 2", linkStyle) }
                 }
             }
-            page(stationary = stationaryWithBlock) {
+            section(stationary = stationaryWithBlock) {
                 block("blockName") {
                     paragraph { anchor("page-2", "This is page 2") }
                     paragraph { link("#page-1", "Go to page 1", linkStyle) }

@@ -8,8 +8,8 @@ import org.commonmark.ext.gfm.tables.TablesExtension
 import org.commonmark.parser.Parser
 
 
-@JvmName("pageMarkdown")
-fun PageContentBuilder.markdown(markdown: String, vararg imageResources: Pair<String, Component.Image>) {
+@JvmName("sectionMarkdown")
+fun SectionContentBuilder.markdown(markdown: String, vararg imageResources: Pair<String, Component.Image>) {
     table(1, style = noBorder) {
         cell { markdown(markdown, *imageResources) }
     }

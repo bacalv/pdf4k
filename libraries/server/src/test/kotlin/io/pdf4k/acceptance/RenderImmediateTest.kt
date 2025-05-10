@@ -15,7 +15,7 @@ class RenderImmediateTest : AbstractServerTest() {
         val font = Font.Resource(local("CookieCrisp.ttf"), "CookieCrisp")
 
         operator.rendersAPdfImmediately {
-            page(style(font = font), stationary = stationary) {
+            section(style(font = font), stationary = stationary) {
                 content {
                     +"Here is an image..."
                     table {

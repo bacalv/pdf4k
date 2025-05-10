@@ -48,8 +48,8 @@ abstract class PhraseBuilder<P : PhraseBuilder<P>> : BuildsStyle<Component.Phras
         }
     }
 
-    class ForPage: PhraseBuilder<ForPage>() {
-        override val childBuilder: () -> ForPage = ::ForPage
+    class ForSection: PhraseBuilder<ForSection>() {
+        override val childBuilder: () -> ForSection = ::ForSection
     }
 
     class ForCell: PhraseBuilder<ForCell>() {

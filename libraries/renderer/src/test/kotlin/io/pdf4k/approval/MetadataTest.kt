@@ -9,7 +9,7 @@ class MetadataTest : AbstractPdfRendererTest() {
     @Test
     fun `adds metadata`(approver: PdfApprover) {
         pdf {
-            page {
+            section {
                 content { +"Some PDF with metadata" }
             }
             metadata {

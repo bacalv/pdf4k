@@ -26,7 +26,7 @@ class StationaryTest : AbstractPdfRendererTest() {
     @Test
     fun `render empty page`(approver: PdfApprover) {
         pdf {
-            page()
+            section()
         }.approve(approver)
     }
 
@@ -41,7 +41,7 @@ class StationaryTest : AbstractPdfRendererTest() {
     fun `render text on 2 pages`(approver: PdfApprover) {
         pdf {
             repeat(2) {
-                page {
+                section {
                     content {
                         +"Page ${it + 1}"
                     }
@@ -53,7 +53,7 @@ class StationaryTest : AbstractPdfRendererTest() {
     @Test
     fun `can adjust margin`(approver: PdfApprover) {
         pdf {
-            page(stationary = BlankA4DifferentMargins) {
+            section(stationary = BlankA4DifferentMargins) {
                 content {
                     +"Hello World!"
                 }
@@ -64,12 +64,12 @@ class StationaryTest : AbstractPdfRendererTest() {
     @Test
     fun `can use different stationary for second page`(approver: PdfApprover) {
         pdf {
-            page {
+            section {
                 content {
                     +"Page 1"
                 }
             }
-            page(stationary = BlankA4DifferentMargins) {
+            section(stationary = BlankA4DifferentMargins) {
                 content {
                     +"Page 2 - margin changed"
                 }
@@ -80,7 +80,7 @@ class StationaryTest : AbstractPdfRendererTest() {
     @Test
     fun `renders content on an existing PDF page template`(approver: PdfApprover) {
         pdf {
-            page(stationary = Letter, continuation = arrayOf(ContinuationPage)) {
+            section(stationary = Letter, continuation = arrayOf(ContinuationPage)) {
                 block("address") {
                     +"""
                         Mr Arthur Dent
@@ -172,7 +172,7 @@ class StationaryTest : AbstractPdfRendererTest() {
     @Test
     fun `can use different sized stationary for continuation page`(approver: PdfApprover) {
         pdf {
-            page(continuation = arrayOf(BlankA4Landscape)) {
+            section(continuation = arrayOf(BlankA4Landscape)) {
                 content(style(size = 24f)) {
                     """
                         Far away on the opposite spiral arm of the Galaxy, five hundred thousand
@@ -217,7 +217,7 @@ class StationaryTest : AbstractPdfRendererTest() {
             val port = server.start()
             val remoteStationary = BlankA4Portrait.copy(uri("http://localhost:$port/RemotePageTemplate.pdf"))
             pdf {
-                page(style(background = Color(100, 200, 0, 128), spacingBefore = Spacing.ZERO), stationary = remoteStationary) {
+                section(style(background = Color(100, 200, 0, 128), spacingBefore = Spacing.ZERO), stationary = remoteStationary) {
                     content {
                         repeat(50) { +"Remote Stationary" }
                     }
@@ -231,7 +231,7 @@ class StationaryTest : AbstractPdfRendererTest() {
     fun `loads stationary from a custom provider`(approver: PdfApprover) {
         val remoteStationary = BlankA4Portrait.copy(custom("custom", "custom.pdf".toArgument("location")) )
         pdf {
-            page(style(background = Color(100, 200, 0, 128), spacingBefore = Spacing.ZERO), stationary = remoteStationary) {
+            section(style(background = Color(100, 200, 0, 128), spacingBefore = Spacing.ZERO), stationary = remoteStationary) {
                 content {
                     repeat(50) { +"Custom Provider Stationary" }
                 }

@@ -17,7 +17,7 @@ class EmptyServerTest : AbstractServerTest() {
                 contact = "Test Contact",
                 signDate = ZonedDateTime.now(Clock.systemDefaultZone())
             )
-            page {
+            section {
                 content {
                     +"This is signed using the test-key"
                 }

@@ -66,10 +66,10 @@ class RendererContext(
         resourceLocators.fontProvider.getFont(font, size, fontStyle, colour)
     }
 
-    fun drawBlocks(page: Page, stationary: Stationary) {
-        page.blockContent.forEach { (blockName, content) ->
+    fun drawBlocks(section: Section, stationary: Stationary) {
+        section.blockContent.forEach { (blockName, content) ->
             stationary.blocks[blockName]?.let { block ->
-                page.backgroundImages[blockName]?.let { backgroundImage ->
+                section.backgroundImages[blockName]?.let { backgroundImage ->
                     mainDocumentWriter.directContent.addImage(getImage(backgroundImage, block.w, block.h, null), block.w, 0f, 0f, block.h, block.x, block.y)
                 }
                 ColumnText(contentBlocksDocumentWriter.directContent).let { columnText ->

@@ -25,7 +25,7 @@ class BlocksTest : AbstractPdfRendererTest() {
     @Test
     fun `render a paragraph in a block`(approver: PdfApprover) {
         pdf {
-            page(stationary = stationaryWithBlock) {
+            section(stationary = stationaryWithBlock) {
                 block("blockName") {
                     +"Text in a block"
                 }
@@ -36,7 +36,7 @@ class BlocksTest : AbstractPdfRendererTest() {
     @Test
     fun `render a paragraph in a block and main content`(approver: PdfApprover) {
         pdf {
-            page(stationary = stationaryWithBlock) {
+            section(stationary = stationaryWithBlock) {
                 block("blockName") {
                     +"Text in a block"
                 }
@@ -51,7 +51,7 @@ class BlocksTest : AbstractPdfRendererTest() {
     fun `renders page numbers in blocks only`(approver: PdfApprover) {
         pdf {
             repeat(3) {
-                page(stationary = stationaryWithBlock) {
+                section(stationary = stationaryWithBlock) {
                     block("blockName", style(colour = RED)) {
                         paragraph {
                             +"This is page "
@@ -66,7 +66,7 @@ class BlocksTest : AbstractPdfRendererTest() {
     @Test
     fun `renders a table in a block`(approver: PdfApprover) {
         pdf {
-            page(stationary = stationaryWithBlock) {
+            section(stationary = stationaryWithBlock) {
                 block("blockName") {
                     table(3) {
                         textCell("Col1")
@@ -84,7 +84,7 @@ class BlocksTest : AbstractPdfRendererTest() {
     @Test
     fun `renders pages with 2 column text`(approver: PdfApprover) {
         pdf {
-            page(stationary = twoColumns) {
+            section(stationary = twoColumns) {
                 content(style(size = 24f, align = JustifiedAll)) {
                     """
                         Within seconds he ran out onto the deck and waved and grinned at over
@@ -127,7 +127,7 @@ class BlocksTest : AbstractPdfRendererTest() {
     @Test
     fun `renders artists in two columns`(approver: PdfApprover) {
         pdf {
-            page(stationary = twoColumns) {
+            section(stationary = twoColumns) {
                 content(noBorder) {
                     table {
                         musicians.forEach { musician ->
@@ -149,7 +149,7 @@ class BlocksTest : AbstractPdfRendererTest() {
     @Test
     fun `renders a block break`(approver: PdfApprover) {
         pdf {
-            page(stationary = twoColumns) {
+            section(stationary = twoColumns) {
                 content(style(size = 24f, align = JustifiedAll)) {
                     """
                         Within seconds he ran out onto the deck and waved and grinned at over
@@ -189,7 +189,7 @@ class BlocksTest : AbstractPdfRendererTest() {
     @Test
     fun `renders a page break`(approver: PdfApprover) {
         pdf {
-            page(stationary = twoColumns) {
+            section(stationary = twoColumns) {
                 content(style(size = 24f, align = JustifiedAll)) {
                     """
                         Within seconds he ran out onto the deck and waved and grinned at over
@@ -223,7 +223,7 @@ class BlocksTest : AbstractPdfRendererTest() {
     @Test
     fun `sets a background image for a block`(approver: PdfApprover) {
         pdf {
-            page(stationary = fourColumns, style = style(size = 24f, align = JustifiedAll, background = Color(255, 255, 255, 128))) {
+            section(stationary = fourColumns, style = style(size = 24f, align = JustifiedAll, background = Color(255, 255, 255, 128))) {
                 block("col1", backgroundImage = local("port.png")) {}
                 block("col4", backgroundImage = local("needles.png")) {}
                 content {
@@ -268,7 +268,7 @@ class BlocksTest : AbstractPdfRendererTest() {
     @Test
     fun `moves on to next page template after filling one block out of two`(approver: PdfApprover) {
         pdf {
-            page(stationary = twoColumns, style = style(size = 24f)) {
+            section(stationary = twoColumns, style = style(size = 24f)) {
                 content {
                     table(1, border(0.5f, BLACK) + padding(0f) + style(spacingBefore = Spacing.Fixed(24f))) {
                         cell {
@@ -290,7 +290,7 @@ class BlocksTest : AbstractPdfRendererTest() {
                 }
             }
 
-            page {
+            section {
                 content {
                     +"This document should only be two pages long."
                 }

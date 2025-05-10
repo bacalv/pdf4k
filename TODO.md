@@ -6,6 +6,5 @@
   - Durable storage
 - Add more default stationary
 - Review server configuration mechanisms
-- Review `page` DSL element - should this actually be `section`?
 - Improve markdown plugin
 - Add more TODO items :)

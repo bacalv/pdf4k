@@ -12,7 +12,7 @@ class SecurityTest : AbstractPdfRendererTest() {
     @Test
     fun `render a signed PDF`(approver: PdfApprover) {
         pdf {
-            page {
+            section {
                 content { +"A signed PDF" }
             }
             sign(defaultKeyName, "Test signing a PDF", "Bedford Taxi", "01234567890")
@@ -23,7 +23,7 @@ class SecurityTest : AbstractPdfRendererTest() {
     @PdfPassword("userPass")
     fun `password protect a PDF - open as user`(approver: PdfApprover) {
         pdf {
-            page {
+            section {
                 content {
                     +"Hello, user"
                 }
@@ -36,7 +36,7 @@ class SecurityTest : AbstractPdfRendererTest() {
     @PdfPassword("ownerPass")
     fun `password protect a PDF - open as owner`(approver: PdfApprover) {
         pdf {
-            page {
+            section {
                 content {
                     +"Hello, owner"
                 }

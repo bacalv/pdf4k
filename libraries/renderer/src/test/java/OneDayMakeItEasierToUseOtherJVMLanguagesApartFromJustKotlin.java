@@ -10,7 +10,7 @@ import static io.pdf4k.dsl.PdfBuilder.Companion;
 public class OneDayMakeItEasierToUseOtherJVMLanguagesApartFromJustKotlin {
     public static void main(String[] args) throws Exception {
         Pdf pdf = Companion.pdf(null, builder -> {
-            builder.page(null, Stationary.Companion.getBlankA4Portrait(), new Stationary[0], page -> {
+            builder.section(null, Stationary.Companion.getBlankA4Portrait(), new Stationary[0], page -> {
                 page.content(null, content -> {
                     content.paragraph("Hello world!");
                     return Unit.INSTANCE;

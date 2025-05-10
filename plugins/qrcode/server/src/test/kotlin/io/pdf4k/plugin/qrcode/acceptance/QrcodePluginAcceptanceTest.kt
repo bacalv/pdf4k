@@ -16,7 +16,7 @@ class QrcodePluginAcceptanceTest : AbstractServerTest() {
     @Test
     fun `render QR code`(approver: PdfApprover) = with(emptyScenario()) {
         operator.rendersAPdfImmediately {
-            page {
+            section {
                 content {
                     table(4, noBorder) {
                         Shape.entries.forEach { shape ->
@@ -54,7 +54,7 @@ class QrcodePluginAcceptanceTest : AbstractServerTest() {
     @Test
     fun `qr logo not found`(): Unit = with(emptyScenario()) {
         operator.renderingPdfCausesError(ClasspathResourceNotFound("/images/not_found")) {
-            page {
+            section {
                 content {
                     table(4, noBorder) {
                         Shape.entries.forEach { shape ->

@@ -60,7 +60,7 @@ class ResourceDownloader(
         }
     }
 
-    private fun findResources(pdf: Pdf, locations: MutableSet<ResourceLocation>) = pdf.pages.forEach { page ->
+    private fun findResources(pdf: Pdf, locations: MutableSet<ResourceLocation>) = pdf.sections.forEach { page ->
         locations.addAll(page.stationary.map { it.template })
         page.blockContent.values.forEach { findResources(it, locations) }
         findResources(page.content, locations)

@@ -72,8 +72,8 @@ class DefaultEndpoint : SyncPdfEndpoint<PdfDto> {
                 )
             ),
             style = 0,
-            pages = listOf(
-                PageDto(
+            sections = listOf(
+                SectionDto(
                     stationary = listOf(0),
                     style = 0,
                     content = listOf(

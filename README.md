@@ -2,7 +2,7 @@
 
 ```kotlin
 pdf {
-    page {
+    section {
         content { +"Hello, $name!" }
     }
 }
@@ -29,7 +29,7 @@ pdf {
 * Libraries depend on zero ot more third party dependencies
 * Plugins depend on libraries
 * Applications depend on plugins and libraries and generate runnable Docker images
-* Every directory underneath this one (up until `src` should have a README.md)
+* Every directory underneath this one (up until `src`) should have a README.md
 
 ## Resources
 

@@ -90,13 +90,13 @@ abstract class TableBuilder<F : PhraseBuilder<F>, P : ParagraphBuilder<F, P>, T 
         override val tableBuilder: (TableAttributes, StyleAttributes?) -> ForBlock = { t, s -> ForBlock(t, s) }
     }
 
-    class ForPage(
+    class ForSection(
         private val attributes: TableAttributes,
         style: StyleAttributes?
-    ) : TableBuilder<PhraseBuilder.ForPage, ParagraphBuilder.ForPage, ForPage, ContentBuilder.ForPage>(attributes, style) {
-        override val phraseBuilder: () -> PhraseBuilder.ForPage = { PhraseBuilder.ForPage() }
-        override val childBuilder: () -> ForPage = { ForPage(TableAttributes(0, attributes.widthPercentage, null, attributes.margin, 0, attributes.extend), style) }
-        override val tableBuilder: (TableAttributes, StyleAttributes?) -> ForPage = { t, s -> ForPage(t, s) }
+    ) : TableBuilder<PhraseBuilder.ForSection, ParagraphBuilder.ForSection, ForSection, ContentBuilder.ForSection>(attributes, style) {
+        override val phraseBuilder: () -> PhraseBuilder.ForSection = { PhraseBuilder.ForSection() }
+        override val childBuilder: () -> ForSection = { ForSection(TableAttributes(0, attributes.widthPercentage, null, attributes.margin, 0, attributes.extend), style) }
+        override val tableBuilder: (TableAttributes, StyleAttributes?) -> ForSection = { t, s -> ForSection(t, s) }
     }
 
     class ForCell(
@@ -110,5 +110,3 @@ abstract class TableBuilder<F : PhraseBuilder<F>, P : ParagraphBuilder<F, P>, T 
 }
 
 typealias AnyTableBuilder = TableBuilder<*, *, *, *>
-typealias PageTableBuilder = TableBuilder<PhraseBuilder.ForPage, ParagraphBuilder.ForPage, TableBuilder.ForPage, ContentBuilder.ForPage>
-typealias BlockTableBuilder = TableBuilder<PhraseBuilder.ForBlock, ParagraphBuilder.ForBlock, TableBuilder.ForBlock, ContentBuilder.ForBlock>

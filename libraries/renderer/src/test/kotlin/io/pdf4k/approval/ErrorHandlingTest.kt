@@ -22,7 +22,7 @@ class ErrorHandlingTest {
     fun `page template not found`() {
         assertThrows<PageTemplateNotFound> {
             pdf {
-                page(stationary = stationary("not_found", 1, 1f, 1f))
+                section(stationary = stationary("not_found", 1, 1f, 1f))
             }.render()
         }.let { error ->
             assertEquals(local("not_found"), error.resource)
@@ -41,7 +41,7 @@ class ErrorHandlingTest {
     fun `font not found`() {
         assertThrows<FontNotFound> {
             pdf {
-                page {
+                section {
                     content {
                         style(font = Font.Resource(local("not_found"), "not_found")) {
                             +"Hello"
@@ -58,7 +58,7 @@ class ErrorHandlingTest {
     fun `image not found`() {
         assertThrows<ImageNotFound> {
             pdf {
-                page {
+                section {
                     content {
                         paragraph {
                             image("not_found")
@@ -75,7 +75,7 @@ class ErrorHandlingTest {
     fun `unknown custom image provider`() {
         assertThrows<CustomResourceProviderNotFound> {
             pdf {
-                page {
+                section {
                     content {
                         table {
                             imageCell(custom("not_found"))
@@ -92,7 +92,7 @@ class ErrorHandlingTest {
     fun `custom provider image not found`() {
         assertThrows<ImageNotFound> {
             pdf {
-                page {
+                section {
                     content {
                         table {
                             imageCell(custom("custom", "not_found".toArgument("location")))

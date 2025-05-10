@@ -1,6 +1,6 @@
 package io.pdf4k.domain
 
-data class Page(
+data class Section(
     val stationary: List<Stationary>,
     val style: StyleAttributes?,
     val content: Component.Content,

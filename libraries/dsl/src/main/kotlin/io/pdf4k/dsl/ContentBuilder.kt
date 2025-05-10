@@ -66,11 +66,11 @@ abstract class ContentBuilder<F : PhraseBuilder<F>, P : ParagraphBuilder<F, P>, 
         override val tableBuilder: (TableAttributes, StyleAttributes?) -> TableBuilder.ForBlock =  { t, s -> TableBuilder.ForBlock(t, s) }
     }
 
-    class ForPage : ContentBuilder<PhraseBuilder.ForPage, ParagraphBuilder.ForPage, TableBuilder.ForPage, ForPage>() {
-        override val phraseBuilder: () -> PhraseBuilder.ForPage = { PhraseBuilder.ForPage() }
-        override val paragraphBuilder: () -> ParagraphBuilder.ForPage = { ParagraphBuilder.ForPage() }
-        override val childBuilder: () -> ForPage = ::ForPage
-        override val tableBuilder: (TableAttributes, StyleAttributes?) -> TableBuilder.ForPage =  { t, s -> TableBuilder.ForPage(t, s) }
+    class ForSection : ContentBuilder<PhraseBuilder.ForSection, ParagraphBuilder.ForSection, TableBuilder.ForSection, ForSection>() {
+        override val phraseBuilder: () -> PhraseBuilder.ForSection = { PhraseBuilder.ForSection() }
+        override val paragraphBuilder: () -> ParagraphBuilder.ForSection = { ParagraphBuilder.ForSection() }
+        override val childBuilder: () -> ForSection = ::ForSection
+        override val tableBuilder: (TableAttributes, StyleAttributes?) -> TableBuilder.ForSection =  { t, s -> TableBuilder.ForSection(t, s) }
 
         fun blockBreak() { children += blockBreakBuilder }
 
@@ -86,5 +86,5 @@ abstract class ContentBuilder<F : PhraseBuilder<F>, P : ParagraphBuilder<F, P>, 
 }
 
 typealias AnyContentBuilder = ContentBuilder<*, *, *, *>
-typealias PageContentBuilder = ContentBuilder<PhraseBuilder.ForPage, ParagraphBuilder.ForPage, TableBuilder.ForPage, ContentBuilder.ForPage>
+typealias SectionContentBuilder = ContentBuilder<PhraseBuilder.ForSection, ParagraphBuilder.ForSection, TableBuilder.ForSection, ContentBuilder.ForSection>
 typealias BlockContentBuilder = ContentBuilder<PhraseBuilder.ForBlock, ParagraphBuilder.ForBlock, TableBuilder.ForBlock, ContentBuilder.ForBlock>

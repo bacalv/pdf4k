@@ -231,7 +231,7 @@ class TableTest : AbstractPdfRendererTest() {
         }
 
         pdf {
-            page(stationary = stationary) {
+            section(stationary = stationary) {
                 listOf("extended" to true, "normal" to false).forEach { (blockName, extend) ->
                     block(blockName) {
                         style(cellBackground = RED, colour = WHITE) {

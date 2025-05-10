@@ -1,9 +1,9 @@
 package io.pdf4k.domain.dto
 
 import io.pdf4k.domain.Component
-import io.pdf4k.domain.Page
+import io.pdf4k.domain.Section
 
-data class PageDto(
+data class SectionDto(
     val stationary: List<StationaryRef>,
     val style: StyleRef?,
     val content: List<ComponentDto>,
@@ -11,7 +11,7 @@ data class PageDto(
     val backgroundImages: Map<String, ResourceRef>
 )
 
-fun Page.toDto(resourceMapBuilder: ResourceMapDto.Builder) = PageDto(
+fun Section.toDto(resourceMapBuilder: ResourceMapDto.Builder) = SectionDto(
     stationary = stationary.map { it.toDto(resourceMapBuilder).let(resourceMapBuilder::stationaryRef) },
     style = style?.toDto(resourceMapBuilder)?.let(resourceMapBuilder::styleRef),
     content = (content.toDto(resourceMapBuilder) as ComponentDto.Content).children,
@@ -20,7 +20,7 @@ fun Page.toDto(resourceMapBuilder: ResourceMapDto.Builder) = PageDto(
     backgroundImages = backgroundImages.map { it.key to resourceMapBuilder.resourceRef(it.value.toDto(resourceMapBuilder))}.toMap()
 )
 
-fun PageDto.toDomain(resourceMap: ResourceMap): Page = Page(
+fun SectionDto.toDomain(resourceMap: ResourceMap): Section = Section(
     stationary = stationary.map { resourceMap.getStationary(it) },
     style = style?.let { resourceMap.getStyle(it) },
     content = Component.Content(content.toDomain(resourceMap)),

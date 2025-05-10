@@ -7,7 +7,7 @@ import io.pdf4k.domain.PdfError.RenderingError
 import io.pdf4k.provider.ResourceLocators
 import io.pdf4k.provider.StationaryLoader.loadStationary
 import io.pdf4k.provider.TempStreamFactory
-import io.pdf4k.renderer.PageRenderer.render
+import io.pdf4k.renderer.SectionRenderer.render
 import java.io.OutputStream
 
 class PdfRenderer(
@@ -18,7 +18,7 @@ class PdfRenderer(
     fun render(pdf: Pdf, outputStream: OutputStream) = with(pdf) {
         tempStreamFactory.createTempOutputStream().use { mainDocumentStream ->
             tempStreamFactory.createTempOutputStream().use { contentBlocksDocumentStream ->
-                resourceLocators.stationaryResourceLocator.loadStationary(pages).let { loadedStationary ->
+                resourceLocators.stationaryResourceLocator.loadStationary(sections).let { loadedStationary ->
                     createContext(
                         mainDocumentStream.outputStream,
                         contentBlocksDocumentStream.outputStream,
@@ -66,8 +66,8 @@ class PdfRenderer(
     private fun Pdf.paginateDocument(context: RendererContext) = with(context) {
         try {
             pushStyle(style)
-            pages.forEach {
-                eventListener.setCurrentPageTemplate(it)
+            sections.forEach {
+                eventListener.setCurrentSection(it)
                 it.render(context)
             }
             popStyle()

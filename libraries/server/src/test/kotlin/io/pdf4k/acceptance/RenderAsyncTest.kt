@@ -24,7 +24,7 @@ class RenderAsyncTest : AbstractServerTest() {
             callbackMode = CallbackMode.POST_RESULT,
             callbackUrl = URI.create("http://localhost:$port/pdf-callback/$jobRef").toURL()
         ) {
-            page(style(font = font), stationary = stationary) {
+            section(style(font = font), stationary = stationary) {
                 content {
                     +"Here is an image..."
                     table {

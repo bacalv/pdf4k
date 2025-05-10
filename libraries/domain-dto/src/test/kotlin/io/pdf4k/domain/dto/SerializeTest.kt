@@ -52,7 +52,7 @@ class SerializeTest {
                 customProperty("CUSTOM_KEY", "CUSTOM_KEY Value")
                 customProperty("ANOTHER_CUSTOM_KEY", "ANOTHER_CUSTOM_KEY Value")
             }
-            page {
+            section {
                 content {
                     paragraph(style()) {
                         +"Here is a paragraph with an empty style "
@@ -60,14 +60,14 @@ class SerializeTest {
                     }
                 }
             }
-            page {
+            section {
                 content {
                     paragraph {
                         anchor("link", "Here's an anchor")
                     }
                 }
             }
-            page {
+            section {
                 content {
                     list {
                         item("This is the first item")
@@ -84,7 +84,7 @@ class SerializeTest {
                     }
                 }
             }
-            page(style(font, colour = RED)) {
+            section(style(font, colour = RED)) {
                 content {
                     style(splitLate = true, splitRows = true) {
                         table(columns = 2, weights = listOf(2f, 3f), headerRows = 1) {

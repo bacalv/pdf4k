@@ -159,7 +159,7 @@
       "name" : "musicians/blondie.png"
     } ]
   },
-  "pages" : [ {
+  "sections" : [ {
     "stationary" : [ 0 ],
     "content" : [ {
       "type" : "s",

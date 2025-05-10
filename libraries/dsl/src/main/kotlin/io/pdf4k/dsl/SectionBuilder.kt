@@ -3,12 +3,12 @@ package io.pdf4k.dsl
 import io.pdf4k.domain.*
 
 @PdfDsl
-class PageBuilder(val style: StyleAttributes?, private val stationary: List<Stationary>) {
-    private val builder = ContentBuilder.ForPage()
+class SectionBuilder(val style: StyleAttributes?, private val stationary: List<Stationary>) {
+    private val builder = ContentBuilder.ForSection()
     private val blockContent = mutableMapOf<String, Component.Content>()
     private val backgroundImages = mutableMapOf<String, ResourceLocation>()
 
-    fun content(style: StyleAttributes? = null, block: ContentBuilder.ForPage.() -> Unit) {
+    fun content(style: StyleAttributes? = null, block: ContentBuilder.ForSection.() -> Unit) {
         if (style == null) {
             builder.block()
         } else {
@@ -31,5 +31,5 @@ class PageBuilder(val style: StyleAttributes?, private val stationary: List<Stat
         backgroundImage?.let { backgroundImages[ref] = it }
     }
 
-    fun build() = Page(stationary, style, builder.build(), blockContent, backgroundImages)
+    fun build() = Section(stationary, style, builder.build(), blockContent, backgroundImages)
 }

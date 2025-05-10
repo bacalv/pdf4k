@@ -8,20 +8,20 @@ import java.time.ZonedDateTime
 
 @PdfDsl
 class PdfBuilder(val style: StyleAttributes?) {
-    private val pages = mutableListOf<Page>()
+    private val sections = mutableListOf<Section>()
     private val metadataBuilder = MetadataBuilder()
     private var signature: Signature? = null
     private var permissions: PdfPermissions? = null
 
-    fun page(
+    fun section(
         style: StyleAttributes? = null,
         stationary: Stationary = BlankA4Portrait,
         vararg continuation: Stationary = arrayOf(),
-        block: PageBuilder.() -> Unit = {}
+        block: SectionBuilder.() -> Unit = {}
     ) {
-        val builder = PageBuilder(style, listOf(stationary) + continuation.toList())
+        val builder = SectionBuilder(style, listOf(stationary) + continuation.toList())
         builder.block()
-        pages += builder.build()
+        sections += builder.build()
     }
 
     fun metadata(block: MetadataBuilder.() -> Unit) {
@@ -39,7 +39,7 @@ class PdfBuilder(val style: StyleAttributes?) {
     }
 
     private fun build(): Pdf {
-        return Pdf(style, pages, metadataBuilder.build(), signature, permissions)
+        return Pdf(style, sections, metadataBuilder.build(), signature, permissions)
     }
 
     fun encrypt(userPassword: String, ownerPassword: String, vararg permission: PdfPermission) {
@@ -53,6 +53,6 @@ class PdfBuilder(val style: StyleAttributes?) {
             return builder.build()
         }
 
-        fun content(block: PageContentBuilder.() -> Unit) = pdf { page { content { block() } } }
+        fun content(block: SectionContentBuilder.() -> Unit) = pdf { section { content { block() } } }
     }
 }

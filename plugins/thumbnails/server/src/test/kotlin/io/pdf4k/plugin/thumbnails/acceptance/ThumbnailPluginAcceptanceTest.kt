@@ -12,7 +12,7 @@ class ThumbnailPluginAcceptanceTest : AbstractServerTest() {
     @Test
     fun `render thumbnail of image`(approver: PdfApprover) = with(emptyScenario()) {
         operator.rendersAPdfImmediately {
-            page {
+            section {
                 content {
                     table(1, style(align = HorizontalAlignment.Center), widthPercentage = 53f) {
                         thumbnail(resource = local("beach.png"), width = 300, height = 200)

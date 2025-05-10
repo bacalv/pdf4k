@@ -117,19 +117,19 @@ class StyleTest : AbstractPdfRendererTest() {
     @Test
     fun `applies styles to all levels when set at block level`(approver: PdfApprover) {
         pdf(style(fontStyle = Bold)) {
-            page {
+            section {
                 content { +"Bold" }
             }
 
-            page(style(colour = RED)) {
+            section(style(colour = RED)) {
                 content { +"Bold and red" }
             }
 
-            page(style(colour = RED)) {
+            section(style(colour = RED)) {
                 content(style(underlined = true)) { +"Bold red and underlined" }
             }
 
-            page {
+            section {
                 content(style(fontStyle = Italic)) {
                     paragraph(style(size = 16f)) {
                         +"Italic size 16\n\n"
@@ -159,7 +159,7 @@ class StyleTest : AbstractPdfRendererTest() {
         val greenTransparent = style(cellBackground = Color(0, 255, 0, 128))
         val blueTransparent = style(cellBackground = Color(0, 0, 255, 128))
         pdf {
-            page(stationary = stationary) {
+            section(stationary = stationary) {
                 listOf(
                     "red" to redTransparent,
                     "green" to greenTransparent,
