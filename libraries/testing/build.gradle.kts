@@ -1,5 +1,6 @@
 plugins {
     id("buildlogic.kotlin-library-conventions")
+    id("buildlogic.kotlin-publishing-conventions")
 }
 
 dependencies {
@@ -8,4 +9,13 @@ dependencies {
     api(libs.okeyDoke)
     implementation(libs.pdfBox)
     testImplementation(libs.openPdf)
+}
+
+publishing {
+    publications.named<MavenPublication>("mavenJava") {
+        pom {
+            name = "PDF4K Approval Testing Library"
+            description = "A JUnit5 extension based on okeydoke that allows you to create PDF approval tests"
+        }
+    }
 }

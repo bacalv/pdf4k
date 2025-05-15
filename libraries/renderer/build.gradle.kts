@@ -1,5 +1,6 @@
 plugins {
     id("buildlogic.kotlin-library-conventions")
+    id("buildlogic.kotlin-publishing-conventions")
 }
 
 dependencies {
@@ -24,4 +25,13 @@ dependencies {
 
 tasks.withType<Test> {
     maxParallelForks = Runtime.getRuntime().availableProcessors()
+}
+
+publishing {
+    publications.named<MavenPublication>("mavenJava") {
+        pom {
+            name = "PDF4K Renderer"
+            description = "Renders the PDF4K domain to a PDF file using iText / OpenPDF"
+        }
+    }
 }

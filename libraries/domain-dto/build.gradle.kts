@@ -1,5 +1,6 @@
 plugins {
     id("buildlogic.kotlin-library-conventions")
+    id("buildlogic.kotlin-publishing-conventions")
 }
 
 dependencies {
@@ -16,4 +17,13 @@ dependencies {
     testFixturesApi(testFixtures(project(":libraries::domain")))
     testFixturesApi(project(":libraries::testing"))
     testFixturesApi(project(":libraries::dsl"))
+}
+
+publishing {
+    publications.named<MavenPublication>("mavenJava") {
+        pom {
+            name = "PDF4K Domain Data Transfer Objects"
+            description = "Objects to use for serializing and deserializing the PDF4K to and from JSOM"
+        }
+    }
 }

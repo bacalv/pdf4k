@@ -10,6 +10,7 @@ plugins {
 }
 
 rootProject.name = "pdf4k"
+
 include(
     "libraries:testing",
     "libraries:domain",
