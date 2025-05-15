@@ -4,6 +4,8 @@ plugins {
     signing
 }
 
+group = "io.pdf4k"
+
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
