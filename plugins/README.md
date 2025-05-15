@@ -1,6 +1,10 @@
 # pdf4k.io plugins
 
-Supported cope plugins
+Supported core plugins
+
+* [markdown](./markdown/README.md) - Markdown DSL plugin
+* [qrcode](./qrcode/README.md) - Render QR codes
+* [thumbnails](./thumbnails/README.md) - Render reduced quality images
 
 Each folder under this directory is either:
 

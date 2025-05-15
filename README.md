@@ -1,19 +1,21 @@
 # pdf4k.io
 
+A Kotlin DSL for generating PDF files.
+
 ```kotlin
 pdf {
     section {
-        content { +"Hello, $name!" }
+        content { +"Hello, world!" }
     }
 }
 ```
 
 ## Goals
 
-* Provide an idiomatic way of generating PDF files using Kotlin
-* Simplify using iText / OpenPDF
-* Provide a JUnit plugin to help verify that generated PDF files are correct
-* Enjoy creating production-ready PDF server applications
+* Provide an idiomatic way of generating PDF files using Kotlin.
+* Simplify using iText / OpenPDF.
+* Provide a JUnit plugin to help verify that generated PDF files are correct.
+* Enjoy creating production-ready PDF server applications.
 
 ## Project Structure
 
@@ -47,10 +49,24 @@ pdf {
 * Okeydoke
 * PDF Box
 * Http4K
+* Bouncycastle
 * Jackson
+
+## Handy links
+
 * Open source fonts
+* Okeydoke IntelliJ plugin
 
 ## Authors
 
 - Bret Calvey (Work: bac@juxt.pro / Home: bacalv@gmail.com)
 - Please contribute :)
+
+## License
+
+- TODO
+
+## Disclaimer
+
+- All code supplied 'as is'
+- Use at your own risk - no liability accepted
