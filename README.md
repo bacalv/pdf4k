@@ -10,6 +10,15 @@ pdf {
 }
 ```
 
+## Example
+
+```shell
+git clone https://github.com/bacalv/hello-pdf4k
+cd hello-pdf4k
+./gradlew clean build
+open src/test/resources/HelloTest.hello\ world.approved.pdf
+```
+
 ## Goals
 
 * Provide an idiomatic way of generating PDF files using Kotlin.
@@ -35,7 +44,6 @@ pdf {
 
 ## Resources
 
-* Hello World project
 * [Documentation](docs/README.md)
 * [Decision record](ADR.md)
 * [TODO list](TODO.md)
