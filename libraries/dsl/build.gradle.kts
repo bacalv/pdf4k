@@ -11,7 +11,7 @@ dependencies {
 publishing {
     publications.named<MavenPublication>("mavenJava") {
         pom {
-            name = "PDF4K DSL"
+            name = "pdf4k DSL"
             description = "Kotlin domain-specific language for creating PDF files"
         }
     }

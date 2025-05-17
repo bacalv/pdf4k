@@ -1,10 +1,22 @@
 # pdf4k.io - TODO list
 
+- Create a User guide, more examples and other supporting documentation
 - Finish off in-memory server
+- Improve configuration
 - Create more robust server implementation
   - Support multiple server instances
   - Durable storage
-- Add more default stationary
+  - S3 plugin
+  - Telemetry / Grafana dashboard
+  - Performance testing
+- Add more default stationary / built-in fonts
+- Create a 'page template designer'
+- Create a 'playground' server (e.g. something like https://play.kotlinlang.org/ but for pdf4k)
 - Review server configuration mechanisms
 - Improve markdown plugin
+- Push docker images to public repository
+- Release process using Github Actions
+- Create syntax-highlighting plugin
+- Verify code in READMEs
+- Verify links in READMEs
 - Add more TODO items :)

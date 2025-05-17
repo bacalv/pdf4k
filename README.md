@@ -1,16 +1,23 @@
 # pdf4k.io
 
-A Kotlin DSL for generating PDF files.
+## Project Goals
+
+* Provide an idiomatic way of generating PDF files using Kotlin.
+* Simplify using iText / OpenPDF.
+* Provide a JUnit plugin to help verify that generated PDF files are correct.
+* Provide a framework to create production-ready PDF server applications.
+
+## Hello World
 
 ```kotlin
 pdf {
-    section {
+    section { 
         content { +"Hello, world!" }
     }
 }
 ```
 
-## Example
+[Hello World GitHub Project](https://github.com/bacalv/hello-pdf4k).
 
 ```shell
 git clone https://github.com/bacalv/hello-pdf4k
@@ -19,62 +26,44 @@ cd hello-pdf4k
 open src/test/resources/HelloTest.hello\ world.approved.pdf
 ```
 
-## Goals
+## Documentation
 
-* Provide an idiomatic way of generating PDF files using Kotlin.
-* Simplify using iText / OpenPDF.
-* Provide a JUnit plugin to help verify that generated PDF files are correct.
-* Enjoy creating production-ready PDF server applications.
+Documentation can be found [here](docs/README.md).
 
 ## Project Structure
 
-| Directory                                | Contents                                       |
-|------------------------------------------|------------------------------------------------|
-| [applications](./applications/README.md) | Dockerized runnable applications and examples. |
-| [libraries](./libraries/README.md)       | Shared libraries                               |
-| [plugins](./plugins/README.md)           | Non-essential plugins                          |
-| plugins/XYZ/domain/src                   | A plugin's common domain                       |
-| plugins/XYZ/dsl/src                      | DSL extensions for the plugin                  |
-| plugins/XYZ/server/src                   | Runtime/server implementation of the plugin    |
+| Directory                      | Contents                                       |
+|--------------------------------|------------------------------------------------|
+| [applications](./applications/README.md)            | Dockerized runnable applications and examples. |
+| [libraries](./libraries/README.md)               | Shared libraries.                              |
+| [plugins](./plugins/README.md)                 | Non-essential plugins.                         |
+| [scripts](./scripts/README.md) | Handy scripts.                                 |
 
-* Libraries depend on zero ot more third party dependencies
-* Plugins depend on libraries
-* Applications depend on plugins and libraries and generate runnable Docker images
-* Every directory underneath this one (up until `src`) should have a README.md
+* Libraries depend on zero or more third party dependencies.
+* Plugins depend on libraries.
+* Applications depend on libraries and optional plugins and generate runnable Docker images.
+* Every subproject should have a README.md containing more details.
 
-## Resources
+## Handy Links
 
-* [Documentation](docs/README.md)
-* [Decision record](ADR.md)
-* [TODO list](TODO.md)
-* [Wish list](WISHLIST.md)
-* Open source fonts
-* Okeydoke IntelliJ plugin
+* [iText](https://itextpdf.com/) - pdf4k is based on iText.
+* [OpenPDF](https://librepdf.github.io/OpenPDF/) - Open PDF is a fork of iText.
+* [PDF Box](https://pdfbox.apache.org/) - PDF Box is used to render PDFs into images (used by the testing framework).
+* [http4k](https://www.http4k.org/) - http4k is used by the pdf4k server components.
+* [Okey-doke IntelliJ plugin](https://plugins.jetbrains.com/plugin/9424-okey-doke-support) - IntelliJ plugin for working with approval tests.
+* [PDF Viewer IntelliJ plugin](https://plugins.jetbrains.com/plugin/14494-pdf-viewer) - IntelliJ plugin to view PDF files.
+* [thumbnailator](https://github.com/coobird/thumbnailator) - used to create thumbnails of images (used by thumbnails plugin).
+* [qrcode-kotlin](https://github.com/g0dkar/qrcode-kotlin) - used to create QR codes (used by qrcode plugin).
+* [common-mark](https://commonmark.org/) - used by the markdown plugin.
+* [Fontspace](https://www.fontspace.com/category/open-source) - Open source fonts.
+* [Maven Central](https://central.sonatype.com/search?q=io.pdf4k) - pdf4k artefacts on Maven Central.
+* [jReleaser](https://jreleaser.org/guide/latest/tools/jreleaser-gradle.html) - gradle plugin used to release to Maven Central.
 
-## Acknowledgements
+## TODO
 
-* iText
-* Okeydoke
-* PDF Box
-* Http4K
-* Bouncycastle
-* Jackson
-
-## Handy links
-
-* Open source fonts
-* Okeydoke IntelliJ plugin
+[TODO List](./TODO.md)
 
 ## Authors
 
-- Bret Calvey (Work: bac@juxt.pro / Home: bacalv@gmail.com)
+- [Bret Calvey](mailto:bacalv@gmail.com) - original author.
 - Please contribute :)
-
-## License
-
-- TODO
-
-## Disclaimer
-
-- All code supplied 'as is'
-- Use at your own risk - no liability accepted

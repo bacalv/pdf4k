@@ -11,8 +11,8 @@ dependencies {
 publishing {
     publications.named<MavenPublication>("mavenJava") {
         pom {
-            name = "PDF4K Domain"
-            description = "Domain library for PDF4K"
+            name = "pdf4k Domain"
+            description = "Domain library for pdf4k"
         }
     }
 }

@@ -14,7 +14,7 @@ dependencies {
 publishing {
     publications.named<MavenPublication>("mavenJava") {
         pom {
-            name = "PDF4K Approval Testing Library"
+            name = "pdf4k Approval Testing Library"
             description = "A JUnit5 extension based on okeydoke that allows you to create PDF approval tests"
         }
     }

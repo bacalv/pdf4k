@@ -22,8 +22,8 @@ dependencies {
 publishing {
     publications.named<MavenPublication>("mavenJava") {
         pom {
-            name = "PDF4K Domain Data Transfer Objects"
-            description = "Objects to use for serializing and deserializing the PDF4K to and from JSOM"
+            name = "pdf4k Domain Data Transfer Objects"
+            description = "Objects to use for serializing and deserializing the pdf4k domain to and from JSOM"
         }
     }
 }
