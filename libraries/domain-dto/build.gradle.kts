@@ -23,7 +23,7 @@ publishing {
     publications.named<MavenPublication>("mavenJava") {
         pom {
             name = "pdf4k Domain Data Transfer Objects"
-            description = "Objects to use for serializing and deserializing the pdf4k domain to and from JSOM"
+            description = "Objects to use for serializing and deserializing the pdf4k domain to and from JSON"
         }
     }
 }

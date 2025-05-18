@@ -1,7 +1,7 @@
 plugins {
     java
     `maven-publish`
-    signing
+    id("org.jreleaser")
 }
 
 group = "io.pdf4k"
@@ -44,18 +44,43 @@ publishing {
     }
     repositories {
         maven {
-            name = "ossrh"
-            url = uri("https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/")
-            credentials {
-                val ossrhUsername: String? by project
-                val ossrhToken: String? by project
-                username = ossrhUsername
-                password = ossrhToken
-            }
+            url = uri(layout.buildDirectory.dir("staging-deploy"))
         }
     }
 }
 
-signing {
-    sign(publishing.publications["mavenJava"])
+val signingPublicKey: String? by project
+val signingSecretKey: String? by project
+val signingPassphrase: String? by project
+val sonatypeUsername: String? by project
+val sonatypePassword: String? by project
+
+jreleaser {
+    gitRootSearch = true
+    strict = false
+    signing {
+        passphrase = signingPassphrase
+        publicKey = signingPublicKey
+        secretKey = signingSecretKey
+        setActive("ALWAYS")
+        armored = true
+    }
+    deploy {
+        maven {
+            mavenCentral {
+                create("sonatype") {
+                    username = sonatypeUsername
+                    password = sonatypePassword
+                    setActive("ALWAYS")
+                    url = "https://central.sonatype.com/api/v1/publisher"
+                    stagingRepository("build/staging-deploy")
+                }
+            }
+        }
+    }
+    release {
+        github {
+            token = "blank"
+        }
+    }
 }
