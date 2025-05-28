@@ -3,4 +3,9 @@ plugins {
 
     `java-library`
     `java-test-fixtures`
+    jacoco
+}
+
+tasks.jacocoTestReport {
+    enabled = false
 }

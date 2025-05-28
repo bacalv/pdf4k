@@ -3,6 +3,7 @@ plugins {
     id("com.bmuschko.docker-remote-api")
     id("com.bmuschko.docker-java-application")
     application
+    jacoco
 }
 
 repositories {
@@ -16,4 +17,8 @@ docker {
         ports.set(listOf(8080))
         jvmArgs.set(listOf("-Xms256m", "-Xmx2048m"))
     }
+}
+
+tasks.jacocoTestReport {
+    enabled = false
 }

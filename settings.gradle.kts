@@ -29,3 +29,5 @@ include(
     "applications:empty-server",
     "applications:examples:musician-renderer"
 )
+
+include("code-coverage-report")
