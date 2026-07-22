@@ -1,4 +1,5 @@
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.sl.usermodel.TableCell.BorderEdge;
 import org.apache.poi.sl.usermodel.TextParagraph.TextAlign;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
@@ -14,17 +15,26 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Converts an Excel sheet (.xlsx) into a PowerPoint (.pptx) table, preserving
- * cell fill colors, borders, font styling, and alignment as closely as
- * XSLFTable's API allows. The table is not editable / not linked back to
- * Excel -- it's a static visual copy, rendered natively as PowerPoint shapes
- * (not an image), so text stays selectable and it renders crisply at any zoom.
+ * cell fill colors, borders, font styling, alignment, and merged cells (both
+ * within the data area and within a repeating multi-row header block).
+ *
+ * The table is not editable / not linked back to Excel -- it's a static
+ * visual copy, rendered natively as PowerPoint shapes (not an image), so
+ * text stays selectable and it renders crisply at any zoom.
  *
  * If the sheet has more rows than fit on one slide, it's split across
- * multiple slides, optionally repeating a header row on each one.
+ * multiple slides. Pass headerRowCount > 0 to treat the sheet's first N rows
+ * as a header block that's repeated at the top of every slide -- handy for
+ * sheets with multi-row headers (e.g. a merged title row plus a column-label
+ * row below it). Pagination never splits a page in the middle of a merged
+ * region -- if a vertically merged block would overflow a page, the whole
+ * block is kept together (the page may run slightly long rather than cut it).
  *
  * Maven dependency (POI 5.5.1, current as of writing -- check Maven Central
  * for anything newer):
@@ -38,9 +48,9 @@ import java.util.List;
  * Limitations (kept simple on purpose -- extend as needed):
  *   - .xlsx only (uses XSSFWorkbook). .xls would need HSSF-specific color
  *     palette lookups instead of XSSFColor.
- *   - Merged cells are not merged in the output table (each cell renders
- *     independently). XSLFTable does support merging via mergeCells(), so
- *     this is a reasonable follow-up if you need it.
+ *   - A merged region that straddles the header/data boundary (starts inside
+ *     the header block and ends inside the data area) is skipped -- keep
+ *     header merges fully inside the first headerRowCount rows.
  *   - Theme-based colors (as opposed to explicit RGB) fall back to a default,
  *     since resolving a theme color to RGB requires reading the workbook's
  *     theme part separately.
@@ -55,19 +65,23 @@ public class SpreadsheetToPptx {
 
     public static void main(String[] args) throws IOException {
         if (args.length < 2) {
-            System.out.println("Usage: SpreadsheetToPptx <input.xlsx> <output.pptx> [sheetIndex] [repeatHeaderRow]");
+            System.out.println("Usage: SpreadsheetToPptx <input.xlsx> <output.pptx> [sheetIndex] [headerRowCount]");
             return;
         }
         String inputPath = args[0];
         String outputPath = args[1];
         int sheetIndex = args.length > 2 ? Integer.parseInt(args[2]) : 0;
-        boolean repeatHeaderRow = args.length > 3 && Boolean.parseBoolean(args[3]);
+        int headerRowCount = args.length > 3 ? Integer.parseInt(args[3]) : 0;
 
-        convert(inputPath, outputPath, sheetIndex, repeatHeaderRow);
+        convert(inputPath, outputPath, sheetIndex, headerRowCount);
         System.out.println("Wrote " + outputPath);
     }
 
-    public static void convert(String excelPath, String pptxPath, int sheetIndex, boolean repeatHeaderRow) throws IOException {
+    /**
+     * @param headerRowCount number of leading sheet rows to treat as a header
+     *                       block that's repeated on every slide (0 = no repeated header)
+     */
+    public static void convert(String excelPath, String pptxPath, int sheetIndex, int headerRowCount) throws IOException {
         try (FileInputStream fis = new FileInputStream(excelPath);
              XSSFWorkbook workbook = new XSSFWorkbook(fis);
              XMLSlideShow ppt = new XMLSlideShow()) {
@@ -83,7 +97,24 @@ public class SpreadsheetToPptx {
                 }
                 return;
             }
+            headerRowCount = Math.max(0, Math.min(headerRowCount, rows.size()));
             int numCols = Math.max(1, rows.stream().mapToInt(r -> r.cells.size()).max().orElse(0));
+
+            List<int[]> merges = readMerges(sheet); // each: {firstRow, lastRow, firstCol, lastCol}
+            List<int[]> headerMerges = new ArrayList<>();
+            List<int[]> dataMerges = new ArrayList<>();
+            Set<Long> covered = new HashSet<>(); // non-anchor cells of any merge, keyed by (row, col)
+            for (int[] m : merges) {
+                markCovered(covered, m);
+                if (m[1] < headerRowCount) {
+                    headerMerges.add(m);
+                } else if (m[0] >= headerRowCount) {
+                    dataMerges.add(m);
+                }
+                // merges straddling the header/data boundary are skipped (documented limitation)
+            }
+
+            int[] reach = computeReach(rows.size(), merges);
 
             Dimension pageSize = ppt.getPageSize(); // points
             double availableWidth = pageSize.getWidth() - 2 * MARGIN_PT;
@@ -91,10 +122,10 @@ public class SpreadsheetToPptx {
 
             double[] colWidths = computeColumnWidths(sheet, numCols, availableWidth);
 
-            int headerRowIndex = repeatHeaderRow ? 0 : -1;
-            double headerHeight = repeatHeaderRow ? rows.get(0).heightPt : 0;
+            double headerHeight = 0;
+            for (int r = 0; r < headerRowCount; r++) headerHeight += rows.get(r).heightPt;
 
-            List<List<Integer>> pages = paginate(rows, headerRowIndex, availableTableHeight, headerHeight);
+            List<List<Integer>> pages = paginate(rows, headerRowCount, availableTableHeight, headerHeight, reach);
 
             String sheetName = sheet.getSheetName();
             for (int p = 0; p < pages.size(); p++) {
@@ -102,27 +133,42 @@ public class SpreadsheetToPptx {
                 XSLFSlide slide = ppt.createSlide();
                 addTitle(ppt, slide, sheetName + (pages.size() > 1 ? "  (page " + (p + 1) + " of " + pages.size() + ")" : ""));
 
-                int tblRows = dataRowIdx.size() + (repeatHeaderRow ? 1 : 0);
+                int tblRows = dataRowIdx.size() + headerRowCount;
                 XSLFTable table = slide.createTable(tblRows, numCols);
                 table.setAnchor(new Rectangle2D.Double(MARGIN_PT, MARGIN_PT + TITLE_HEIGHT_PT, availableWidth, availableTableHeight));
 
-                int outRow = 0;
-                if (repeatHeaderRow) {
-                    writeRow(table, outRow++, rows.get(0), numCols);
+                for (int r = 0; r < headerRowCount; r++) {
+                    writeRow(table, r, rows.get(r), r, numCols, covered);
                 }
-                for (int idx : dataRowIdx) {
-                    writeRow(table, outRow++, rows.get(idx), numCols);
+                for (int j = 0; j < dataRowIdx.size(); j++) {
+                    int sheetRow = dataRowIdx.get(j);
+                    writeRow(table, headerRowCount + j, rows.get(sheetRow), sheetRow, numCols, covered);
                 }
+
                 for (int c = 0; c < numCols; c++) {
                     table.setColumnWidth(c, colWidths[c]);
                 }
-                // Row heights: let each row keep its natural height; table's total
-                // height comes from the sum, which is why pagination targets availableTableHeight.
-                for (int r = 0; r < tblRows; r++) {
-                    XSLFTableRow tr = table.getRows().get(r);
-                    double h = (repeatHeaderRow && r == 0) ? rows.get(0).heightPt
-                            : rows.get(dataRowIdx.get(r - (repeatHeaderRow ? 1 : 0))).heightPt;
-                    tr.setHeight(Math.max(h, 10)); // guard against degenerate 0pt rows
+                for (int r = 0; r < headerRowCount; r++) {
+                    table.getRows().get(r).setHeight(Math.max(rows.get(r).heightPt, 10));
+                }
+                for (int j = 0; j < dataRowIdx.size(); j++) {
+                    table.getRows().get(headerRowCount + j).setHeight(Math.max(rows.get(dataRowIdx.get(j)).heightPt, 10));
+                }
+
+                // Re-apply header merges on every page, then translate data merges into this page's row numbering.
+                for (int[] m : headerMerges) {
+                    table.mergeCells(m[0], m[1], m[2], m[3]);
+                }
+                if (!dataRowIdx.isEmpty()) {
+                    int pageFirst = dataRowIdx.get(0);
+                    int pageLast = dataRowIdx.get(dataRowIdx.size() - 1);
+                    for (int[] m : dataMerges) {
+                        if (m[0] >= pageFirst && m[1] <= pageLast) {
+                            int tblFirst = headerRowCount + (m[0] - pageFirst);
+                            int tblLast = headerRowCount + (m[1] - pageFirst);
+                            table.mergeCells(tblFirst, tblLast, m[2], m[3]);
+                        }
+                    }
                 }
             }
 
@@ -130,6 +176,42 @@ public class SpreadsheetToPptx {
                 ppt.write(out);
             }
         }
+    }
+
+    // ---------- merges ----------
+
+    private static List<int[]> readMerges(Sheet sheet) {
+        List<int[]> merges = new ArrayList<>();
+        for (CellRangeAddress ra : sheet.getMergedRegions()) {
+            merges.add(new int[]{ra.getFirstRow(), ra.getLastRow(), ra.getFirstColumn(), ra.getLastColumn()});
+        }
+        return merges;
+    }
+
+    private static void markCovered(Set<Long> covered, int[] m) {
+        for (int r = m[0]; r <= m[1]; r++) {
+            for (int c = m[2]; c <= m[3]; c++) {
+                if (r == m[0] && c == m[2]) continue; // anchor cell keeps its content/style
+                covered.add(cellKey(r, c));
+            }
+        }
+    }
+
+    // Row indices fit in 20 bits (Excel's row limit is 1,048,576); columns fit comfortably in the rest.
+    private static long cellKey(int row, int col) {
+        return ((long) row << 20) | (col & 0xFFFFF);
+    }
+
+    /** For each row, the furthest row reached by any merged region covering it (itself if none). */
+    private static int[] computeReach(int rowCount, List<int[]> merges) {
+        int[] reach = new int[rowCount];
+        for (int r = 0; r < rowCount; r++) reach[r] = r;
+        for (int[] m : merges) {
+            for (int r = m[0]; r <= m[1] && r < rowCount; r++) {
+                reach[r] = Math.max(reach[r], m[1]);
+            }
+        }
+        return reach;
     }
 
     // ---------- data extraction ----------
@@ -226,16 +308,23 @@ public class SpreadsheetToPptx {
         return scaled;
     }
 
-    /** Groups row indices into pages so each page's total height fits availableTableHeight. */
-    private static List<List<Integer>> paginate(List<RowSnapshot> rows, int headerRowIndex, double availableTableHeight, double headerHeight) {
+    /**
+     * Groups data-row indices (rows >= headerRowCount) into pages so each page's
+     * total height fits availableTableHeight. Never breaks in the middle of a
+     * merged region: if the last row added to the current page is still "inside"
+     * a merge that extends further down, the page keeps growing until that merge
+     * ends, even if it overflows the target height.
+     */
+    private static List<List<Integer>> paginate(List<RowSnapshot> rows, int headerRowCount, double availableTableHeight, double headerHeight, int[] reach) {
         List<List<Integer>> pages = new ArrayList<>();
         List<Integer> current = new ArrayList<>();
         double currentHeight = headerHeight;
 
-        int start = headerRowIndex == 0 ? 1 : 0;
-        for (int i = start; i < rows.size(); i++) {
+        for (int i = headerRowCount; i < rows.size(); i++) {
             double h = rows.get(i).heightPt;
-            if (!current.isEmpty() && currentHeight + h > availableTableHeight) {
+            int lastAdded = current.isEmpty() ? -1 : current.get(current.size() - 1);
+            boolean midMerge = lastAdded >= 0 && reach[lastAdded] > lastAdded;
+            if (!current.isEmpty() && !midMerge && currentHeight + h > availableTableHeight) {
                 pages.add(current);
                 current = new ArrayList<>();
                 currentHeight = headerHeight;
@@ -258,10 +347,11 @@ public class SpreadsheetToPptx {
         run.setBold(true);
     }
 
-    private static void writeRow(XSLFTable table, int rowIdx, RowSnapshot rowSnap, int numCols) {
-        XSLFTableRow tr = table.getRows().get(rowIdx);
+    private static void writeRow(XSLFTable table, int tblRowIdx, RowSnapshot rowSnap, int sheetRowIdx, int numCols, Set<Long> covered) {
+        XSLFTableRow tr = table.getRows().get(tblRowIdx);
         for (int c = 0; c < numCols; c++) {
             XSLFTableCell cell = tr.getCells().get(c);
+            if (covered.contains(cellKey(sheetRowIdx, c))) continue; // will be hidden once merged; leave it blank
             CellSnapshot cs = c < rowSnap.cells.size() ? rowSnap.cells.get(c) : new CellSnapshot();
             styleCell(cell, cs);
         }
